@@ -1,6 +1,7 @@
 package Authentication;
 
-import ApplicationForm.ApplicantDashboard;
+//import ApplicationForm.ApplicantDashboard;
+import Applicant.ApplicantDashboard;
 import Authentication.ForgetPasswordFrame;
 import Authentication.Myframe;
 import Authentication.UserLogin;

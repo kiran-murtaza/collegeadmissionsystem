@@ -1,5 +1,4 @@
 package Authentication;
-import ApplicationForm.Gender;
 
 import java.io.File;
 import java.io.FileWriter;

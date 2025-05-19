@@ -1,7 +1,7 @@
 package Authentication;
 
-import Administration.NewAdmin.AddAdminFrame;
-import MainDashboard.MainDashboard;
+//import Administration.NewAdmin.AddAdminFrame;
+//import MainDashboard.MainDashboard;
 
 import javax.swing.*;
 import java.awt.*;
