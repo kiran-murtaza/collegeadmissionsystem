@@ -14,7 +14,7 @@ public class Users {
     protected Gender gender;
     protected String phone;
     protected String email;
-    public static int idCounter ;
+    public static int idCounter=1 ;
     protected String userID;
 
 
