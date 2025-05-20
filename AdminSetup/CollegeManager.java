@@ -1,19 +1,19 @@
 package AdminSetup;
-
+//Add/remove/edit colleges
 import java.util.ArrayList;
 import java.util.List;
 
-public class College {
+public class CollegeManager {
     private String name;
-    private List<Course> courses = new ArrayList<>();
+    private List<ProgramManager> cours = new ArrayList<>();
     private List<Student> applicants = new ArrayList<>();
     private AdmissionCriteria admissionCriteria;
     private ScholarshipCriteria scholarshipCriteria;
 
-    public College(String name) { this.name = name; }
+    public CollegeManager(String name) { this.name = name; }
     public String getName() { return name; }
-    public void addCourse(Course c) { courses.add(c); }
-    public List<Course> getCourses() { return courses; }
+    public void addCourse(ProgramManager c) { cours.add(c); }
+    public List<ProgramManager> getCourses() { return cours; }
     public void addApplicant(Student s) { applicants.add(s); }
     public List<Student> getApplicants() { return applicants; }
 
@@ -28,7 +28,7 @@ public class College {
             if (admissionCriteria != null) {
                 s.setStatus(admissionCriteria.isEligible(s) ? Status.ADMITTED : Status.REJECTED);
             } else {
-                for (Course c : courses) {
+                for (ProgramManager c : cours) {
                     if (c.getName().equals(s.getCourseName())) {
                         s.setStatus(s.getScore() >= c.getEligibility() ? Status.ADMITTED : Status.REJECTED);
                     }
