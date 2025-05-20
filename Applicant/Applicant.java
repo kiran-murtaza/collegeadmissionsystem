@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Applicant extends Users {
 
         private ArrayList<ApplicationForm> submittedApplications;
+    private ArrayList<ScholarshipForm> submittedScholarships;
 
         public Applicant(String firstName, String lastName, String password, String securityAnswer,
                          String cnic, LocalDate dateOfBirth, Gender gender, String phone, String email,

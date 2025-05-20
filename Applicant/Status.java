@@ -2,5 +2,5 @@ package Applicant;
 
 public enum Status {
 
-    NOTAPPLIED, PENDING, APPROVED, REJECTED
+    SUBMITTED, APPROVED, REJECTED, ADMISSION_OFFERED,
 }
