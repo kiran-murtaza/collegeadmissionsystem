@@ -42,19 +42,5 @@ public class EntryTestManager {
         }
     }
 
-    public void resetTest(String stream) {
-        switch (stream.toLowerCase()) {
-            case "commerce":
-                commerceTestDate = null;
-                break;
-            case "engineering":
-                engineeringTestDate = null;
-                break;
-            case "biology":
-                biologyTestDate = null;
-                break;
-            default:
-                System.out.println("Invalid stream");
-        }
-    }
+
 }
