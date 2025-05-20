@@ -116,11 +116,11 @@ public class LoginFrame extends JFrame {
 
                 ArrayList<String> csPrograms = new ArrayList<>();
                 csPrograms.add("Computer Science");
-                cm.addCollege("C001", "Tech University", csPrograms);
+                cm.addCollege("Tech University");
 
                 ArrayList<String> baPrograms = new ArrayList<>();
                 baPrograms.add("Business Admin");
-                cm.addCollege("C002", "Business School", baPrograms);
+                cm.addCollege("Business School");
 
                 // login successful
                 ApplicantDashboard dashboard = new ApplicantDashboard(user,pm, cm); // pass the user object

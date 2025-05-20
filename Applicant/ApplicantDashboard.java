@@ -185,4 +185,6 @@ public class ApplicantDashboard extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
+
+
 }

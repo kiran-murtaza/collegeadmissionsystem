@@ -1,52 +1,76 @@
 package AdminSetup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CollegeManager {
     private final ArrayList<College> colleges;
 
     public CollegeManager() {
         colleges = new ArrayList<>();
-        ArrayList<String> csPrograms = new ArrayList<>();
-        csPrograms.add("Computer Science");
-        addCollege("C001", "Tech University", csPrograms);
+        College techUniversity = new College("Tech University");
+        ArrayList<Program> csPrograms = new ArrayList<>();
+        csPrograms.add(new Program("Computer Science",99,22));  // assuming Program has constructor Program(String name)
+        techUniversity.setPrograms(csPrograms);
+        colleges.add(techUniversity);
 
-        ArrayList<String> baPrograms = new ArrayList<>();
-        baPrograms.add("Business Admin");
-        addCollege("C002", "Business School", baPrograms);
+        College businessSchool = new College("Business School");
+        ArrayList<Program> baPrograms = new ArrayList<>();
+        baPrograms.add(new Program("Business Admin",100,102));
+        businessSchool.setPrograms(baPrograms);
+        colleges.add(businessSchool);
     }
 
-    public void addCollege(String id, String name, ArrayList<String> programNames) {
-        colleges.add(new College(id, name, programNames));
+    public void addCollege(String name) {
+        colleges.add(new College( name));
     }
 
-    public boolean removeCollegeById(String id) {
-        return colleges.removeIf(c -> c.getId().equals(id));
+    public boolean removeCollegeByName(String name) {
+        return colleges.removeIf(c -> c.getName().equalsIgnoreCase(name));
     }
 
     public ArrayList<College> getAllColleges() {
         return colleges;
     }
 
-    public ArrayList<College> getCollegesByProgram(String programName) {
+
+    public ArrayList<College> getCollegesByName(String collegeName) {
         ArrayList<College> result = new ArrayList<>();
         for (College c : colleges) {
-            if (c.getProgramNames().contains(programName)) {
+            if (c.getName().equalsIgnoreCase(collegeName)) {
                 result.add(c);
             }
         }
         return result;
     }
-    public boolean updateCollegePrograms(String collegeId, ArrayList<String> newPrograms) {
+
+    public ArrayList<College> getCollegesByProgramName(String programName) {
+        ArrayList<College> result = new ArrayList<>();
         for (College c : colleges) {
-            if (c.getId().equals(collegeId)) {
-                c.setProgramNames(newPrograms);
+            for (Program p : c.getPrograms()) {
+                if (p.getName().equalsIgnoreCase(programName)) {
+                    result.add(c);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public boolean updateCollegeProgramsByName(String collegeName, ArrayList<Program> newPrograms) {
+        for (College c : colleges) {
+            if (c.getName().equalsIgnoreCase(collegeName)) {
+                c.setPrograms(newPrograms);
                 return true;
             }
         }
         return false;
     }
 }
+
+
+
+
 
 
 //example idea

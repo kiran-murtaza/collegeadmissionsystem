@@ -15,16 +15,17 @@ public class ApplicationForm extends JPanel {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
     private static int applicationFormCount = 0;
-    private JComboBox<String> programDropdown, collegeDropdown;
+    private JComboBox<String> programDropdown, collegeDropdown,stream12Dropdown;
+
     private JTextField addressField, board10Field, year10Field, percent10Field, stream10Field;
-    private JTextField board12Field, year12Field, percent12Field, stream12Field;
+    private JTextField board12Field, year12Field, percent12Field;
     private JButton submitButton;
 //    private JLabel applicationIdLabel;
 
     private ProgramManager programManager;
     private CollegeManager collegeManager;
     private Users userInfo;
-
+    private ArrayList<College> colleges;
 
 
 
@@ -34,91 +35,27 @@ public class ApplicationForm extends JPanel {
     }
 
     public ApplicationForm(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+        colleges = new ArrayList<>();
+
         this.programManager= programManager;
         this.collegeManager=collegeManager;
         this.userInfo = userInfo;
 
-
-//        setTitle("Admission Application Form");
-//        setSize(600, 700);
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
-//        getContentPane().setBackground(COLORAZ_WHITE);
 
         // Title
         JLabel title = new JLabel("Admission Application Form", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setForeground(COLORAZ_BLACK);
-
+        setVisible(true);
        this.add(title);
        this.add(new JLabel(""));
-
-        // Program Dropdown
-        add(new JLabel("Select Program:"));
-        programDropdown = new JComboBox<>();
-        add(programDropdown);
-
-        // College Dropdown
-        add(new JLabel("Select College:"));
         collegeDropdown = new JComboBox<>();
-        add(collegeDropdown);
+        programDropdown = new JComboBox<>();
 
-        // Load programs into programDropdown
-        loadPrograms();
 
-        // Listener for program selection to update colleges dropdown
-        programDropdown.addActionListener(e -> {
-            String selectedProgram = (String) programDropdown.getSelectedItem();
-            if (selectedProgram != null) {
-                updateCollegeDropdown(selectedProgram);
-            }
-        });
 
-        // Initial update for colleges based on first program if exists
-        if (programDropdown.getItemCount() > 0) {
-            updateCollegeDropdown((String) programDropdown.getItemAt(0));
-        }
-    }
-
-    private void loadPrograms() {
-        programDropdown.removeAllItems();
-        for (Program p : programManager.getAllPrograms()) {
-            programDropdown.addItem(p.getName());
-        }
-    }
-
-    private void updateCollegeDropdown(String programName) {
-        collegeDropdown.removeAllItems();
-        ArrayList<College> filteredColleges = collegeManager.getCollegesByProgram(programName);
-        for (College c : filteredColleges) {
-            collegeDropdown.addItem(c.getName());
-        }
-        // If no college available for program, add placeholder
-        if (collegeDropdown.getItemCount() == 0) {
-            collegeDropdown.addItem("No colleges available");
-        }
-
-//        // Add Program Dropdown
-//        add(new JLabel("Select Program:"));
-//        programDropdown = new JComboBox<>(program.toArray(new String[0]));
-//        add(programDropdown);
-//
-//// Add College Dropdown
-//        add(new JLabel("Select College:"));
-//        collegeDropdown = new JComboBox<>(colleges.toArray(new String[0]));
-//        add(collegeDropdown);
-
-//        // Program and College Dropdowns
-//        add(new JLabel("Select Program:"));
-//        programDropdown = new JComboBox<>(programs.toArray(new String[0]));
-//        add(programDropdown);
-//
-//        add(new JLabel("Select College:"));
-//        collegeDropdown = new JComboBox<>(colleges.toArray(new String[0]));
-//        add(collegeDropdown);
-
-        // Pre-filled Details
         add(new JLabel("Applicant ID:"));
         add(new JLabel(userInfo.getUserID()));
 
@@ -130,7 +67,7 @@ public class ApplicationForm extends JPanel {
 
         add(new JLabel("Last Name:"));
         add(new JLabel(userInfo.getLastName()));
-        
+
 
         add(new JLabel("Phone Number:"));
         add(new JLabel(userInfo.getPhone()));
@@ -188,9 +125,44 @@ public class ApplicationForm extends JPanel {
         percent12Field = new JTextField();
         add(percent12Field);
 
+        stream12Dropdown = new JComboBox<>();
         add(new JLabel("12th Stream/Field:"));
-        stream12Field = new JTextField();
-        add(stream12Field);
+        String[] streams = {"Commerce", "Engineering", "Medical"};
+        for (String s : streams) {
+            stream12Dropdown.addItem(s);
+        }
+
+        stream12Dropdown.addActionListener(e -> {
+            String selectedStream = (String) stream12Dropdown.getSelectedItem();
+            if (selectedStream != null) {
+                loadProgramsByStream(selectedStream);
+                if (programDropdown.getItemCount() > 0) {
+                    updateCollegeDropdown((String) programDropdown.getSelectedItem());
+                }
+            }
+        });
+
+        add(stream12Dropdown);
+
+        add(new JLabel("Select Program:"));
+        add(programDropdown);
+        add(new JLabel("Select College:"));
+        add(collegeDropdown);
+
+
+        if (stream12Dropdown.getItemCount() > 0) {
+            loadProgramsByStream((String) stream12Dropdown.getItemAt(0));
+            if (programDropdown.getItemCount() > 0) {
+                updateCollegeDropdown((String) programDropdown.getSelectedItem());
+            }
+        }
+
+        programDropdown.addActionListener(e -> {
+            String selectedProgram = (String) programDropdown.getSelectedItem();
+            if (selectedProgram != null) {
+                updateCollegeDropdown(selectedProgram);
+            }
+        });
 
         // Submit Button
         submitButton = new JButton("Submit");
@@ -198,7 +170,40 @@ public class ApplicationForm extends JPanel {
         submitButton.addActionListener(e -> validateForm());
         add(submitButton);
 
-        setVisible(true);
+
+
+
+
+
+
+
+    }
+
+
+    private void loadProgramsByStream(String stream) {
+        programDropdown.removeAllItems();
+        ArrayList<Program> filteredPrograms = programManager.getProgramsByStream(stream);
+        if (filteredPrograms.isEmpty()) {
+            programDropdown.addItem("No programs available");
+        } else {
+            for (Program p : filteredPrograms) {
+                programDropdown.addItem(p.getName());
+            }
+        }
+    }
+
+
+    private void updateCollegeDropdown(String programName) {
+        collegeDropdown.removeAllItems();
+        ArrayList<College> filteredColleges = collegeManager.getCollegesByProgramName(programName);
+        for (College c : filteredColleges) {
+            collegeDropdown.addItem(c.getName());
+        }
+        // If no college available for program, add placeholder
+        if (collegeDropdown.getItemCount() == 0) {
+            collegeDropdown.addItem("No colleges available");
+        }
+
     }
 
     private void validateForm() {
@@ -206,10 +211,11 @@ public class ApplicationForm extends JPanel {
                 board10Field.getText().isEmpty() || year10Field.getText().isEmpty() ||
                 percent10Field.getText().isEmpty() || stream10Field.getText().isEmpty() ||
                 board12Field.getText().isEmpty() || year12Field.getText().isEmpty() ||
-                percent12Field.getText().isEmpty() || stream12Field.getText().isEmpty()) {
+                percent12Field.getText().isEmpty() ) {
 
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+        }
+        else {
             // ✅ Generate Application ID here
             String applicationId = generateApplicationId();
             System.out.println("Generated App ID: " + applicationId);
@@ -221,8 +227,40 @@ public class ApplicationForm extends JPanel {
            // ---------//
 
         }
-
     }
+
+//    private void showProgramAndCollegeDialog() {
+//        JPanel panel = new JPanel(new GridLayout(0, 2));
+//        JComboBox<String> programBox = new JComboBox<>();
+//        JComboBox<String> collegeBox = new JComboBox<>();
+//
+////        for (Program p : programManager.getAllPrograms()) {
+////            programBox.addItem(p.getName());
+////        }
+//        for (College college : collegeManager.getAllColleges()) {
+//            collegeBox.addItem(college.getName());
+//        }
+//
+//
+//        if (programBox.getItemCount() > 0) {
+//            programBox.setSelectedIndex(0);
+//        }
+//
+//        panel.add(new JLabel("Select Program:"));
+//        panel.add(programBox);
+//        panel.add(new JLabel("Select College:"));
+//        panel.add(collegeBox);
+//
+//    }
+
+
+
+
+
+
+
+
+
 }
 
 
