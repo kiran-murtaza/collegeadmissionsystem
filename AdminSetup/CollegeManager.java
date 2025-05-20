@@ -3,7 +3,7 @@ package AdminSetup;
 import java.util.ArrayList;
 
 public class CollegeManager {
-    private ArrayList<College> colleges;
+    private final ArrayList<College> colleges;
 
     public CollegeManager() {
         colleges = new ArrayList<>();
