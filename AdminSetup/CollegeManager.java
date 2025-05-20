@@ -7,6 +7,13 @@ public class CollegeManager {
 
     public CollegeManager() {
         colleges = new ArrayList<>();
+        ArrayList<String> csPrograms = new ArrayList<>();
+        csPrograms.add("Computer Science");
+        addCollege("C001", "Tech University", csPrograms);
+
+        ArrayList<String> baPrograms = new ArrayList<>();
+        baPrograms.add("Business Admin");
+        addCollege("C002", "Business School", baPrograms);
     }
 
     public void addCollege(String id, String name, ArrayList<String> programNames) {

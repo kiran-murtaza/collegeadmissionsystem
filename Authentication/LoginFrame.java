@@ -5,9 +5,12 @@ import Applicant.ApplicantDashboard;
 import Authentication.ForgetPasswordFrame;
 import Authentication.Myframe;
 import Authentication.UserLogin;
+import AdminSetup.ProgramManager;
+import AdminSetup.CollegeManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class LoginFrame extends JFrame {
     UserLogin userLogin = new UserLogin();
@@ -103,10 +106,27 @@ public class LoginFrame extends JFrame {
             Users user = userLogin.login(email, password2);  // login returns User object
 
             if (user != null) {
+
+                ProgramManager pm = new ProgramManager();
+                CollegeManager cm = new CollegeManager();
+
+                // Add sample data
+                pm.addProgram("Computer Science", 50, 70);
+                pm.addProgram("Business Admin", 40, 65);
+
+                ArrayList<String> csPrograms = new ArrayList<>();
+                csPrograms.add("Computer Science");
+                cm.addCollege("C001", "Tech University", csPrograms);
+
+                ArrayList<String> baPrograms = new ArrayList<>();
+                baPrograms.add("Business Admin");
+                cm.addCollege("C002", "Business School", baPrograms);
+
                 // login successful
-                ApplicantDashboard dashboard = new ApplicantDashboard(user); // pass the user object
+                ApplicantDashboard dashboard = new ApplicantDashboard(user,pm, cm); // pass the user object
                 dashboard.setVisible(true); // make the dashboard visible
                 dispose(); // close the login frame
+
             } else {
                 // login failed
                 JOptionPane.showMessageDialog(null, "Incorrect email or Password");
