@@ -1,6 +1,8 @@
 package Applicant;
 
 
+import AdminSetup.CollegeManager;
+import AdminSetup.ProgramManager;
 import Authentication.LoginFrame;
 import Authentication.Users;
 
@@ -10,14 +12,18 @@ import java.awt.*;
 public class ApplicantDashboard extends JFrame {
     private final Users userInfo;
     private JPanel contentPanel;
+    private ProgramManager programManager;
+    private CollegeManager collegeManager;
 
     // Color theme
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
 
-    public ApplicantDashboard(Users applicant) {
+    public ApplicantDashboard(Users applicant, ProgramManager programManager , CollegeManager collegeManager){
         this.userInfo = applicant;
+        this.programManager = programManager;
+        this.collegeManager = collegeManager;
         setupFrame();
         initUI();
     }
@@ -99,7 +105,7 @@ public class ApplicantDashboard extends JFrame {
 
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
-            case "Apply for College" -> showApplicationForm(userInfo);
+            case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
             case "Applied For" -> showApplicationStatus();
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
@@ -121,7 +127,7 @@ public class ApplicantDashboard extends JFrame {
 //        contentPanel.repaint();
 //    }
 
-    private void showApplicationForm(Users user) {
+    private void showApplicationForm(Users user, ProgramManager programManager, CollegeManager collegeManager) {
 //        contentPanel.removeAll();
 //
 //        ApplicationForm appForm = new ApplicationForm(userInfo); // if you need to pass the user
@@ -130,7 +136,7 @@ public class ApplicantDashboard extends JFrame {
 //        contentPanel.revalidate();
 //        contentPanel.repaint();
 
-        ApplicationForm formPanel = new ApplicationForm(userInfo);
+        ApplicationForm formPanel = new ApplicationForm(userInfo, this.programManager, this.collegeManager);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(formPanel, BorderLayout.CENTER);

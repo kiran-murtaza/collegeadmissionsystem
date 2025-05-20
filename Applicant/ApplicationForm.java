@@ -1,9 +1,14 @@
 package Applicant;
 
+import AdminSetup.College;
+import AdminSetup.CollegeManager;
+import AdminSetup.Program;
+import AdminSetup.ProgramManager;
 import Authentication.Users;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ApplicationForm extends JPanel {
     private static final Color COLORAZ_BLACK = Color.BLACK;
@@ -16,8 +21,10 @@ public class ApplicationForm extends JPanel {
     private JButton submitButton;
 //    private JLabel applicationIdLabel;
 
-//    ArrayList<String> program = new ArrayList<>();
-//    ArrayList<String> colleges = new ArrayList<>();
+    private ProgramManager programManager;
+    private CollegeManager collegeManager;
+    private Users userInfo;
+
 
 
 
@@ -26,8 +33,12 @@ public class ApplicationForm extends JPanel {
         return "APP-" + String.format("%03d", applicationFormCount);
     }
 
-    public ApplicationForm(Users userInfo
-    ) {
+    public ApplicationForm(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+        this.programManager= programManager;
+        this.collegeManager=collegeManager;
+        this.userInfo = userInfo;
+
+
 //        setTitle("Admission Application Form");
 //        setSize(600, 700);
 //        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,6 +53,51 @@ public class ApplicationForm extends JPanel {
 
        this.add(title);
        this.add(new JLabel(""));
+
+        // Program Dropdown
+        add(new JLabel("Select Program:"));
+        programDropdown = new JComboBox<>();
+        add(programDropdown);
+
+        // College Dropdown
+        add(new JLabel("Select College:"));
+        collegeDropdown = new JComboBox<>();
+        add(collegeDropdown);
+
+        // Load programs into programDropdown
+        loadPrograms();
+
+        // Listener for program selection to update colleges dropdown
+        programDropdown.addActionListener(e -> {
+            String selectedProgram = (String) programDropdown.getSelectedItem();
+            if (selectedProgram != null) {
+                updateCollegeDropdown(selectedProgram);
+            }
+        });
+
+        // Initial update for colleges based on first program if exists
+        if (programDropdown.getItemCount() > 0) {
+            updateCollegeDropdown((String) programDropdown.getItemAt(0));
+        }
+    }
+
+    private void loadPrograms() {
+        programDropdown.removeAllItems();
+        for (Program p : programManager.getAllPrograms()) {
+            programDropdown.addItem(p.getName());
+        }
+    }
+
+    private void updateCollegeDropdown(String programName) {
+        collegeDropdown.removeAllItems();
+        ArrayList<College> filteredColleges = collegeManager.getCollegesByProgram(programName);
+        for (College c : filteredColleges) {
+            collegeDropdown.addItem(c.getName());
+        }
+        // If no college available for program, add placeholder
+        if (collegeDropdown.getItemCount() == 0) {
+            collegeDropdown.addItem("No colleges available");
+        }
 
 //        // Add Program Dropdown
 //        add(new JLabel("Select Program:"));
