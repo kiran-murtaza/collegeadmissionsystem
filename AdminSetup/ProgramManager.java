@@ -10,9 +10,14 @@ public class ProgramManager {
         programList = new ArrayList<>();
     }
 
-    public void addProgram(String name, int seats, int eligibility) {
-        programList.add(new Program(name, seats, eligibility));
+    public boolean addProgram(String name, int seats, int eligibility) {
+        if (getProgramByName(name) == null) {
+            programList.add(new Program(name, seats, eligibility));
+            return true;
+        }
+        return false; // program already exists
     }
+
 
     public List<Program> getAllPrograms() {
         return programList;
