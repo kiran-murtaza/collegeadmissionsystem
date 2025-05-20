@@ -1,7 +1,7 @@
 package Authentication;
 
-//import Administration.NewAdmin.AddAdminFrame;
-//import MainDashboard.MainDashboard;
+
+import AdminSetup.AdminDashboardGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,7 +81,8 @@ public class AdminLoginFrame extends JFrame{
             boolean success = adminLogin.login(Username,Password);
 
             if(success){
-                JOptionPane.showMessageDialog(null,"Login Successful");
+                dispose();
+                new AdminDashboardGUI();
             }
             else {
                 JOptionPane.showMessageDialog(null, "Incorrect username or Password");
