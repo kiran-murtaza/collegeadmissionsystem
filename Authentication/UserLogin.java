@@ -19,15 +19,7 @@ public class UserLogin extends UserLoginManager {
         }
         return null;
     }
-//    public boolean login (String email, String pass){
-//        for (int i = 0; i <users.size() ; i++) {
-//            if(email.equals(users.get(i).getEmail()) && pass.equals(users.get(i).getPassword()) ){
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
+
 
     public static void main(String[] args) {
         new LoginFrame();

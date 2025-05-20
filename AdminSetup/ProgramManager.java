@@ -1,23 +1,34 @@
 package AdminSetup;
-//Add/remove/edit programs
 
+import java.util.ArrayList;
+import java.util.List;
 
-class ProgramManager {
-    private String name;
-    private int seats;
-    private int eligibility;
+public class ProgramManager {
+    private List<Program> programList;
 
-    public ProgramManager(String name, int seats) {
-        this.name = name;
-        this.seats = seats;
+    public ProgramManager() {
+        programList = new ArrayList<>();
     }
 
-    public String getName() { return name; }
-    public int getSeats() { return seats; }
-    public void setEligibility(int score) { eligibility = score; }
-    public int getEligibility() { return eligibility; }
-
-    public String toString() {
-        return name + " (Seats: " + seats + ", Min Score: " + eligibility + ")";
+    public void addProgram(String name, int seats, int eligibility) {
+        programList.add(new Program(name, seats, eligibility));
     }
+
+    public List<Program> getAllPrograms() {
+        return programList;
+    }
+
+    public void removeProgram(String name) {
+        programList.removeIf(p -> p.getName().equalsIgnoreCase(name));
+    }
+
+    public Program getProgramByName(String name) {
+        for (Program p : programList) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
 }
