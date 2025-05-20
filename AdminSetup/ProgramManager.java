@@ -1,11 +1,13 @@
 package AdminSetup;
+//Add/remove/edit programs
 
-class Course {
+
+class ProgramManager {
     private String name;
     private int seats;
     private int eligibility;
 
-    public Course(String name, int seats) {
+    public ProgramManager(String name, int seats) {
         this.name = name;
         this.seats = seats;
     }
