@@ -6,6 +6,7 @@ import java.util.List;
 public class ProgramManager {
     private List<Program> programList;
 
+
     public ProgramManager() {
         programList = new ArrayList<>();
     }
@@ -25,6 +26,17 @@ public class ProgramManager {
 
     public void removeProgram(String name) {
         programList.removeIf(p -> p.getName().equalsIgnoreCase(name));
+    }
+
+
+    public ArrayList<Program> getProgramsByStream(String stream) {
+        ArrayList<Program> filtered = new ArrayList<>();
+        for (Program p : programList) {
+            if (p.isStreamAllowed(stream)) {
+                filtered.add(p);
+            }
+        }
+        return filtered;
     }
 
     public Program getProgramByName(String name) {

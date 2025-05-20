@@ -1,42 +1,33 @@
 package AdminSetup;
 
-
 import java.util.ArrayList;
 
 public class College {
-    private String id;
     private String name;
-    private ArrayList<String> programNames; // Using ArrayList
+    private ArrayList<Program> programs;
 
-    public College(String id, String name, ArrayList<String> programNames) {
-        this.id = id;
+    public College(String name) {
         this.name = name;
-        this.programNames = programNames;
-    }
-
-    public String getId() {
-        return id;
+        this.programs = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public ArrayList<String> getProgramNames() {
-        return programNames;
+    public ArrayList<Program> getPrograms() {
+        return programs;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setProgramNames(ArrayList<String> programNames) {
-        this.programNames = programNames;
+    public void setPrograms(ArrayList<Program> programs) {
+        this.programs = programs;
     }
 
-    @Override
-    public String toString() {
-        return name + " (Programs: " + programNames + ")";
+    public void addProgram(Program program) {
+        this.programs.add(program);
     }
 }
-
