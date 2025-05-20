@@ -73,7 +73,8 @@ public class CollegeManager {
 
 
 
-//example idea
+//example
+//
 
 
 //ArrayList<String> medPrograms = new ArrayList<>();
