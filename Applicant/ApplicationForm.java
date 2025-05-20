@@ -49,8 +49,8 @@ public class ApplicationForm extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setForeground(COLORAZ_BLACK);
         setVisible(true);
-       this.add(title);
-       this.add(new JLabel(""));
+        this.add(title);
+        this.add(new JLabel(""));
         collegeDropdown = new JComboBox<>();
         programDropdown = new JComboBox<>();
 
@@ -224,7 +224,7 @@ public class ApplicationForm extends JPanel {
             JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
 
             // Optional: Save application to database or file here
-           // ---------//
+            // ---------//
 
         }
     }
