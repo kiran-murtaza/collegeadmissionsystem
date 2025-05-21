@@ -16,6 +16,8 @@ public class Applicant extends Users {
         public Applicant(String firstName, String lastName, String email, String password,
                          String securityAnswer, String cnic, LocalDate dob,
                          Gender gender, String phone, String userID) {
+
+
             super(firstName,lastName,email,password,securityAnswer,cnic,dob,gender,phone,userID);
 
             this.submittedApplications = new ArrayList<>();

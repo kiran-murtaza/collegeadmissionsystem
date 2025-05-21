@@ -106,7 +106,7 @@ public class ApplicantDashboard extends JFrame {
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
-            case "Applied For" -> showApplicationStatus();
+            case "Applied For" -> showApplicationInfoPanel();
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
             case "View Eligibility" -> showEligibilityCriteria();
@@ -144,7 +144,7 @@ public class ApplicantDashboard extends JFrame {
         contentPanel.repaint();
     }
 
-    private void showApplicationStatus() {
+    private void showApplicationInfoPanel(){
         contentPanel.removeAll();
         contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();

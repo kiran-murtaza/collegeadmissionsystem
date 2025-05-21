@@ -1,7 +1,5 @@
 package Applicant;
 
-
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -10,24 +8,23 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ApplicationInfoPanel extends JPanel {
+public class ApplicationInfoPanel extends JFrame {
 
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_WHITE = Color.WHITE;
 
     public ApplicationInfoPanel(Applicant applicant) {
-
-        setLayout(new BorderLayout()); // BorderLayout set kar diya panel ke layout ke liye
-        setBackground(COLORAZ_WHITE); // Background white rakha gaya hai
+        setLayout(new BorderLayout());
+        setBackground(COLORAZ_WHITE);
 
         // Heading label
         JLabel title = new JLabel("Aapki Applications ka Record");
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(COLORAZ_BLACK);
-        add(title, BorderLayout.NORTH); // Title ko upar lagaya
+        add(title, BorderLayout.NORTH);
 
-        // Table ke columns
+        // Table columns
         String[] columns = {
                 "Application No.",
                 "Program Name",
@@ -38,11 +35,9 @@ public class ApplicationInfoPanel extends JPanel {
                 "Test Details"
         };
 
-        // Applicant se applications list hasil kar rahe hain
         ArrayList<ApplicationForm> applications = applicant.getSubmittedApplications();
         Object[][] data = new Object[applications.size()][columns.length];
 
-        // Har application ka data table mein daala jaa raha hai
         for (int i = 0; i < applications.size(); i++) {
             ApplicationForm app = applications.get(i);
             data[i][0] = app.getApplicantID();
@@ -51,96 +46,96 @@ public class ApplicationInfoPanel extends JPanel {
             data[i][3] = app.getEmailId();
             data[i][4] = app.getStatus();
 
-//            // Entry test date dikhayi jaayegi
+//            // Entry test date
 //            if (app.getTestDate() != null) {
 //                data[i][5] = app.getTestDate().toString();
 //            } else {
 //                data[i][5] = "Not Scheduled";
 //            }
-//
-//            // Test ki details ya action button
+
+//            // Test details or action button
 //            if (app.getTestDate() != null && app.getTestDate().isEqual(LocalDate.now())) {
 //                data[i][6] = "Take Test";
 //            } else {
 //                data[i][6] = "Unavailable";
 //            }
 //        }
+//
+//            DefaultTableModel model = new DefaultTableModel(data, columns) {
+//                @Override
+//                public boolean isCellEditable(int row, int column) {
+//                    return column == 6 && getValueAt(row, column).equals("Take Test");
+//                }
+//            };
 
-            // Table model aur JTable bana rahe hain
-            DefaultTableModel model = new DefaultTableModel(data, columns) {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return column == 6 && getValueAt(row, column).equals("Take Test"); // sirf test button editable hoga
+//            JTable table = new JTable(model);
+//            table.setRowHeight(30);
+
+//            // Add button renderer and editor
+//            table.getColumn("Test Details").setCellRenderer(new ButtonRenderer());
+//            table.getColumn("Test Details").setCellEditor(new ButtonEditor(new JCheckBox(), applications));
+//
+//            JScrollPane scrollPane = new JScrollPane(table);
+//            add(scrollPane, BorderLayout.CENTER);
+//        }
+
+            // Button renderer class
+            class ButtonRenderer extends JButton implements javax.swing.table.TableCellRenderer {
+                public ButtonRenderer() {
+                    setOpaque(true);
                 }
-            };
 
-            JTable table = new JTable(model);
-            table.setRowHeight(30);
-
-//        // Button click ka event add kar rahe hain
-//        table.getColumn("Test Details").setCellRenderer(new ButtonRenderer());
-//        table.getColumn("Test Details").setCellEditor(new ButtonEditor(new JCheckBox(), applications));
-
-            JScrollPane scrollPane = new JScrollPane(table);
-            add(scrollPane, BorderLayout.CENTER); // table ko center mein lagaya gaya hai
-        }
-
-        // Renderer class button ke liye
-        class ButtonRenderer extends JButton implements javax.swing.table.TableCellRenderer {
-            public ButtonRenderer() {
-                setOpaque(true);
+                public Component getTableCellRendererComponent(JTable table, Object value,
+                                                               boolean isSelected, boolean hasFocus, int row, int column) {
+                    setText((value == null) ? "" : value.toString());
+                    return this;
+                }
             }
 
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus, int row, int column) {
-                setText((value == null) ? "" : value.toString());
-                return this;
-            }
-        }
+            // Button editor class
+            class ButtonEditor extends DefaultCellEditor {
+                private JButton button;
+                private String label;
+                private boolean isPushed;
+                private ArrayList<ApplicationForm> applications;
+                private int selectedRow;
 
-        // Editor class button ke action ke liye
-        class ButtonEditor extends DefaultCellEditor {
-            private JButton button;
-            private String label;
-            private boolean isPushed;
-            private ArrayList<ApplicationForm> applications;
-            private int selectedRow;
+                public ButtonEditor(JCheckBox checkBox, ArrayList<ApplicationForm> applications) {
+                    super(checkBox);
+                    this.applications = applications;
+                    button = new JButton();
+                    button.setOpaque(true);
+                    button.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            fireEditingStopped();
+                            ApplicationForm app = applications.get(selectedRow);
+                            JOptionPane.showMessageDialog(null, "Test Started for: " + app.getSelectedProgram());
+                            // Open test panel here
+                        }
+                    });
+                }
 
-            public ButtonEditor(JCheckBox checkBox, ArrayList<ApplicationForm> applications) {
-                super(checkBox);
-                this.applications = applications;
-                button = new JButton();
-                button.setOpaque(true);
-                button.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        fireEditingStopped();
-                        // Yahan test dena ka panel open karna hoga
-                        ApplicationForm app = applications.get(selectedRow);
-                        JOptionPane.showMessageDialog(null, "Test Started for: " + app.getSelectedProgram());
-                        // yahan se aap test panel open kar sakte hain
-                    }
-                });
-            }
+                public Component getTableCellEditorComponent(JTable table, Object value,
+                                                             boolean isSelected, int row, int column) {
+                    selectedRow = row;
+                    label = (value == null) ? "" : value.toString();
+                    button.setText(label);
+                    isPushed = true;
+                    return button;
+                }
 
-            public Component getTableCellEditorComponent(JTable table, Object value,
-                                                         boolean isSelected, int row, int column) {
-                selectedRow = row;
-                label = (value == null) ? "" : value.toString();
-                button.setText(label);
-                isPushed = true;
-                return button;
-            }
+                public Object getCellEditorValue() {
+                    return label;
+                }
 
-            public Object getCellEditorValue() {
-                return label;
-            }
-
-            public boolean stopCellEditing() {
-                isPushed = false;
-                return super.stopCellEditing();
+                public boolean stopCellEditing() {
+                    isPushed = false;
+                    return super.stopCellEditing();
+                }
             }
         }
     }
+}
 //    public static void main(String[] args) {
 //        // Dummy application list
 //        ArrayList<ApplicationForm> dummyApps = new ArrayList<>();
@@ -158,4 +153,4 @@ public class ApplicationInfoPanel extends JPanel {
 //        frame.setVisible(true);
 
 
-}
+
