@@ -60,7 +60,7 @@ public class ApplicantDashboard_Panel extends JFrame {
 
         String[] menuItems = {
                 "Apply for College",
-                "Application Info",
+                "Submitted Form List",
                 "College List",
                 "Program List",
                 "View Eligibility",
@@ -109,7 +109,7 @@ public class ApplicantDashboard_Panel extends JFrame {
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
-            case "Application Info" -> showApplicationInfoPanel();
+            case "Submitted Form List" -> showSubmittedFormList();
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
             case "View Eligibility" -> showEligibilityCriteria();
@@ -140,11 +140,11 @@ public class ApplicantDashboard_Panel extends JFrame {
         contentPanel.repaint();
     }
 
-    private void showApplicationInfoPanel(){
-        ApplicationInfo_Panel infoPanel = new ApplicationInfo_Panel(userInfo);
+    private void showSubmittedFormList(){
+        SubmittedFormList_Panel submittedFormListPanel = new SubmittedFormList_Panel(userInfo);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
-        contentPanel.add(infoPanel, BorderLayout.CENTER);
+        contentPanel.add(submittedFormListPanel, BorderLayout.CENTER);
 //        contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();

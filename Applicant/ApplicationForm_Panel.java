@@ -219,21 +219,30 @@ public class ApplicationForm_Panel extends JPanel {
             // ✅ Generate Application ID here
             applicationId = generateApplicationId();
             System.out.println("Generated App ID: " + applicationId);
+            ApplicationFormData formData = new ApplicationFormData();
+            formData.setApplicationId(applicationId);
+            formData.setApplicant(userInfo); // store applicant reference
+            formData.setAddress(addressField.getText());
 
-//            ApplicationForm_Panel newApp = new ApplicationForm_Panel(userInfo);
-//
-//            // Ensure the list is initialized
-//            if (userInfo.getSubmittedApplications() == null) {
-//                userInfo.setSubmittedApplications(new ArrayList<>());
-//            }
-//
-//            // ✅ Add the new application
-//            userInfo.getSubmittedApplications().add(newApp);
+            formData.setBoard10(board10Field.getText());
+            formData.setYear10(year10Field.getText());
+            formData.setPercent10(percent10Field.getText());
+            formData.setStream10(stream10Field.getText());
 
-            // ✅ Confirmation
+            formData.setBoard12(board12Field.getText());
+            formData.setYear12(year12Field.getText());
+            formData.setPercent12(percent12Field.getText());
+            formData.setStream12((String) stream12Dropdown.getSelectedItem());
+
+            // Assuming you have a method to get Program/College by name
+            formData.setSelectedProgram(programManager.getProgramByName((String) programDropdown.getSelectedItem()));
+            formData.setSelectedCollege(collegeManager.getCollegesByName((String) collegeDropdown.getSelectedItem()));
+
+
+            // ✅ Add the application to the central list (if you have one)
+            Applicant.addSubmittedApplication(formData);  // You must create this method
+
             JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-
         }
     }
     public String getAddress() {

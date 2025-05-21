@@ -1,7 +1,6 @@
 package AdminSetup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CollegeManager {
     private final ArrayList<College> colleges;
