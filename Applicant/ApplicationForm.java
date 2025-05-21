@@ -25,17 +25,17 @@ public class ApplicationForm extends JPanel {
     private ProgramManager programManager;
     private CollegeManager collegeManager;
     private Users userInfo;
-    private ArrayList<College> colleges;
+
     private  Status status;
     private String applicationId;
 
+    private ArrayList<College> colleges;
 
 
 
     private String generateApplicationId() {
         applicationFormCount++;
         return "APP-" + String.format("%03d", applicationFormCount);
-
     }
 
     public ApplicationForm(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
@@ -44,8 +44,6 @@ public class ApplicationForm extends JPanel {
         this.programManager= programManager;
         this.collegeManager=collegeManager;
         this.userInfo = userInfo;
-        this.status = Status.SUBMITTED;
-
 
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
@@ -84,6 +82,17 @@ public class ApplicationForm extends JPanel {
         add(new JLabel("Gender:"));
         add(new JLabel(String.valueOf(userInfo.getGender())));
 
+
+        // Auto-generated Application ID
+//        String appId = programDropdown.getSelectedItem() + "-" + System.currentTimeMillis();
+//        applicationIdLabel = new JLabel(appId);
+//        add(new JLabel("Application ID:"));
+//        add(applicationIdLabel);
+
+//        String appId = generateApplicationId(); // generate ID
+//        JLabel applicationIdLabel = new JLabel(appId);
+//        add(new JLabel("Application ID:"));
+//        add(applicationIdLabel);
 
         // Address
         add(new JLabel("Address:"));
@@ -164,6 +173,12 @@ public class ApplicationForm extends JPanel {
         submitButton.setBackground(COLORAZ_SAGE);
         submitButton.addActionListener(e -> validateForm());
         add(submitButton);
+
+
+
+
+
+
 
 
     }
@@ -271,6 +286,10 @@ public class ApplicationForm extends JPanel {
     public Status getStatus() {
         return status;
     }
+    public String getEmailId() {
+        return userInfo.getEmail();
+    }
+
 
 
 //    private void showProgramAndCollegeDialog() {
