@@ -1,7 +1,7 @@
-package AdminSetup;
+package AdminSetup.Program;
 
 import java.util.ArrayList;
-import java.util.List;
+
 //
 public class Program {
     private String name;

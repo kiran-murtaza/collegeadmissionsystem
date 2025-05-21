@@ -3,6 +3,8 @@ package Authentication;
 
 
 import AdminSetup.*;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.ProgramManager;
 
 import javax.swing.*;
 import java.awt.*;

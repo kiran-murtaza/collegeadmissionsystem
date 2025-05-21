@@ -1,4 +1,6 @@
-package AdminSetup;
+package AdminSetup.College;
+
+import AdminSetup.Program.Program;
 
 import java.util.ArrayList;
 //

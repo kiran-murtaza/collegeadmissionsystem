@@ -1,4 +1,4 @@
-package AdminSetup;
+package AdminSetup.Program;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class ProgramManager {
             programList.add(new Program(name, seats, eligibility));
             return true;
         }
-        return false; // program already exists
+        return false;
     }
 
 

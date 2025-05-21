@@ -3,8 +3,8 @@ package Authentication;
 //import ApplicationForm.ApplicantDashboard;
 import Applicant.Applicant;
 import Applicant.ApplicantDashboard_Panel;
-import AdminSetup.ProgramManager;
-import AdminSetup.CollegeManager;
+import AdminSetup.Program.ProgramManager;
+import AdminSetup.College.CollegeManager;
 
 import javax.swing.*;
 import java.awt.*;
