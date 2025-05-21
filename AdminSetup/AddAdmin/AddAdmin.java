@@ -38,7 +38,7 @@ public class AddAdmin extends AdminLogin {
         );
 
         adminsArrayList.add(admins);
-//        saveAdmin();
+        saveAdmin();
         return "new admin added";
 
     }

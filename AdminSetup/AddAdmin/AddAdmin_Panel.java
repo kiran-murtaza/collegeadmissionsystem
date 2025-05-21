@@ -108,7 +108,7 @@ public class AddAdmin_Panel extends JPanel {
         }
 
 
-        login.saveAdmin();
+
 
     }
 }
