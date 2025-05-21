@@ -26,12 +26,16 @@ public class ApplicationForm extends JPanel {
     private CollegeManager collegeManager;
     private Users userInfo;
     private ArrayList<College> colleges;
+    private  Status status;
+    private String applicationId;
+
 
 
 
     private String generateApplicationId() {
         applicationFormCount++;
         return "APP-" + String.format("%03d", applicationFormCount);
+
     }
 
     public ApplicationForm(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
@@ -40,6 +44,8 @@ public class ApplicationForm extends JPanel {
         this.programManager= programManager;
         this.collegeManager=collegeManager;
         this.userInfo = userInfo;
+        this.status = Status.SUBMITTED;
+
 
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
@@ -78,17 +84,6 @@ public class ApplicationForm extends JPanel {
         add(new JLabel("Gender:"));
         add(new JLabel(String.valueOf(userInfo.getGender())));
 
-
-        // Auto-generated Application ID
-//        String appId = programDropdown.getSelectedItem() + "-" + System.currentTimeMillis();
-//        applicationIdLabel = new JLabel(appId);
-//        add(new JLabel("Application ID:"));
-//        add(applicationIdLabel);
-
-//        String appId = generateApplicationId(); // generate ID
-//        JLabel applicationIdLabel = new JLabel(appId);
-//        add(new JLabel("Application ID:"));
-//        add(applicationIdLabel);
 
         // Address
         add(new JLabel("Address:"));
@@ -171,12 +166,6 @@ public class ApplicationForm extends JPanel {
         add(submitButton);
 
 
-
-
-
-
-
-
     }
 
 
@@ -217,7 +206,7 @@ public class ApplicationForm extends JPanel {
         }
         else {
             // ✅ Generate Application ID here
-            String applicationId = generateApplicationId();
+            applicationId = generateApplicationId();
             System.out.println("Generated App ID: " + applicationId);
 
             // You can show it in a dialog or label
@@ -228,6 +217,61 @@ public class ApplicationForm extends JPanel {
 
         }
     }
+    public String getAddress() {
+        return addressField.getText();
+    }
+
+    public String getBoard10() {
+        return board10Field.getText();
+    }
+
+    public String getYear10() {
+        return year10Field.getText();
+    }
+
+    public String getPercent10() {
+        return percent10Field.getText();
+    }
+
+    public String getStream10() {
+        return stream10Field.getText();
+    }
+
+    public String getBoard12() {
+        return board12Field.getText();
+    }
+
+    public String getYear12() {
+        return year12Field.getText();
+    }
+
+    public String getPercent12() {
+        return percent12Field.getText();
+    }
+
+    public String getStream12() {
+        return (String) stream12Dropdown.getSelectedItem();
+    }
+
+    public String getSelectedProgram() {
+        return (String) programDropdown.getSelectedItem();
+    }
+
+    public String getSelectedCollege() {
+        return (String) collegeDropdown.getSelectedItem();
+    }
+
+    public String getApplicantID() {
+        return userInfo.getUserID();
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+    public Status getStatus() {
+        return status;
+    }
+
 
 //    private void showProgramAndCollegeDialog() {
 //        JPanel panel = new JPanel(new GridLayout(0, 2));

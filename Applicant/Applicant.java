@@ -10,10 +10,13 @@ public class Applicant extends Users {
 
 
         private ArrayList<ApplicationForm> submittedApplications;
+    private ScholarshipForm scholarshipForm;
+    private ArrayList<Document> documents = new ArrayList<>();
 
-        public Applicant(String firstName, String lastName, String password, String securityAnswer,
-                         String cnic, LocalDate dateOfBirth, Gender gender, String phone, String email) {
-            super(firstName, lastName, password, securityAnswer, cnic, dateOfBirth, gender, phone, email);
+        public Applicant(String firstName, String lastName, String email, String password,
+                         String securityAnswer, String cnic, LocalDate dob,
+                         Gender gender, String phone, String userID) {
+            super(firstName,lastName,email,password,securityAnswer,cnic,dob,gender,phone,userID);
 
             this.submittedApplications = new ArrayList<>();
         }
