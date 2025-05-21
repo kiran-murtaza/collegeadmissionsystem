@@ -37,7 +37,7 @@ public class Applicant extends Users {
 //        public ArrayList<ApplicationForm_Panel> getSubmittedApplications() {
 //            return submittedApplications;
 //        }
-//
+
     public static void addSubmittedApplication(ApplicationFormData application) {
         submittedApplications.add(application);
     }

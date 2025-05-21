@@ -1,7 +1,7 @@
 package Applicant;
 
 import AdminSetup.College.College;
-import AdminSetup.Program;
+import AdminSetup.Program.Program;
 import Authentication.Users;
 
 import java.util.ArrayList;
