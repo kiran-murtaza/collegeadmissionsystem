@@ -25,13 +25,13 @@ public class Users {
      */
 
     public Users(String firstName, String lastName, String email, String password,
-                 String securityAnswer, LocalDate cnic, Gender dob,
-                 String gender, String phone) {
+                 String securityAnswer, String cnic, LocalDate dob,
+                 Gender gender, String phone) {
         this.firstName=firstName;
         this.lastName=lastName;
         this.password = password;
         this.securityAnswer = securityAnswer;
-        this.cnic = cnic;
+        this.cnic =cnic;
         this.dateOfBirth = dob;
         this.gender = gender;
         this.phone = phone;
