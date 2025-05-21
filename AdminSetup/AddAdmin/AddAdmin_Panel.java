@@ -1,8 +1,5 @@
 package AdminSetup.AddAdmin;
 
-import AdminSetup.AdminDashboard_Panel;
-import AdminSetup.CollegeManager;
-import AdminSetup.ProgramManager;
 import Authentication.AdminLogin;
 
 import javax.swing.*;

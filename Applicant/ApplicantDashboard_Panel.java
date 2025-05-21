@@ -1,8 +1,8 @@
 package Applicant;
 
 
-import AdminSetup.CollegeManager;
-import AdminSetup.ProgramManager;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.ProgramManager;
 import Authentication.LoginFrame;
 import Authentication.Users;
 

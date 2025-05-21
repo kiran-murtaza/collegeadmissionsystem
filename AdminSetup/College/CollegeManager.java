@@ -1,24 +1,15 @@
-package AdminSetup;
+package AdminSetup.College;
+
+import AdminSetup.Program.Program;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CollegeManager {
     private final ArrayList<College> colleges;
 
     public CollegeManager() {
-        colleges = new ArrayList<>();
-        College techUniversity = new College("Tech University");
-        ArrayList<Program> csPrograms = new ArrayList<>();
-        csPrograms.add(new Program("Computer Science",99,22));  // assuming Program has constructor Program(String name)
-        techUniversity.setPrograms(csPrograms);
-        colleges.add(techUniversity);
+        colleges= new ArrayList<>();
 
-        College businessSchool = new College("Business School");
-        ArrayList<Program> baPrograms = new ArrayList<>();
-        baPrograms.add(new Program("Business Admin",100,102));
-        businessSchool.setPrograms(baPrograms);
-        colleges.add(businessSchool);
     }
 
     public void addCollege(String name) {

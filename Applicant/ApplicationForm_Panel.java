@@ -1,10 +1,9 @@
 package Applicant;
 
-import AdminSetup.College;
-import AdminSetup.CollegeManager;
-import AdminSetup.Program;
-import AdminSetup.ProgramManager;
-import Authentication.Users;
+import AdminSetup.College.College;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.Program;
+import AdminSetup.Program.ProgramManager;
 
 import javax.swing.*;
 import java.awt.*;

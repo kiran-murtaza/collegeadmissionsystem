@@ -1,11 +1,12 @@
 package AdminSetup;
 
 import AdminSetup.AddAdmin.AddAdmin_Panel;
-import AdminSetup.CollegeManager;
-import AdminSetup.ProgramManager;
-import Applicant.ApplicationForm_Panel;
+import AdminSetup.College.College;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.College.College_Panel;
+import AdminSetup.Program.ProgramManager;
+import AdminSetup.Program.ProgramPanel;
 import Authentication.LoginFrame;
-import Authentication.Users;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,6 @@ public class AdminDashboard_Panel extends JFrame {
     private final ProgramManager programManager;
     private final CollegeManager collegeManager;
 
-    // Color theme
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
@@ -23,7 +23,6 @@ public class AdminDashboard_Panel extends JFrame {
     public AdminDashboard_Panel(ProgramManager programManager, CollegeManager collegeManager) {
         this.programManager = programManager;
         this.collegeManager = collegeManager;
-
         setupFrame();
         initUI();
     }
@@ -38,7 +37,6 @@ public class AdminDashboard_Panel extends JFrame {
     }
 
     private void initUI() {
-        // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COLORAZ_SAGE);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -77,7 +75,6 @@ public class AdminDashboard_Panel extends JFrame {
             menuPanel.add(Box.createHorizontalStrut(10));
         }
 
-        // Content Panel
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBackground(COLORAZ_WHITE);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -85,13 +82,11 @@ public class AdminDashboard_Panel extends JFrame {
         defaultContent.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         contentPanel.add(defaultContent, BorderLayout.CENTER);
 
-        // Middle Panel
         JPanel middlePanel = new JPanel(new BorderLayout());
         middlePanel.add(menuPanel, BorderLayout.NORTH);
         middlePanel.add(contentPanel, BorderLayout.CENTER);
         add(middlePanel, BorderLayout.CENTER);
 
-        // Footer
         JPanel footerPanel = new JPanel();
         footerPanel.setBackground(COLORAZ_SAGE);
         footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
@@ -107,9 +102,9 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.setLayout(new BorderLayout());
 
         switch (menuItem) {
-            case "View College" -> contentPanel.add(new JLabel("College List Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
+            case "View College" -> showColleges();
             case "View Applicant" -> contentPanel.add(new JLabel("Applicant List Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
-            case "View Program" -> contentPanel.add(new JLabel("Program List Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
+            case "View Program" -> showPrograms();
             case "Set Test" -> contentPanel.add(new JLabel("Set Test Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
             case "Add Admin" -> showAddAdmin();
             case "Set Criteria" -> contentPanel.add(new JLabel("Admission Criteria Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
@@ -129,6 +124,23 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(formPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+    private void showColleges() {
+        College_Panel collegePanel= new College_Panel();
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(collegePanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+    private void showPrograms() {
+        ProgramPanel programPanel = new ProgramPanel(programManager);
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(programPanel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
