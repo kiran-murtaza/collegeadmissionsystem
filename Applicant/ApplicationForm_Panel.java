@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ApplicationForm extends JPanel {
+public class ApplicationForm_Panel extends JPanel {
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
@@ -38,7 +38,7 @@ public class ApplicationForm extends JPanel {
         return "APP-" + String.format("%03d", applicationFormCount);
     }
 
-    public ApplicationForm(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+    public ApplicationForm_Panel(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
         colleges = new ArrayList<>();
 
         this.programManager= programManager;

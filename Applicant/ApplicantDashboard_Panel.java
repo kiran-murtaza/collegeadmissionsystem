@@ -9,7 +9,7 @@ import Authentication.Users;
 import javax.swing.*;
 import java.awt.*;
 
-public class ApplicantDashboard extends JFrame {
+public class ApplicantDashboard_Panel extends JFrame {
     private final Users userInfo;
     private JPanel contentPanel;
     private ProgramManager programManager;
@@ -20,7 +20,7 @@ public class ApplicantDashboard extends JFrame {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
 
-    public ApplicantDashboard(Users applicant, ProgramManager programManager , CollegeManager collegeManager){
+    public ApplicantDashboard_Panel(Users applicant, ProgramManager programManager , CollegeManager collegeManager){
         this.userInfo = applicant;
         this.programManager = programManager;
         this.collegeManager = collegeManager;
@@ -136,7 +136,7 @@ public class ApplicantDashboard extends JFrame {
 //        contentPanel.revalidate();
 //        contentPanel.repaint();
 
-        ApplicationForm formPanel = new ApplicationForm(userInfo, this.programManager, this.collegeManager);
+        ApplicationForm_Panel formPanel = new ApplicationForm_Panel(userInfo, this.programManager, this.collegeManager);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(formPanel, BorderLayout.CENTER);

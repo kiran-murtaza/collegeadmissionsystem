@@ -1,16 +1,12 @@
 package Authentication;
 
 //import ApplicationForm.ApplicantDashboard;
-import Applicant.ApplicantDashboard;
-import Authentication.ForgetPasswordFrame;
-import Authentication.Myframe;
-import Authentication.UserLogin;
+import Applicant.ApplicantDashboard_Panel;
 import AdminSetup.ProgramManager;
 import AdminSetup.CollegeManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class LoginFrame extends JFrame {
     UserLogin userLogin = new UserLogin();
@@ -113,7 +109,7 @@ public class LoginFrame extends JFrame {
 
 
                 // login successful
-                ApplicantDashboard dashboard = new ApplicantDashboard(user,pm, cm); // pass the user object
+                ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(user,pm, cm); // pass the user object
                 dashboard.setVisible(true); // make the dashboard visible
                 dispose(); // close the login frame
 

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ScholarshipForm {
+public class ScholarshipForm_Panel {
 
     private static JTextField fullNameField, emailField, dobField, addressField, contactField;
     private static JTextField percentageField, institutionField, fieldOfStudyField;

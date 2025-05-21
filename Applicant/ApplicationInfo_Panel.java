@@ -1,19 +1,17 @@
 package Applicant;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ApplicationInfoPanel extends JFrame {
+public class ApplicationInfo_Panel extends JFrame {
 
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_WHITE = Color.WHITE;
 
-    public ApplicationInfoPanel(Applicant applicant) {
+    public ApplicationInfo_Panel(Applicant applicant) {
         setLayout(new BorderLayout());
         setBackground(COLORAZ_WHITE);
 
@@ -35,11 +33,11 @@ public class ApplicationInfoPanel extends JFrame {
                 "Test Details"
         };
 
-        ArrayList<ApplicationForm> applications = applicant.getSubmittedApplications();
+        ArrayList<ApplicationForm_Panel> applications = applicant.getSubmittedApplications();
         Object[][] data = new Object[applications.size()][columns.length];
 
         for (int i = 0; i < applications.size(); i++) {
-            ApplicationForm app = applications.get(i);
+            ApplicationForm_Panel app = applications.get(i);
             data[i][0] = app.getApplicantID();
             data[i][1] = app.getSelectedProgram();
             data[i][2] = app.getSelectedCollege();
@@ -97,10 +95,10 @@ public class ApplicationInfoPanel extends JFrame {
                 private JButton button;
                 private String label;
                 private boolean isPushed;
-                private ArrayList<ApplicationForm> applications;
+                private ArrayList<ApplicationForm_Panel> applications;
                 private int selectedRow;
 
-                public ButtonEditor(JCheckBox checkBox, ArrayList<ApplicationForm> applications) {
+                public ButtonEditor(JCheckBox checkBox, ArrayList<ApplicationForm_Panel> applications) {
                     super(checkBox);
                     this.applications = applications;
                     button = new JButton();
@@ -108,7 +106,7 @@ public class ApplicationInfoPanel extends JFrame {
                     button.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             fireEditingStopped();
-                            ApplicationForm app = applications.get(selectedRow);
+                            ApplicationForm_Panel app = applications.get(selectedRow);
                             JOptionPane.showMessageDialog(null, "Test Started for: " + app.getSelectedProgram());
                             // Open test panel here
                         }
