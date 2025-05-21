@@ -1,6 +1,6 @@
 package Applicant;
 
-import AdminSetup.College;
+import AdminSetup.College.College;
 import AdminSetup.Program;
 import Authentication.Users;
 
