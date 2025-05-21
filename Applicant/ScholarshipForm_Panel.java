@@ -5,6 +5,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ScholarshipForm_Panel {
+//    Purpose:
+//    Show scholarship options and eligibility criteria.
+//
+//    Features:
+//
+//    List of scholarships
+//
+//    For each: % of tuition covered, eligibility, apply button (if needed)
+//
+//    Optional:
+//
+//    If it's auto-calculated by admin later, then make it view-only.
+
+
 
     private static JTextField fullNameField, emailField, dobField, addressField, contactField;
     private static JTextField percentageField, institutionField, fieldOfStudyField;

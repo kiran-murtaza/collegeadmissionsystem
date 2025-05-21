@@ -1,20 +1,24 @@
 package Applicant;
 
+import Authentication.Users;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
 public class ApplicationInfo_Panel extends JFrame {
+    private Applicant userInfo;
 
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_WHITE = Color.WHITE;
 
-    public ApplicationInfo_Panel(Applicant applicant) {
+    public ApplicationInfo_Panel(Applicant userInfo) {
         setLayout(new BorderLayout());
         setBackground(COLORAZ_WHITE);
-
+this.userInfo= userInfo;
         // Heading label
         JLabel title = new JLabel("Aapki Applications ka Record");
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
@@ -33,7 +37,7 @@ public class ApplicationInfo_Panel extends JFrame {
                 "Test Details"
         };
 
-        ArrayList<ApplicationForm_Panel> applications = applicant.getSubmittedApplications();
+        ArrayList<ApplicationForm_Panel> applications = userInfo.getSubmittedApplications();
         Object[][] data = new Object[applications.size()][columns.length];
 
         for (int i = 0; i < applications.size(); i++) {

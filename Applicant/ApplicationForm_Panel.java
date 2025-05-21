@@ -24,7 +24,7 @@ public class ApplicationForm_Panel extends JPanel {
 
     private ProgramManager programManager;
     private CollegeManager collegeManager;
-    private Users userInfo;
+    private Applicant userInfo;
 
     private  Status status;
     private String applicationId;
@@ -38,7 +38,7 @@ public class ApplicationForm_Panel extends JPanel {
         return "APP-" + String.format("%03d", applicationFormCount);
     }
 
-    public ApplicationForm_Panel(Users userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+    public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
         colleges = new ArrayList<>();
 
         this.programManager= programManager;

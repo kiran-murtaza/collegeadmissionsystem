@@ -1,6 +1,7 @@
 package Authentication;
 
 //import ApplicationForm.ApplicantDashboard;
+import Applicant.Applicant;
 import Applicant.ApplicantDashboard_Panel;
 import AdminSetup.ProgramManager;
 import AdminSetup.CollegeManager;
@@ -105,11 +106,11 @@ public class LoginFrame extends JFrame {
 
                 ProgramManager pm = new ProgramManager();
                 CollegeManager cm = new CollegeManager();
-
+                Applicant applicant = new Applicant(user.firstName,user.lastName,user.email,user.password,user.securityAnswer,user.cnic,user.dateOfBirth,user.gender,user.phone,user.getUserID());
 
 
                 // login successful
-                ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(user,pm, cm); // pass the user object
+                ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(applicant,pm, cm); // pass the user object
                 dashboard.setVisible(true); // make the dashboard visible
                 dispose(); // close the login frame
 

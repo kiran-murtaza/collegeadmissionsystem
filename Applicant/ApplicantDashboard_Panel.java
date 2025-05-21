@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ApplicantDashboard_Panel extends JFrame {
-    private final Users userInfo;
+    private final Applicant userInfo;
     private JPanel contentPanel;
     private ProgramManager programManager;
     private CollegeManager collegeManager;
@@ -20,7 +20,10 @@ public class ApplicantDashboard_Panel extends JFrame {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
 
-    public ApplicantDashboard_Panel(Users applicant, ProgramManager programManager , CollegeManager collegeManager){
+
+
+
+    public ApplicantDashboard_Panel(Applicant applicant, ProgramManager programManager , CollegeManager collegeManager){
         this.userInfo = applicant;
         this.programManager = programManager;
         this.collegeManager = collegeManager;
@@ -106,7 +109,7 @@ public class ApplicantDashboard_Panel extends JFrame {
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
-            case "Applied For" -> showApplicationInfoPanel();
+            case "Applied For" -> showApplicationInfoPanel(userInfo);
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
             case "View Eligibility" -> showEligibilityCriteria();
@@ -144,7 +147,7 @@ public class ApplicantDashboard_Panel extends JFrame {
         contentPanel.repaint();
     }
 
-    private void showApplicationInfoPanel(){
+    private void showApplicationInfoPanel(Applicant applicant){
         contentPanel.removeAll();
         contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();
