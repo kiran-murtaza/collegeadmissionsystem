@@ -112,7 +112,7 @@ public class LoginFrame extends JFrame {
                 // login successful
                 ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(applicant,pm, cm); // pass the user object
                 dashboard.setVisible(true); // make the dashboard visible
-                dispose(); // close the login frame
+                dispose(); // close the login frame//
 
             } else {
                 // login failed
