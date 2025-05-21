@@ -23,8 +23,8 @@ public class ApplicantDashboard_Panel extends JFrame {
 
 
 
-    public ApplicantDashboard_Panel(Applicant applicant, ProgramManager programManager , CollegeManager collegeManager){
-        this.userInfo = applicant;
+    public ApplicantDashboard_Panel(Applicant userInfo, ProgramManager programManager , CollegeManager collegeManager){
+        this.userInfo = userInfo;
         this.programManager = programManager;
         this.collegeManager = collegeManager;
         setupFrame();
@@ -109,7 +109,7 @@ public class ApplicantDashboard_Panel extends JFrame {
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
-            case "Applied For" -> showApplicationInfoPanel(userInfo);
+            case "Applied For" -> showApplicationInfoPanel();
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
             case "View Eligibility" -> showEligibilityCriteria();
@@ -131,14 +131,7 @@ public class ApplicantDashboard_Panel extends JFrame {
 //    }
 
     private void showApplicationForm(Users user, ProgramManager programManager, CollegeManager collegeManager) {
-//        contentPanel.removeAll();
 //
-//        ApplicationForm appForm = new ApplicationForm(userInfo); // if you need to pass the user
-//        contentPanel.add(appForm, BorderLayout.CENTER);
-
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
-
         ApplicationForm_Panel formPanel = new ApplicationForm_Panel(userInfo, this.programManager, this.collegeManager);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
@@ -147,9 +140,12 @@ public class ApplicantDashboard_Panel extends JFrame {
         contentPanel.repaint();
     }
 
-    private void showApplicationInfoPanel(Applicant applicant){
+    private void showApplicationInfoPanel(){
+        ApplicationInfo_Panel infoPanel = new ApplicationInfo_Panel(userInfo);
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(infoPanel, BorderLayout.CENTER);
+//        contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
