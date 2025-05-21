@@ -27,15 +27,13 @@ public class ApplicationForm_Panel extends JPanel {
     private Applicant userInfo;
 
     private  Status status;
-    private String applicationId;
-
+    private static int nextId = 1; // for auto-incrementing IDs
+    private static String applicationId;
     private ArrayList<College> colleges;
 
 
-
-    private String generateApplicationId() {
-        applicationFormCount++;
-        return "APP-" + String.format("%03d", applicationFormCount);
+    private static String generateApplicationId() {
+        return applicationId = "APP-" + nextId++;
     }
 
     public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
@@ -59,7 +57,6 @@ public class ApplicationForm_Panel extends JPanel {
         programDropdown = new JComboBox<>();
 
 
-
         add(new JLabel("Applicant ID:"));
         add(new JLabel(userInfo.getUserID()));
 
@@ -71,7 +68,6 @@ public class ApplicationForm_Panel extends JPanel {
 
         add(new JLabel("Last Name:"));
         add(new JLabel(userInfo.getLastName()));
-
 
         add(new JLabel("Phone Number:"));
         add(new JLabel(userInfo.getPhone()));

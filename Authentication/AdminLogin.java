@@ -30,7 +30,7 @@ public class AdminLogin {
             if(!file.exists()){
                 file.createNewFile();
             }
-            FileWriter writer = new FileWriter(file,true);
+            FileWriter writer = new FileWriter(file,false);
 
             for (int i = 0; i <adminsArrayList.size() ; i++) {
 

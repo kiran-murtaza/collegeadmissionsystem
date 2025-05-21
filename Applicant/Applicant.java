@@ -23,7 +23,7 @@ public class Applicant extends Users {
     private String selectedProgram;
     private String selectedCollege;
 
-        private ArrayList<ApplicationForm_Panel> submittedApplications;
+    private ArrayList<ApplicationForm_Panel> submittedApplications;
     private ScholarshipForm_Panel scholarshipForm;
     private ArrayList<AdmissionRecord> admissions;
 
