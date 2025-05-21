@@ -224,11 +224,19 @@ public class ApplicationForm_Panel extends JPanel {
             applicationId = generateApplicationId();
             System.out.println("Generated App ID: " + applicationId);
 
-            // You can show it in a dialog or label
+//            ApplicationForm_Panel newApp = new ApplicationForm_Panel(userInfo);
+//
+//            // Ensure the list is initialized
+//            if (userInfo.getSubmittedApplications() == null) {
+//                userInfo.setSubmittedApplications(new ArrayList<>());
+//            }
+//
+//            // ✅ Add the new application
+//            userInfo.getSubmittedApplications().add(newApp);
+
+            // ✅ Confirmation
             JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            // Optional: Save application to database or file here
-            // ---------//
 
         }
     }

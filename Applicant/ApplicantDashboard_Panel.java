@@ -60,7 +60,7 @@ public class ApplicantDashboard_Panel extends JFrame {
 
         String[] menuItems = {
                 "Apply for College",
-                "Applied For",
+                "Application Info",
                 "College List",
                 "Program List",
                 "View Eligibility",
@@ -109,7 +109,7 @@ public class ApplicantDashboard_Panel extends JFrame {
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
-            case "Applied For" -> showApplicationInfoPanel();
+            case "Application Info" -> showApplicationInfoPanel();
             case "College List" -> showCollegeList();
             case "Program List" -> showProgramList();
             case "View Eligibility" -> showEligibilityCriteria();
