@@ -18,14 +18,27 @@ public class SubmittedFormList_Panel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(COLOR_WHITE);
 
-        // Title
+
         JLabel title = new JLabel("Submitted Applications Record");
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setForeground(COLOR_BLACK);
         add(title, BorderLayout.NORTH);
 
-        ArrayList<ApplicationFormData> applications = Applicant.getSubmittedApplications();
+        ArrayList<ApplicationFormData> applications = new ArrayList<>();
+        File file = new File("applications.txt");
+        try {
+            applications = ApplicantManager.loadApplicantsFromFile(userInfo, file);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            JLabel errorLabel = new JLabel("Error loading applications.");
+            errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            errorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            errorLabel.setForeground(Color.RED);
+            add(errorLabel, BorderLayout.CENTER);
+            return;
+        }
 
         if (applications == null || applications.isEmpty()) {
             JLabel noAppsLabel = new JLabel("Ab tak koi application submit nahi hui hai.");
@@ -49,9 +62,9 @@ public class SubmittedFormList_Panel extends JPanel {
                 ApplicationFormData app = applications.get(i);
 
                 data[i][0] = app.getApplicationId();
-                data[i][1] = app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A";
-                data[i][2] = (app.getSelectedCollege() != null) ? app.getSelectedCollege() : "N/A";
-                data[i][3] = app.getEmail() != null ? app.getEmail() : "N/A";
+                data[i][1] = app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A";
+                data[i][2] = app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A";
+                data[i][3] = (app.getUsers() != null && app.getUsers().getEmail() != null) ? app.getUsers().getEmail() : "N/A";
                 data[i][4] = formatStatus(app.getStatus());
 
                 if (app.getStatus() == Status.TEST_SCHEDULED || app.getStatus() == Status.TEST_TAKEN) {

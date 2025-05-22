@@ -213,9 +213,18 @@ public class ApplicationForm_Panel extends JPanel {
                     selectedProgram,
                     selectedCollege
             );
-            JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
-            Applicant.addSubmittedApplication(applicationFormData);  // You must create this method
-            ApplicantManager.saveToFile(applicationFormData,new File("applications.txt"));
+
+            ArrayList<ApplicationFormData> existingApplications = Applicant.getSubmittedApplications();
+            boolean alreadyApplied = ApplicantManager.hasAppliedBefore(existingApplications, applicationFormData);
+            if (alreadyApplied) {
+                JOptionPane.showMessageDialog(this, "You have already applied for this program.");
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
+                Applicant.addSubmittedApplication(applicationFormData);
+                ApplicantManager.saveToFile(applicationFormData,new File("applications.txt"));
+            }
+
 //
         }
     }
