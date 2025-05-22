@@ -21,7 +21,6 @@ public class ApplicationForm_Panel extends JPanel {
     private JTextField addressField, board10Field, year10Field, percent10Field, stream10Field;
     private JTextField board12Field, year12Field, percent12Field;
     private JButton submitButton;
-//    private JLabel applicationIdLabel;
 
     private ProgramManager programManager;
     private CollegeManager collegeManager;
@@ -46,7 +45,6 @@ public class ApplicationForm_Panel extends JPanel {
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
 
-        // Title
         JLabel title = new JLabel("Admission Application Form", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 18));
         title.setForeground(COLORAZ_BLACK);
@@ -78,24 +76,10 @@ public class ApplicationForm_Panel extends JPanel {
         add(new JLabel("Gender :"));
         add(new JLabel(String.valueOf(userInfo.getGender())));
 
-
-        // Auto-generated Application ID
-//        String appId = programDropdown.getSelectedItem() + "-" + System.currentTimeMillis();
-//        applicationIdLabel = new JLabel(appId);
-//        add(new JLabel("Application ID:"));
-//        add(applicationIdLabel);
-
-//        String appId = generateApplicationId(); // generate ID
-//        JLabel applicationIdLabel = new JLabel(appId);
-//        add(new JLabel("Application ID:"));
-//        add(applicationIdLabel);
-
-        // Address
         add(new JLabel("Address:"));
         addressField = new JTextField();
         add(addressField);
 
-        // 10th Qualification
         add(new JLabel("10th Board:"));
         board10Field = new JTextField();
         add(board10Field);
@@ -112,7 +96,6 @@ public class ApplicationForm_Panel extends JPanel {
         stream10Field = new JTextField();
         add(stream10Field);
 
-        // 12th Qualification
         add(new JLabel("12th Board:"));
         board12Field = new JTextField();
         add(board12Field);
@@ -164,17 +147,10 @@ public class ApplicationForm_Panel extends JPanel {
             }
         });
 
-        // Submit Button
         submitButton = new JButton("Submit");
         submitButton.setBackground(COLORAZ_SAGE);
         submitButton.addActionListener(e -> validateForm());
         add(submitButton);
-
-
-
-
-
-
 
 
     }
@@ -216,9 +192,7 @@ public class ApplicationForm_Panel extends JPanel {
             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Validation Error", JOptionPane.ERROR_MESSAGE);
         }
         else {
-            // ✅ Generate Application ID here
             applicationId = generateApplicationId();
-//            System.out.println("Generated App ID: " + applicationId);
             String selectedProgramName = (String) programDropdown.getSelectedItem();
             String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
 
@@ -226,7 +200,7 @@ public class ApplicationForm_Panel extends JPanel {
             College selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
             ApplicationFormData applicationFormData = new ApplicationFormData(
                     applicationId,
-                    userInfo,          // pass UserID from Users object
+                    userInfo,
                     addressField.getText(),
                     board10Field.getText(),
                     year10Field.getText(),
@@ -241,27 +215,8 @@ public class ApplicationForm_Panel extends JPanel {
             );
             JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
             Applicant.addSubmittedApplication(applicationFormData);  // You must create this method
-            ApplicantManager.saveToFile(applicationFormData,new File("applicants.txt"));
-//            formData.setApplicationId(applicationId);
-//            formData.setApplicant(userInfo); // store applicant reference
-//            formData.setAddress(addressField.getText());
+            ApplicantManager.saveToFile(applicationFormData,new File("applications.txt"));
 //
-//            formData.setBoard10(board10Field.getText());
-//            formData.setYear10(year10Field.getText());
-//            formData.setPercent10(percent10Field.getText());
-//            formData.setStream10(stream10Field.getText());
-//
-//            formData.setBoard12(board12Field.getText());
-//            formData.setYear12(year12Field.getText());
-//            formData.setPercent12(percent12Field.getText());
-//            formData.setStream12((String) stream12Dropdown.getSelectedItem());
-//
-//            // Assuming you have a method to get Program/College by name
-//            formData.setSelectedProgram(programManager.getProgramByName((String) programDropdown.getSelectedItem()));
-//            formData.setSelectedCollege(collegeManager.getCollegesByName((String) collegeDropdown.getSelectedItem()));
-
-
-            // ✅ Add the application to the central list (if you have one)
         }
     }
     public String getAddress() {

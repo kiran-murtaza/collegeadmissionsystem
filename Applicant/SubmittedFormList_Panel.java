@@ -14,7 +14,6 @@ public class SubmittedFormList_Panel extends JPanel {
 
     public SubmittedFormList_Panel(Applicant userInfo) {
         this.userInfo = userInfo;
-//        ApplicantManager.loadApplicantsFromFile(new File("applicants.txt"));
 
         setLayout(new BorderLayout());
         setBackground(COLOR_WHITE);
@@ -53,11 +52,8 @@ public class SubmittedFormList_Panel extends JPanel {
                 data[i][1] = app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A";
                 data[i][2] = (app.getSelectedCollege() != null) ? app.getSelectedCollege() : "N/A";
                 data[i][3] = app.getEmail() != null ? app.getEmail() : "N/A";
-
-                // Dynamic status from enum
                 data[i][4] = formatStatus(app.getStatus());
 
-                // Entry test info (you can customize logic here)
                 if (app.getStatus() == Status.TEST_SCHEDULED || app.getStatus() == Status.TEST_TAKEN) {
                     data[i][5] = "Scheduled";
                     data[i][6] = "Test details will be emailed.";
@@ -82,7 +78,6 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 
-    // Utility to format status enum
     private String formatStatus(Status status) {
         if (status == null) return "Unknown";
         return switch (status) {
