@@ -3,6 +3,7 @@ package Applicant;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class SubmittedFormList_Panel extends JPanel {
@@ -13,6 +14,7 @@ public class SubmittedFormList_Panel extends JPanel {
 
     public SubmittedFormList_Panel(Applicant userInfo) {
         this.userInfo = userInfo;
+//        ApplicantManager.loadApplicantsFromFile(new File("applicants.txt"));
 
         setLayout(new BorderLayout());
         setBackground(COLOR_WHITE);

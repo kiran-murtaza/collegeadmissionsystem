@@ -7,6 +7,7 @@ import AdminSetup.Program.ProgramManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 
 public class ApplicationForm_Panel extends JPanel {
@@ -15,6 +16,7 @@ public class ApplicationForm_Panel extends JPanel {
     private static final Color COLORAZ_WHITE = Color.WHITE;
     private static int applicationFormCount = 0;
     private JComboBox<String> programDropdown, collegeDropdown,stream12Dropdown;
+
 
     private JTextField addressField, board10Field, year10Field, percent10Field, stream10Field;
     private JTextField board12Field, year12Field, percent12Field;
@@ -37,7 +39,6 @@ public class ApplicationForm_Panel extends JPanel {
 
     public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
         colleges = new ArrayList<>();
-
         this.programManager= programManager;
         this.collegeManager=collegeManager;
         this.userInfo = userInfo;
@@ -217,31 +218,50 @@ public class ApplicationForm_Panel extends JPanel {
         else {
             // ✅ Generate Application ID here
             applicationId = generateApplicationId();
-            System.out.println("Generated App ID: " + applicationId);
-            ApplicationFormData formData = new ApplicationFormData();
-            formData.setApplicationId(applicationId);
-            formData.setApplicant(userInfo); // store applicant reference
-            formData.setAddress(addressField.getText());
+//            System.out.println("Generated App ID: " + applicationId);
+            String selectedProgramName = (String) programDropdown.getSelectedItem();
+            String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
 
-            formData.setBoard10(board10Field.getText());
-            formData.setYear10(year10Field.getText());
-            formData.setPercent10(percent10Field.getText());
-            formData.setStream10(stream10Field.getText());
-
-            formData.setBoard12(board12Field.getText());
-            formData.setYear12(year12Field.getText());
-            formData.setPercent12(percent12Field.getText());
-            formData.setStream12((String) stream12Dropdown.getSelectedItem());
-
-            // Assuming you have a method to get Program/College by name
-            formData.setSelectedProgram(programManager.getProgramByName((String) programDropdown.getSelectedItem()));
-            formData.setSelectedCollege(collegeManager.getCollegesByName((String) collegeDropdown.getSelectedItem()));
+            Program selectedProgram = programManager.getProgramByName(selectedProgramName);
+            College selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
+            ApplicationFormData applicationFormData = new ApplicationFormData(
+                    applicationId,
+                    userInfo,          // pass UserID from Users object
+                    addressField.getText(),
+                    board10Field.getText(),
+                    year10Field.getText(),
+                    percent10Field.getText(),
+                    stream10Field.getText(),
+                    board12Field.getText(),
+                    year12Field.getText(),
+                    percent12Field.getText(),
+                    stream12Dropdown.getSelectedItem().toString(),
+                    selectedProgram,
+                    selectedCollege
+            );
+            JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
+            Applicant.addSubmittedApplication(applicationFormData);  // You must create this method
+            ApplicantManager.saveToFile(applicationFormData,new File("applicants.txt"));
+//            formData.setApplicationId(applicationId);
+//            formData.setApplicant(userInfo); // store applicant reference
+//            formData.setAddress(addressField.getText());
+//
+//            formData.setBoard10(board10Field.getText());
+//            formData.setYear10(year10Field.getText());
+//            formData.setPercent10(percent10Field.getText());
+//            formData.setStream10(stream10Field.getText());
+//
+//            formData.setBoard12(board12Field.getText());
+//            formData.setYear12(year12Field.getText());
+//            formData.setPercent12(percent12Field.getText());
+//            formData.setStream12((String) stream12Dropdown.getSelectedItem());
+//
+//            // Assuming you have a method to get Program/College by name
+//            formData.setSelectedProgram(programManager.getProgramByName((String) programDropdown.getSelectedItem()));
+//            formData.setSelectedCollege(collegeManager.getCollegesByName((String) collegeDropdown.getSelectedItem()));
 
 
             // ✅ Add the application to the central list (if you have one)
-            Applicant.addSubmittedApplication(formData);  // You must create this method
-
-            JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     public String getAddress() {

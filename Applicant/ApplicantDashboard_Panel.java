@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ApplicantDashboard_Panel extends JFrame {
-    private final Applicant userInfo;
+    private Applicant userInfo;
     private JPanel contentPanel;
     private ProgramManager programManager;
     private CollegeManager collegeManager;
