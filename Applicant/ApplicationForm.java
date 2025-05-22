@@ -79,7 +79,7 @@ public class ApplicationForm extends JPanel {
         add(new JLabel("Date of Birth:"));
         add(new JLabel(String.valueOf(userInfo.getDateOfBirth())));
 
-        add(new JLabel("Gender:"));
+        add(new JLabel("Gender :"));
         add(new JLabel(String.valueOf(userInfo.getGender())));
 
 
