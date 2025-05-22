@@ -25,14 +25,13 @@ public class CollegeManager {
     }
 
 
-    public ArrayList<College> getCollegesByName(String collegeName) {
-        ArrayList<College> result = new ArrayList<>();
+    public College getCollegeByName(String collegeName) {
         for (College c : colleges) {
             if (c.getName().equalsIgnoreCase(collegeName)) {
-                result.add(c);
+                return c;
             }
         }
-        return result;
+        return null;
     }
 
     public ArrayList<College> getCollegesByProgramName(String programName) {
