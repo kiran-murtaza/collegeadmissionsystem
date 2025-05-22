@@ -2,6 +2,10 @@ package Authentication;
 
 
 
+import AdminSetup.*;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.ProgramManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -81,20 +85,25 @@ public class AdminLoginFrame extends JFrame{
 
             if(success){
                 dispose();
-                JOptionPane.showMessageDialog(null,"correct");
+                ProgramManager programManager= new ProgramManager();
+                CollegeManager collegeManager= new CollegeManager();
+                AdminDashboard_Panel adminDashboardPanel= new AdminDashboard_Panel(programManager,collegeManager);
+                adminDashboardPanel.setVisible(true);
+
+
             }
             else {
                 JOptionPane.showMessageDialog(null, "Incorrect username or Password");
             }
-            adminLogin.transferData();
+            adminLogin.saveAdmin();
 
         });
 
     }
 
-    public static void main(String[] args) {
-        new AdminLoginFrame();
-    }
+
+
+
 
 
 

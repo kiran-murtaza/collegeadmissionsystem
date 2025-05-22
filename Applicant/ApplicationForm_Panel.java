@@ -1,0 +1,341 @@
+package Applicant;
+
+import AdminSetup.College.College;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.Program;
+import AdminSetup.Program.ProgramManager;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+public class ApplicationForm_Panel extends JPanel {
+    private static final Color COLORAZ_BLACK = Color.BLACK;
+    private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
+    private static final Color COLORAZ_WHITE = Color.WHITE;
+    private static int applicationFormCount = 0;
+    private JComboBox<String> programDropdown, collegeDropdown,stream12Dropdown;
+
+    private JTextField addressField, board10Field, year10Field, percent10Field, stream10Field;
+    private JTextField board12Field, year12Field, percent12Field;
+    private JButton submitButton;
+//    private JLabel applicationIdLabel;
+
+    private ProgramManager programManager;
+    private CollegeManager collegeManager;
+    private Applicant userInfo;
+
+    private  Status status;
+    private static int nextId = 1; // for auto-incrementing IDs
+    private static String applicationId;
+    private ArrayList<College> colleges;
+
+
+    private static String generateApplicationId() {
+        return applicationId = "APP-" + nextId++;
+    }
+
+    public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+        colleges = new ArrayList<>();
+
+        this.programManager= programManager;
+        this.collegeManager=collegeManager;
+        this.userInfo = userInfo;
+
+        setLayout(new GridLayout(0, 2));
+        setBackground(COLORAZ_WHITE);
+
+        // Title
+        JLabel title = new JLabel("Admission Application Form", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 18));
+        title.setForeground(COLORAZ_BLACK);
+        setVisible(true);
+        this.add(title);
+        this.add(new JLabel(""));
+        collegeDropdown = new JComboBox<>();
+        programDropdown = new JComboBox<>();
+
+
+        add(new JLabel("Applicant ID:"));
+        add(new JLabel(userInfo.getUserID()));
+
+        add(new JLabel("Email:"));
+        add(new JLabel(userInfo.getEmail()));
+
+        add(new JLabel("First Name:"));
+        add(new JLabel(userInfo.getFirstName()));
+
+        add(new JLabel("Last Name:"));
+        add(new JLabel(userInfo.getLastName()));
+
+        add(new JLabel("Phone Number:"));
+        add(new JLabel(userInfo.getPhone()));
+
+        add(new JLabel("Date of Birth:"));
+        add(new JLabel(String.valueOf(userInfo.getDateOfBirth())));
+
+        add(new JLabel("Gender :"));
+        add(new JLabel(String.valueOf(userInfo.getGender())));
+
+
+        // Auto-generated Application ID
+//        String appId = programDropdown.getSelectedItem() + "-" + System.currentTimeMillis();
+//        applicationIdLabel = new JLabel(appId);
+//        add(new JLabel("Application ID:"));
+//        add(applicationIdLabel);
+
+//        String appId = generateApplicationId(); // generate ID
+//        JLabel applicationIdLabel = new JLabel(appId);
+//        add(new JLabel("Application ID:"));
+//        add(applicationIdLabel);
+
+        // Address
+        add(new JLabel("Address:"));
+        addressField = new JTextField();
+        add(addressField);
+
+        // 10th Qualification
+        add(new JLabel("10th Board:"));
+        board10Field = new JTextField();
+        add(board10Field);
+
+        add(new JLabel("10th Year:"));
+        year10Field = new JTextField();
+        add(year10Field);
+
+        add(new JLabel("10th Percentage:"));
+        percent10Field = new JTextField();
+        add(percent10Field);
+
+        add(new JLabel("10th Stream/Field:"));
+        stream10Field = new JTextField();
+        add(stream10Field);
+
+        // 12th Qualification
+        add(new JLabel("12th Board:"));
+        board12Field = new JTextField();
+        add(board12Field);
+
+        add(new JLabel("12th Year:"));
+        year12Field = new JTextField();
+        add(year12Field);
+
+        add(new JLabel("12th Percentage:"));
+        percent12Field = new JTextField();
+        add(percent12Field);
+
+        stream12Dropdown = new JComboBox<>();
+        add(new JLabel("12th Stream/Field:"));
+        String[] streams = {"Commerce", "Engineering", "Medical"};
+        for (String s : streams) {
+            stream12Dropdown.addItem(s);
+        }
+
+        stream12Dropdown.addActionListener(e -> {
+            String selectedStream = (String) stream12Dropdown.getSelectedItem();
+            if (selectedStream != null) {
+                loadProgramsByStream(selectedStream);
+                if (programDropdown.getItemCount() > 0) {
+                    updateCollegeDropdown((String) programDropdown.getSelectedItem());
+                }
+            }
+        });
+
+        add(stream12Dropdown);
+
+        add(new JLabel("Select Program:"));
+        add(programDropdown);
+        add(new JLabel("Select College:"));
+        add(collegeDropdown);
+
+
+        if (stream12Dropdown.getItemCount() > 0) {
+            loadProgramsByStream((String) stream12Dropdown.getItemAt(0));
+            if (programDropdown.getItemCount() > 0) {
+                updateCollegeDropdown((String) programDropdown.getSelectedItem());
+            }
+        }
+
+        programDropdown.addActionListener(e -> {
+            String selectedProgram = (String) programDropdown.getSelectedItem();
+            if (selectedProgram != null) {
+                updateCollegeDropdown(selectedProgram);
+            }
+        });
+
+        // Submit Button
+        submitButton = new JButton("Submit");
+        submitButton.setBackground(COLORAZ_SAGE);
+        submitButton.addActionListener(e -> validateForm());
+        add(submitButton);
+
+
+
+
+
+
+
+
+    }
+
+
+    private void loadProgramsByStream(String stream) {
+        programDropdown.removeAllItems();
+        ArrayList<Program> filteredPrograms = programManager.getProgramsByStream(stream);
+        if (filteredPrograms.isEmpty()) {
+            programDropdown.addItem("No programs available");
+        } else {
+            for (Program p : filteredPrograms) {
+                programDropdown.addItem(p.getName());
+            }
+        }
+    }
+
+
+    private void updateCollegeDropdown(String programName) {
+        collegeDropdown.removeAllItems();
+        ArrayList<College> filteredColleges = collegeManager.getCollegesByProgramName(programName);
+        for (College c : filteredColleges) {
+            collegeDropdown.addItem(c.getName());
+        }
+        // If no college available for program, add placeholder
+        if (collegeDropdown.getItemCount() == 0) {
+            collegeDropdown.addItem("No colleges available");
+        }
+
+    }
+
+    private void validateForm() {
+        if (addressField.getText().isEmpty() ||
+                board10Field.getText().isEmpty() || year10Field.getText().isEmpty() ||
+                percent10Field.getText().isEmpty() || stream10Field.getText().isEmpty() ||
+                board12Field.getText().isEmpty() || year12Field.getText().isEmpty() ||
+                percent12Field.getText().isEmpty() ) {
+
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            // ✅ Generate Application ID here
+            applicationId = generateApplicationId();
+            System.out.println("Generated App ID: " + applicationId);
+            ApplicationFormData formData = new ApplicationFormData();
+            formData.setApplicationId(applicationId);
+            formData.setApplicant(userInfo); // store applicant reference
+            formData.setAddress(addressField.getText());
+
+            formData.setBoard10(board10Field.getText());
+            formData.setYear10(year10Field.getText());
+            formData.setPercent10(percent10Field.getText());
+            formData.setStream10(stream10Field.getText());
+
+            formData.setBoard12(board12Field.getText());
+            formData.setYear12(year12Field.getText());
+            formData.setPercent12(percent12Field.getText());
+            formData.setStream12((String) stream12Dropdown.getSelectedItem());
+
+            // Assuming you have a method to get Program/College by name
+            formData.setSelectedProgram(programManager.getProgramByName((String) programDropdown.getSelectedItem()));
+            formData.setSelectedCollege(collegeManager.getCollegesByName((String) collegeDropdown.getSelectedItem()));
+
+
+            // ✅ Add the application to the central list (if you have one)
+            Applicant.addSubmittedApplication(formData);  // You must create this method
+
+            JOptionPane.showMessageDialog(this, "Application Submitted Successfully!\nApplication ID: " + applicationId, "Success", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    public String getAddress() {
+        return addressField.getText();
+    }
+
+    public String getBoard10() {
+        return board10Field.getText();
+    }
+
+    public String getYear10() {
+        return year10Field.getText();
+    }
+
+    public String getPercent10() {
+        return percent10Field.getText();
+    }
+
+    public String getStream10() {
+        return stream10Field.getText();
+    }
+
+    public String getBoard12() {
+        return board12Field.getText();
+    }
+
+    public String getYear12() {
+        return year12Field.getText();
+    }
+
+    public String getPercent12() {
+        return percent12Field.getText();
+    }
+
+    public String getStream12() {
+        return (String) stream12Dropdown.getSelectedItem();
+    }
+
+    public String getSelectedProgram() {
+        return (String) programDropdown.getSelectedItem();
+    }
+
+    public String getSelectedCollege() {
+        return (String) collegeDropdown.getSelectedItem();
+    }
+
+    public String getApplicantID() {
+        return userInfo.getUserID();
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+    public Status getStatus() {
+        return status;
+    }
+    public String getEmailId() {
+        return userInfo.getEmail();
+    }
+
+
+
+//    private void showProgramAndCollegeDialog() {
+//        JPanel panel = new JPanel(new GridLayout(0, 2));
+//        JComboBox<String> programBox = new JComboBox<>();
+//        JComboBox<String> collegeBox = new JComboBox<>();
+//
+////        for (Program p : programManager.getAllPrograms()) {
+////            programBox.addItem(p.getName());
+////        }
+//        for (College college : collegeManager.getAllColleges()) {
+//            collegeBox.addItem(college.getName());
+//        }
+//
+//
+//        if (programBox.getItemCount() > 0) {
+//            programBox.setSelectedIndex(0);
+//        }
+//
+//        panel.add(new JLabel("Select Program:"));
+//        panel.add(programBox);
+//        panel.add(new JLabel("Select College:"));
+//        panel.add(collegeBox);
+//
+//    }
+
+
+
+
+
+
+
+
+
+}
+
+

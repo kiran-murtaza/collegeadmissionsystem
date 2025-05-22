@@ -5,108 +5,91 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-import Applicant.
+import Applicant.Applicant;
 
-public class UserLoginManager {
+public class UserLoginManager{
+    public ArrayList<Users> users;
+    private final String Credentials ="UserCredentials.txt";
 
-    private final String CREDENTIALS_FILE = "UserCredentials.txt";
-    private ArrayList<Users> users;
-
-    public UserLoginManager() {
-        users = new ArrayList<>();
-        loadUsersFromFile();
+    public UserLoginManager(){
+        users=new ArrayList<>();
+        transferData();
     }
 
-    // Load users from file - all are Applicants here
-    private void loadUsersFromFile() {
+    public void saveUsers (){
+        try{
+            File file = new File(Credentials);
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            FileWriter writer = new FileWriter(file,false);
+
+            for (int i = 0; i <users.size() ; i++) {
+                Users users1= users.get(i);
+                writer.write(
+                        users1.getFirstName() + "," + users1.getLastName() + "," + users1.getEmail() + "," + users1.getPassword() + "," +
+                                users1.getSecurityAnswer() + "," + users1.getCnic() + "," + users1.getDateOfBirth() +
+                                "," + users1.getGender() + "," + users1.getPhone() + "," + users1.getUserID() + "\n"
+                );
+
+            }
+            writer.close();
+        }
+
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void transferData() {
+        int maxId =0;
         try {
-            File file = new File(CREDENTIALS_FILE);
+            File file = new File(Credentials);
             if (!file.exists()) {
-                return; // no users yet
+                return;
             }
 
-            Scanner scanner = new Scanner(file);
-            int maxId = 0;
-
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+            Scanner readFile = new Scanner(file);
+            while (readFile.hasNextLine()) {
+                String line = readFile.nextLine();
                 String[] parts = line.split(",");
-
-                // Assuming file order: firstName,lastName,email,password,securityAnswer,cnic,dob,gender,phone,userID
-                Applicant applicant = new Applicant(
+                Users users1 = new Users(
                         parts[0], parts[1], parts[2], parts[3], parts[4], parts[5],
                         LocalDate.parse(parts[6]), Gender.valueOf(parts[7]), parts[8], parts[9]
                 );
+                users.add(users1);
 
-                users.add(applicant);
+                /*
+                Code below is for making sure that id count is continued each time code is run.
+                It should not start from 0 each time program is run
+                 */
 
-                // Track max ID to continue id count if needed
                 String userID = parts[9];
-                int idNum = Integer.parseInt(userID.substring(4)); // assuming "USER" prefix
+                int idNum = Integer.parseInt(userID.substring(4));
                 if (idNum >= maxId) {
                     maxId = idNum + 1;
                 }
+
             }
-
-            Users.idCounter = maxId;
-            scanner.close();
-
-        } catch (Exception e) {
+            Users.idCounter=maxId;
+            readFile.close();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
-    // Save current users list to file
-    public void saveUsersToFile() {
-        try {
-            File file = new File(CREDENTIALS_FILE);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileWriter writer = new FileWriter(file, false);
-
-            for (Users user : users) {
-                writer.write(String.join(",",
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getPassword(),
-                        user.getSecurityAnswer(),
-                        user.getCnic(),
-                        user.getDateOfBirth().toString(),
-                        user.getGender().name(),
-                        user.getPhone(),
-                        user.getUserID()
-                ) + "\n");
-            }
-
-            writer.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Login by email and password, return the user if found, else null
-    public Users login(String email, String password) {
-        for (Users user : users) {
-            if (user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    // Password reset by email and security answer
-    public String resetPassword(String email, String newPassword, String securityAnswer) {
-        for (Users user : users) {
-            if (user.getEmail().equalsIgnoreCase(email)) {
-                if (user.getSecurityAnswer().equalsIgnoreCase(securityAnswer)) {
-                    user.setPassword(newPassword);
-                    saveUsersToFile();
+    public String forgetPassword(String email, String newPassword,String securityAnswer) {
+        for (int i = 0; i < users.size(); i++) {
+            Users users1 = users.get(i);
+            if (users1.getEmail().equals(email)) {
+                if (users1.getSecurityAnswer().equals(securityAnswer)) {
+                    users1.setPassword(newPassword);
+                    saveUsers();
                     return "Password reset successful!";
-                } else {
+                }
+                else {
                     return "Incorrect security answer.";
                 }
             }
@@ -114,10 +97,6 @@ public class UserLoginManager {
         return "Email not found.";
     }
 
-    // Add new user (Applicant)
-    public void addUser(Applicant applicant) {
-        users.add(applicant);
-        saveUsersToFile();
-    }
+
 
 }
