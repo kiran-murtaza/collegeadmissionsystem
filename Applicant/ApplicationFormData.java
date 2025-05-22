@@ -48,22 +48,7 @@ public class ApplicationFormData {
     }
 
 
-//    public String toString() {
-//        return applicationId + "|" +
-//                users.getUserID() + "|" +
-//                users.getEmail() + "|" +
-//                users.getFirstName() + "|" +
-//                users.getLastName() + "|" +
-//                users.getPhone() + "|" +
-//                users.getDateOfBirth() + "|" +
-//                users.getGender() + "|" +
-//                address + "|" +
-//                board10 + "|" + year10 + "|" + percent10 + "|" + stream10 + "|" +
-//                board12 + "|" + year12 + "|" + percent12 + "|" + stream12+ "|" + selectedCollege.getName()
-//                +"|"+ selectedProgram.getName();
-//    }
 
-    // Add getters if needed
     public String getApplicationId() { return applicationId; }
     public String getAddress() { return address; }
     public String getBoard10() { return board10; }

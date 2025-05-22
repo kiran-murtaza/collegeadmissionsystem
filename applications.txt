@@ -36,3 +36,11 @@ Inter Board: 232, Year: 423, Marks: 323, Group: Commerce
 Program: N/A
 College: N/A
 
+Application ID: APP-1
+User: Applicant.Applicant@748353e0
+Address: Cambrudge
+Matric Board: 10, Year: 2022, Marks: Engineering, Group: Cambrudge
+Inter Board: 2024, Year: 88, Marks: Arts, Group: Engineering
+Program: N/A
+College: N/A
+

@@ -51,7 +51,7 @@ public class ApplicantManager {
     public ArrayList<Applicant> loadApplicantsFromFile(File file) throws FileNotFoundException {
         ArrayList<Applicant> applicants = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
-            File file1 = new File("Applicants.txt");
+            File file1 = new File(file.getName());
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
