@@ -8,6 +8,7 @@ import java.util.List;
 
 public class CollegeManager {
     private final ArrayList<College> colleges;
+    private final String fileName = "colleges.txt";
 
     public CollegeManager() {
         colleges= new ArrayList<>();
@@ -48,6 +49,18 @@ public class CollegeManager {
         }
         return result;
     }
+//    public void addCollege(String name) {
+//        if (getCollegeByName(name) == null) {
+//            colleges.add(new College(name));
+//        }
+//    }
+
+//    public void addProgramToCollege(String collegeName, String name, int seats) {
+//        College college = getCollegeByName(collegeName);
+//        if (college != null) {
+//            college.addProgram(name);
+//        }
+//    }
 
     public boolean updateCollegeProgramsByName(String collegeName, ArrayList<Program> newPrograms) {
         for (College c : colleges) {
@@ -58,6 +71,28 @@ public class CollegeManager {
         }
         return false;
     }
+
+    // Save colleges and their programs to file
+    public void saveToFile(String filename) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+            for (College c : colleges) {
+                bw.write(c.toFileFormat());
+                bw.newLine();
+            }
+        }
+    }
+
+    // Load from file
+    public void loadFromFile(String filename) throws IOException {
+        colleges.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                colleges.add(College.fromFileLine(line));
+            }
+        }
+    }
+
 }
 
 

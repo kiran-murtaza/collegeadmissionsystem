@@ -57,6 +57,15 @@ public class Program {
     public void setAllowedStreams(ArrayList<String> streams) {
         this.allowedStreams = streams;
     }
+    public String toFileFormat() {
+        return name + "," + seats + "," + eligibility;
+    }
+
+    public static Program fromFileLine(String line) {
+        String[] parts = line.split(",");
+        return new Program(parts[0], Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+    }
+
 }
 //...................................................................................//
 //public class Program {

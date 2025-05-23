@@ -23,6 +23,8 @@ public class AdminDashboard_Panel extends JFrame {
     public AdminDashboard_Panel(ProgramManager programManager, CollegeManager collegeManager) {
         this.programManager = programManager;
         this.collegeManager = collegeManager;
+
+
         setupFrame();
         initUI();
     }

@@ -14,24 +14,24 @@ public class College_Panel extends JPanel {
     private final JList<String> collegeList = new JList<>(collegeListModel);
     private final JTextField collegeNameField = new JTextField(20);
 
-    public College_Panel() {
-        setLayout(new BorderLayout());
-        setBackground(COLORAZ_WHITE);
-        initUI();
-        refreshCollegeList();
-    }
-    //................................................//
-//public College_Panel() {
-//    setLayout(new BorderLayout());
-//    setBackground(COLORAZ_WHITE);
-//    try {
-//        collegeManager.loadFromFile("colleges.txt");
-//    } catch (IOException e) {
-//        JOptionPane.showMessageDialog(this, "Failed to load colleges.");
+//    public College_Panel() {
+//        setLayout(new BorderLayout());
+//        setBackground(COLORAZ_WHITE);
+//        initUI();
+//        refreshCollegeList();
 //    }
-//    initUI();
-//    refreshCollegeList();
-//}
+    //................................................//
+public College_Panel() {
+    setLayout(new BorderLayout());
+    setBackground(COLORAZ_WHITE);
+    try {
+        collegeManager.loadFromFile("colleges.txt");
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Failed to load colleges.");
+    }
+    initUI();
+    refreshCollegeList();
+}
 
 
     private void initUI() {
@@ -83,54 +83,54 @@ public class College_Panel extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    private void handleAddCollege() {
-        String collegeName = collegeNameField.getText().trim();
-
-        if (collegeName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a college name.", "Input Required", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        for (College c : collegeManager.getAllColleges()) {
-            if (c.getName().equalsIgnoreCase(collegeName)) {
-                JOptionPane.showMessageDialog(this, "This college already exists", "Duplicate Entry", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        }
-
-        collegeManager.addCollege(collegeName);
-        refreshCollegeList();
-        collegeNameField.setText("");
-        JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-    }
-    //..................................................//
-//private void handleAddCollege() {
-//    String collegeName = collegeNameField.getText().trim();
+//    private void handleAddCollege() {
+//        String collegeName = collegeNameField.getText().trim();
 //
-//    if (collegeName.isEmpty()) {
-//        JOptionPane.showMessageDialog(this, "Please enter a college name.", "Input Required", JOptionPane.WARNING_MESSAGE);
-//        return;
-//    }
-//
-//    for (College c : collegeManager.getAllColleges()) {
-//        if (c.getName().equalsIgnoreCase(collegeName)) {
-//            JOptionPane.showMessageDialog(this, "This college already exists", "Duplicate Entry", JOptionPane.ERROR_MESSAGE);
+//        if (collegeName.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Please enter a college name.", "Input Required", JOptionPane.WARNING_MESSAGE);
 //            return;
 //        }
+//
+//        for (College c : collegeManager.getAllColleges()) {
+//            if (c.getName().equalsIgnoreCase(collegeName)) {
+//                JOptionPane.showMessageDialog(this, "This college already exists", "Duplicate Entry", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//        }
+//
+//        collegeManager.addCollege(collegeName);
+//        refreshCollegeList();
+//        collegeNameField.setText("");
+//        JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 //    }
-//
-//    collegeManager.addCollege(collegeName);
-//
-//    try {
-//        collegeManager.saveToFile("colleges.txt");
-//    } catch (IOException e) {
-//        JOptionPane.showMessageDialog(this, "Error saving college.", "File Error", JOptionPane.ERROR_MESSAGE);
-//    }
-//
-//    refreshCollegeList();
-//    collegeNameField.setText("");
-//    JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-//}
+    //..................................................//
+private void handleAddCollege() {
+    String collegeName = collegeNameField.getText().trim();
+
+    if (collegeName.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter a college name.", "Input Required", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    for (College c : collegeManager.getAllColleges()) {
+        if (c.getName().equalsIgnoreCase(collegeName)) {
+            JOptionPane.showMessageDialog(this, "This college already exists", "Duplicate Entry", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+
+    collegeManager.addCollege(collegeName);
+
+    try {
+        collegeManager.saveToFile("colleges.txt");
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error saving college.", "File Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    refreshCollegeList();
+    collegeNameField.setText("");
+    JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+}
 
 
     private void refreshCollegeList() {
