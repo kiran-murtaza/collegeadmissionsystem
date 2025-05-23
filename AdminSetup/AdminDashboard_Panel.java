@@ -33,7 +33,7 @@ public class AdminDashboard_Panel extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         getContentPane().setBackground(COLORAZ_WHITE);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null);
     }
 
     private void initUI() {
@@ -47,7 +47,6 @@ public class AdminDashboard_Panel extends JFrame {
         headerPanel.add(welcomeLabel, BorderLayout.WEST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Menu Bar
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
         menuPanel.setBackground(COLORAZ_BLACK);
