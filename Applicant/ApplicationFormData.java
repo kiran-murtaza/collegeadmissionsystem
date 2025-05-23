@@ -61,7 +61,7 @@ public class ApplicationFormData {
     public String getStream12() { return stream12; }
     public Program getSelectedProgram() { return selectedProgram; }
     public College getSelectedCollege() { return selectedCollege; }
-//
+
     public Applicant getApplicant() {
         return applicant;
     }
