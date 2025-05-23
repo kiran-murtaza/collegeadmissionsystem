@@ -11,6 +11,7 @@ public class SubmittedFormList_Panel extends JPanel {
 
     private static final Color COLOR_BLACK = Color.BLACK;
     private static final Color COLOR_WHITE = Color.WHITE;
+    private ArrayList<ApplicationFormData> applications;
 
     public SubmittedFormList_Panel(Applicant userInfo) {
         this.userInfo = userInfo;
@@ -25,7 +26,7 @@ public class SubmittedFormList_Panel extends JPanel {
         title.setForeground(COLOR_BLACK);
         add(title, BorderLayout.NORTH);
 
-        ArrayList<ApplicationFormData> applications = new ArrayList<>();
+        applications = new ArrayList<>();
         File file = new File("applications.txt");
         try {
             applications = ApplicantManager.loadApplicantsFromFile(userInfo, file);
