@@ -2,7 +2,9 @@ package AdminSetup.College;
 
 import AdminSetup.Program.Program;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CollegeManager {
     private final ArrayList<College> colleges;
@@ -87,52 +89,78 @@ public class CollegeManager {
 
 
 
-
-//package AdminSetup;
-////Add/remove/edit colleges
-//import java.util.ArrayList;
+//...........................................//
+//import java.io.*;
+//        import java.util.ArrayList;
 //import java.util.List;
 //
 //public class CollegeManager {
-//    private String name;
-//    private List<ProgramManager> cours = new ArrayList<>();
-//    private List<Student> applicants = new ArrayList<>();
-//    private AdmissionCriteria admissionCriteria;
-//    private ScholarshipCriteria scholarshipCriteria;
+//    private final List<College> colleges = new ArrayList<>();
 //
-//    public CollegeManager(String name) { this.name = name; }
-//    public String getName() { return name; }
-//    public void addCourse(ProgramManager c) { cours.add(c); }
-//    public List<ProgramManager> getCourses() { return cours; }
-//    public void addApplicant(Student s) { applicants.add(s); }
-//    public List<Student> getApplicants() { return applicants; }
+//    public void addCollege(String name) {
+//        if (getCollegeByName(name) == null) {
+//            colleges.add(new College(name));
+//        }
+//    }
 //
-//    public void setAdmissionCriteria(AdmissionCriteria criteria) { this.admissionCriteria = criteria; }
-//    public AdmissionCriteria getAdmissionCriteria() { return admissionCriteria; }
+//    public void addProgramToCollege(String collegeName, String programName, int seatLimit) {
+//        College college = getCollegeByName(collegeName);
+//        if (college != null) {
+//            college.addProgram(programName, seatLimit);
+//        }
+//    }
 //
-//    public void setScholarshipCriteria(ScholarshipCriteria criteria) { this.scholarshipCriteria = criteria; }
-//    public ScholarshipCriteria getScholarshipCriteria() { return scholarshipCriteria; }
+//    public List<College> getAllColleges() {
+//        return colleges;
+//    }
 //
-//    public void evaluateApplicants() {
-//        for (Student s : applicants) {
-//            if (admissionCriteria != null) {
-//                s.setStatus(admissionCriteria.isEligible(s) ? Status.ADMITTED : Status.REJECTED);
-//            } else {
-//                for (ProgramManager c : cours) {
-//                    if (c.getName().equals(s.getCourseName())) {
-//                        s.setStatus(s.getScore() >= c.getEligibility() ? Status.ADMITTED : Status.REJECTED);
-//                    }
-//                }
+//    public College getCollegeByName(String name) {
+//        for (College c : colleges) {
+//            if (c.getName().equalsIgnoreCase(name)) return c;
+//        }
+//        return null;
+//    }
+//
+//    // Save colleges and their programs to file
+//    public void saveToFile(String filename) throws IOException {
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+//            for (College c : colleges) {
+//                bw.write(c.toFileFormat());
+//                bw.newLine();
 //            }
 //        }
 //    }
 //
-//    public void evaluateScholarships() {
-//        if (scholarshipCriteria == null) return;
-//        for (Student s : applicants) {
-//            if (s.getStatus() == Status.ADMITTED) {
-//                s.setScholarshipApproved(scholarshipCriteria.isEligible(s));
+//    // Load from file
+//    public void loadFromFile(String filename) throws IOException {
+//        colleges.clear();
+//        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                colleges.add(College.fromFileLine(line));
 //            }
 //        }
+//    }
+//
+//    // For dropdown: get list of college names
+//    public List<String> getCollegeNames() {
+//        List<String> names = new ArrayList<>();
+//        for (College c : colleges) {
+//            names.add(c.getName());
+//        }
+//        return names;
+//    }
+//
+//    // For dropdown: get program names by college
+//    public List<String> getProgramNames(String collegeName) {
+//        College c = getCollegeByName(collegeName);
+//        List<String> names = new ArrayList<>();
+//        if (c != null) {
+//            for (Program p : c.getPrograms()) {
+//                names.add(p.getName());
+//            }
+//        }
+//        return names;
 //    }
 //}
+

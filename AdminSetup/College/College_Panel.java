@@ -2,6 +2,7 @@ package AdminSetup.College;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class College_Panel extends JPanel {
@@ -19,6 +20,19 @@ public class College_Panel extends JPanel {
         initUI();
         refreshCollegeList();
     }
+    //................................................//
+//public College_Panel() {
+//    setLayout(new BorderLayout());
+//    setBackground(COLORAZ_WHITE);
+//    try {
+//        collegeManager.loadFromFile("colleges.txt");
+//    } catch (IOException e) {
+//        JOptionPane.showMessageDialog(this, "Failed to load colleges.");
+//    }
+//    initUI();
+//    refreshCollegeList();
+//}
+
 
     private void initUI() {
         JLabel titleLabel = new JLabel("College Management", SwingConstants.CENTER);
@@ -89,6 +103,35 @@ public class College_Panel extends JPanel {
         collegeNameField.setText("");
         JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
+    //..................................................//
+//private void handleAddCollege() {
+//    String collegeName = collegeNameField.getText().trim();
+//
+//    if (collegeName.isEmpty()) {
+//        JOptionPane.showMessageDialog(this, "Please enter a college name.", "Input Required", JOptionPane.WARNING_MESSAGE);
+//        return;
+//    }
+//
+//    for (College c : collegeManager.getAllColleges()) {
+//        if (c.getName().equalsIgnoreCase(collegeName)) {
+//            JOptionPane.showMessageDialog(this, "This college already exists", "Duplicate Entry", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//    }
+//
+//    collegeManager.addCollege(collegeName);
+//
+//    try {
+//        collegeManager.saveToFile("colleges.txt");
+//    } catch (IOException e) {
+//        JOptionPane.showMessageDialog(this, "Error saving college.", "File Error", JOptionPane.ERROR_MESSAGE);
+//    }
+//
+//    refreshCollegeList();
+//    collegeNameField.setText("");
+//    JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+//}
+
 
     private void refreshCollegeList() {
         collegeListModel.clear();
