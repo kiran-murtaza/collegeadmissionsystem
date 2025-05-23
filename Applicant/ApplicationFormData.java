@@ -35,13 +35,13 @@ public class ApplicationFormData {
         this.selectedProgram = program;
         this.selectedCollege = college;
     }
-
+//
     @Override
     public String toString() {
         return "Application ID: " + applicationId + "\n" +
                 "User: " + users + "\n" +
                 "Address: " + address + "\n" +
-                "Matric Board: " + 10 + ", Year: " + board10 + ", Marks: " + percent10 + ", Group: " + stream10 + "\n" +
+                "Matric Board: " + board10 + ", Year: " + year10 + ", Marks: " + percent10 + ", Group: " + stream10 + "\n" +
                 "Inter Board: " + board12 + ", Year: " + year12 + ", Marks: " + percent12 + ", Group: " + stream12 + "\n" +
                 "Program: " + (selectedProgram != null ? selectedProgram.getName() : "N/A") + "\n" +
                 "College: " + (selectedCollege != null ? selectedCollege.getName() : "N/A"+"\n");
@@ -61,7 +61,7 @@ public class ApplicationFormData {
     public String getStream12() { return stream12; }
     public Program getSelectedProgram() { return selectedProgram; }
     public College getSelectedCollege() { return selectedCollege; }
-//
+
     public Applicant getApplicant() {
         return applicant;
     }

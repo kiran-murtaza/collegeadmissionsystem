@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class Applicant extends Users {
 
 
-//        private ArrayList<ApplicationForm_Panel> submittedApplications;
     private ScholarshipForm_Panel scholarshipForm;
     private ArrayList<AdmissionRecord> admissions;
 
