@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
-//
+////
 public class ApplicationForm_Panel extends JPanel {
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);

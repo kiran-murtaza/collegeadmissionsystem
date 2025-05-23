@@ -139,7 +139,7 @@ public class ApplicantDashboard_Panel extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
-
+//
     private void showSubmittedFormList(){
         SubmittedFormList_Panel submittedFormListPanel = new SubmittedFormList_Panel(userInfo);
         contentPanel.removeAll();

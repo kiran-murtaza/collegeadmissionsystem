@@ -37,7 +37,7 @@ public class ApplicantManager {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
-
+//
     public static boolean hasAppliedBefore(List<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
         for (ApplicationFormData app : existingApplications) {
             if (app.getUsers().equals(newApp.getUsers()) &&
