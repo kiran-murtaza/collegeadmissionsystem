@@ -37,7 +37,7 @@ public class ApplicantManager {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
-//
+    //
     public static boolean hasAppliedBefore(List<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
         for (ApplicationFormData app : existingApplications) {
             if (app.getUsers().equals(newApp.getUsers()) &&
@@ -51,7 +51,7 @@ public class ApplicantManager {
 
 
 
-    public static ArrayList<ApplicationFormData> loadApplicantsFromFile(Applicant applicant,File file) throws FileNotFoundException {
+    public static ArrayList<ApplicationFormData> loadApplicantsFromFile(File file) throws FileNotFoundException {
         ArrayList<ApplicationFormData> applicantData = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
             File file1 = new File(file.getName());
@@ -79,8 +79,9 @@ public class ApplicantManager {
                 Program program= programManager.getProgramByName(selectedProgram);
                 College college= collegeManager.getCollegeByName(selectedCollege);
 
+
                 ApplicationFormData applicationFormData = new ApplicationFormData(
-                        applicationID,applicant,address,board10,year10,percent10,stream10,
+                        applicationID,null,address,board10,year10,percent10,stream10,
                         board12,year12,percent12,stream12,program,college)
                         ;
 
@@ -99,5 +100,3 @@ public class ApplicantManager {
     }
 
 }
-
-

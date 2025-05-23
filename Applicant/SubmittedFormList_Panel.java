@@ -29,7 +29,7 @@ public class SubmittedFormList_Panel extends JPanel {
         applications = new ArrayList<>();
         File file = new File("applications.txt");
         try {
-            applications = ApplicantManager.loadApplicantsFromFile(userInfo, file);
+            applications = ApplicantManager.loadApplicantsFromFile( file);
         }
         catch (Exception e) {
             e.printStackTrace();

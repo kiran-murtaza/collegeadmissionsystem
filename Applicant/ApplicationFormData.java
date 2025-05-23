@@ -35,7 +35,7 @@ public class ApplicationFormData {
         this.selectedProgram = program;
         this.selectedCollege = college;
     }
-//
+    //
     @Override
     public String toString() {
         return "Application ID: " + applicationId + "\n" +
@@ -70,7 +70,7 @@ public class ApplicationFormData {
     }
 
 
-//    public void setApplicant(Applicant applicant){
+    //    public void setApplicant(Applicant applicant){
 //        this.applicant= applicant;
 //    }
 //    public void setApplicationId(String applicationId){
@@ -125,7 +125,7 @@ public class ApplicationFormData {
 //    }
     public String getEmail(){return users.getEmail();
     }
-//
+    //
 //    public void setSelectedCollege(College college) {
 //        this.selectedCollege = college;
 //    }
