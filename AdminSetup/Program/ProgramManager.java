@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ProgramManager {
     private List<Program> programList;
-    private CollegeManager collegeManager;
     private final String fileName = "programs.txt";
 
     public ProgramManager() {

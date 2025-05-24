@@ -1,18 +1,18 @@
-//package Applicant;
-//
-//import AdminSetup.College.College;
-//import AdminSetup.College.CollegeManager;
-//import AdminSetup.Program.Program;
-//import AdminSetup.Program.ProgramManager;
-//
-//import javax.swing.*;
-//import javax.swing.event.DocumentEvent;
-//import javax.swing.event.DocumentListener;
-//import javax.swing.table.DefaultTableModel;
-//import java.awt.*;
-//import java.util.List;
-//
-//public class CollegeProgramViewer extends JFrame {
+package Applicant;
+
+import AdminSetup.College.College;
+import AdminSetup.College.CollegeManager;
+import AdminSetup.Program.Program;
+import AdminSetup.Program.ProgramManager;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.List;
+
+public class CollegeAndProgramViewer_Panel{
 //
 //    private final CollegeManager collegeManager;
 //    private final ProgramManager programManager;
@@ -259,4 +259,4 @@
 //            // new CollegeProgramViewer(collegeManager, programManager).setVisible(true);
 //        });
 //    }
-//}
+}
