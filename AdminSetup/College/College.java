@@ -74,22 +74,22 @@ public class College {
         this.programs.add(program);
     }
 
-    public String toFileFormat() {
-        String result = name;
-        for (Program p : programs) {
-            result += ";" + p.toFileFormat();
-        }
-        return result;
-    }
-
-
-    public static College fromFileLine(String line) {
-        String[] parts = line.split(";");
-        College college = new College(parts[0]);
-        for (int i = 1; i < parts.length; i++) {
-            college.getPrograms().add(Program.fromFileLine(parts[i]));
-        }
-        return college;
-    }
+//    public String toFileFormat() {
+//        String result = name;
+//        for (Program p : programs) {
+//            result += ";" + p.toFileFormat();
+//        }
+//        return result;
+//    }
+//
+//
+//    public static College fromFileLine(String line) {
+//        String[] parts = line.split(";");
+//        College college = new College(parts[0]);
+//        for (int i = 1; i < parts.length; i++) {
+//            college.getPrograms().add(Program.fromFileLine(parts[i]));
+//        }
+//        return college;
+//    }
 
 }
