@@ -8,7 +8,7 @@ import Authentication.Users;
 import javax.swing.*;
 import java.awt.*;
 
-public class ApplicantDashboard_Panel extends JFrame {
+public class ApplicantDashboard_Panel extends JFrame{
     private Applicant userInfo;
     private JPanel contentPanel;
     private ProgramManager programManager;
@@ -50,28 +50,40 @@ public class ApplicantDashboard_Panel extends JFrame {
 
         // Menu Bar
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.X_AXIS));
         menuPanel.setBackground(COLORAZ_BLACK);
         menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        menuPanel.setPreferredSize(new Dimension(1000, 60));
 
         String[] menuItems = {
+                "Home",
                 "Apply for College",
                 "Submitted Form List",
                 "View Colleges & Programs",
                 "Payment Portal",
                 "Apply for Scholarship",
+                "Documents",
+                "Edit Profile",
                 "Logout"
         };
 
         for (String item : menuItems) {
             JButton menuButton = new JButton(item);
-            menuButton.setForeground(COLORAZ_WHITE);
-            menuButton.setBackground(COLORAZ_BLACK);
-            menuButton.setBorderPainted(false);
-            menuButton.setFocusPainted(false);
-            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+            // Styling the button
+            menuButton.setForeground(COLORAZ_WHITE);                 // Text color
+            menuButton.setBackground(COLORAZ_BLACK);                 // Button background
+            menuButton.setBorderPainted(false);                      // No border
+            menuButton.setFocusPainted(false);                       // No focus border
+            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font styling
+
+            // Add action listener for handling clicks
             menuButton.addActionListener(e -> handleMenuClick(item));
+
+            // Add button to the menu panel
             menuPanel.add(menuButton);
+
+            // Add spacing between buttons
             menuPanel.add(Box.createHorizontalStrut(10));
         }
 

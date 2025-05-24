@@ -8,11 +8,11 @@ import AdminSetup.Program.ProgramManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-/**
- * This class represents the UI panel for submitting an application form.
- */
+//Application form class to submit forms - this class will also generate id of forms globally for every applicant
 public class ApplicationForm_Panel extends JPanel {
 
     // Constants for UI colors
@@ -20,9 +20,10 @@ public class ApplicationForm_Panel extends JPanel {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
 
-    // Static variables to manage application ID generation
-    private static int nextId = 1;
+
     private  String applicationId;
+    private static final String COUNTER_FILE = "application_counter.txt";
+    private int applicationCount;
 
     // UI components
     private JComboBox<String> programDropdown, collegeDropdown, stream12Dropdown;
@@ -37,9 +38,11 @@ public class ApplicationForm_Panel extends JPanel {
     private Status status;
     private ArrayList<College> colleges;
 
-    // Generate unique application ID
-    private static String generateApplicationId() {
-        return "APP-" + nextId++;
+
+    public String generateApplicationId() {
+        applicationCount++;
+        writeCounter(applicationCount);
+        return "APP-FORM" + String.format("%03d", applicationCount);
     }
 
     // Constructor
@@ -48,6 +51,7 @@ public class ApplicationForm_Panel extends JPanel {
         this.programManager = programManager;
         this.collegeManager = collegeManager;
         this.colleges = new ArrayList<>();
+        applicationCount = readCounter();
 
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
@@ -237,19 +241,17 @@ public class ApplicationForm_Panel extends JPanel {
             if (response == JOptionPane.YES_OPTION) {
                 clearForm();
             } else {
-                Container parent = this.getParent();
-                while (parent != null && !parent.getClass().getName().equals("javax.swing.JFrame")) {
-                    parent = parent.getParent();
-                }
+                // Attempt to find the top-level frame that contains this panel
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
-                if (parent != null) {
-                    JFrame frame = (JFrame) parent;
-                    frame.getContentPane().removeAll();
-                    frame.getContentPane().add(new ApplicantDashboard_Panel(userInfo,programManager,collegeManager));
-                    frame.revalidate();
-                    frame.repaint();
+                if (topFrame != null) {
+
+
+                    // Open the main dashboard
+                    ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(userInfo, programManager, collegeManager);
+                    dashboard.setVisible(true);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Dashboard window not found. Closing application.");
+                    JOptionPane.showMessageDialog(this, "Unable to locate main window. Exiting application.");
                     System.exit(0);
                 }
             }
@@ -275,7 +277,7 @@ public class ApplicationForm_Panel extends JPanel {
         board12Field.setText("");
         year12Field.setText("");
         percent12Field.setText("");
-        stream12Dropdown.setSelectedIndex(0);  // Assuming first item is default
+        stream12Dropdown.setSelectedIndex(0);
         programDropdown.setSelectedIndex(0);
         collegeDropdown.setSelectedIndex(0);
     }
@@ -295,4 +297,20 @@ public class ApplicationForm_Panel extends JPanel {
     public String getApplicationId() { return applicationId; }
     public Status getStatus() { return status; }
     public String getEmailId() { return userInfo.getEmail(); }
+
+    private int readCounter() {
+        try (Scanner sc = new Scanner(new File(COUNTER_FILE))) {
+            if (sc.hasNextInt()) return sc.nextInt();
+        } catch (Exception e) {
+            // agar file nahi mili ya error, start from 0
+        }
+        return 0;
+    }
+    private void writeCounter(int count) {
+        try (FileWriter fw = new FileWriter(COUNTER_FILE)) {
+            fw.write(String.valueOf(count));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

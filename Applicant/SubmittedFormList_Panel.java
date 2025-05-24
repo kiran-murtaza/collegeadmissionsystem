@@ -101,6 +101,7 @@ public class SubmittedFormList_Panel extends JPanel {
             case TEST_SCHEDULED -> "Test Scheduled";
             case TEST_TAKEN -> "Test Taken";
             case ADMISSION_OFFERED -> "Admission Offered";
+            case WAIT_LISTED -> "Wait List";
             case ADMISSION_SECURED -> "Admission Secured";
             case ADMISSION_WITHDRAWN -> "Admission Withdrawn";
         };

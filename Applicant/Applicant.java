@@ -29,6 +29,8 @@ public class Applicant extends Users {
     public ArrayList<ApplicationFormData> getSubmittedApplications() {
         return submittedApplications;
     }
+
+
 }
 
 

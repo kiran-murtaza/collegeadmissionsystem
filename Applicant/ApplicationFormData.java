@@ -36,16 +36,16 @@ public class ApplicationFormData {
         this.selectedCollege = college;
     }
     //
-    @Override
-    public String toString() {
-        return "Application ID: " + applicationId + "\n" +
-                "User: " + users + "\n" +
-                "Address: " + address + "\n" +
-                "Matric Board: " + 10 + ", Year: " + board10 + ", Marks: " + percent10 + ", Group: " + stream10 + "\n" +
-                "Inter Board: " + board12 + ", Year: " + year12 + ", Marks: " + percent12 + ", Group: " + stream12 + "\n" +
-                "Program: " + (selectedProgram != null ? selectedProgram.getName() : "N/A") + "\n" +
-                "College: " + (selectedCollege != null ? selectedCollege.getName() : "N/A"+"\n");
-    }
+//    @Override
+//    public String toString() {
+//        return "Application ID: " + applicationId + "\n" +
+//                "User: " + users + "\n" +
+//                "Address: " + address + "\n" +
+//                "Matric Board: " + 10 + ", Year: " + board10 + ", Marks: " + percent10 + ", Group: " + stream10 + "\n" +
+//                "Inter Board: " + board12 + ", Year: " + year12 + ", Marks: " + percent12 + ", Group: " + stream12 + "\n" +
+//                "Program: " + (selectedProgram != null ? selectedProgram.getName() : "N/A") + "\n" +
+//                "College: " + (selectedCollege != null ? selectedCollege.getName() : "N/A"+"\n");
+//    }
 
 
 
