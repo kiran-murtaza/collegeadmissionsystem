@@ -42,7 +42,7 @@ public class ApplicationForm_Panel extends JPanel {
     public String generateApplicationId() {
         applicationCount++;
         writeCounter(applicationCount);
-        return "APP-FORM" + String.format("%03d", applicationCount);
+        return "APP-FORM-" + String.format("%03d", applicationCount);
     }
 
     // Constructor
