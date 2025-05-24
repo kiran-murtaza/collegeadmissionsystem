@@ -47,6 +47,10 @@ public class UserSignup extends UserLoginManager {
             return "Password must contain at least one special character.";
         }
 
+        if (securityAnswer.trim().matches("\\d+")) {
+            return "Enter a valid pet name";
+        }
+
 
         for (Users u : users) {
             if (u.getEmail().equalsIgnoreCase(email)) {
