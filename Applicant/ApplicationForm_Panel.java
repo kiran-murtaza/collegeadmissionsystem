@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 //Application form class to submit forms - this class will also generate id of forms globally for every applicant
 public class ApplicationForm_Panel extends JPanel {
 
@@ -250,6 +251,7 @@ public class ApplicationForm_Panel extends JPanel {
                     // Open the main dashboard
                     ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(userInfo, programManager, collegeManager);
                     dashboard.setVisible(true);
+                    topFrame.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Unable to locate main window. Exiting application.");
                     System.exit(0);
