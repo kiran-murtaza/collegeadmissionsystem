@@ -8,8 +8,8 @@ import java.awt.*;
 import java.io.IOException;
 
 public class ProgramPanel extends JPanel {
-    private final ProgramManager programManager;
-    private final CollegeManager collegeManager;
+    private ProgramManager programManager;
+    private CollegeManager collegeManager;
 
     private final JComboBox<String> collegeDropdown;
     private final JTextField nameField;
