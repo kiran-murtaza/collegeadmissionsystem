@@ -15,8 +15,8 @@ import java.awt.*;
 
 public class AdminDashboard_Panel extends JFrame {
     private JPanel contentPanel;
-    private final ProgramManager programManager;
-    private final CollegeManager collegeManager;
+    private ProgramManager programManager;
+    private CollegeManager collegeManager;
 
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
