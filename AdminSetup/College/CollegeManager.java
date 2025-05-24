@@ -61,24 +61,67 @@ public class CollegeManager {
         return false;
     }
 
-    public void saveToFile(String filename) throws IOException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
-            for (College c : colleges) {
-                bw.write(c.toFileFormat());
+//    public void saveToFile(String filename) throws IOException {
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+//            for (College c : colleges) {
+//                bw.write(c.toFileFormat());
+//                bw.newLine();
+//            }
+//        }
+//    }
+//
+//    public void loadFromFile(String filename) throws IOException {
+//        colleges.clear();
+//        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                colleges.add(College.fromFileLine(line));
+//            }
+//        }
+//    }
+public void saveToFile(String filename) throws IOException {
+    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
+        for (College college : colleges) {
+            bw.write("COLLEGE," + college.getName());
+            bw.newLine();
+
+            for (Program program : college.getPrograms()) {
+                bw.write("PROGRAM," + program.getName() + "," + program.getSeats() + "," + program.getEligibility());
                 bw.newLine();
             }
+            bw.newLine();
         }
     }
-
+}
     public void loadFromFile(String filename) throws IOException {
         colleges.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
+            College currentCollege = null;
+
             while ((line = br.readLine()) != null) {
-                colleges.add(College.fromFileLine(line));
+                line = line.trim();
+                if (line.isEmpty()) {
+                    currentCollege = null;
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+
+                if (parts[0].equalsIgnoreCase("COLLEGE")) {
+                    String collegeName = parts[1];
+                    currentCollege = new College(collegeName);
+                    colleges.add(currentCollege);
+                } else if (parts[0].equalsIgnoreCase("PROGRAM") && currentCollege != null) {
+                    String programName = parts[1];
+                    int seats = Integer.parseInt(parts[2]);
+                    int eligibility = Integer.parseInt(parts[3]);
+                    currentCollege.addProgram(new Program(programName, seats, eligibility));
+                }
             }
         }
     }
+
 
 }
 
