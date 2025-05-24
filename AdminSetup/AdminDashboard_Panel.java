@@ -140,13 +140,14 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.repaint();
     }
     private void showPrograms() {
-        ProgramPanel programPanel = new ProgramPanel(programManager);
+        ProgramPanel programPanel = new ProgramPanel(programManager, collegeManager);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(programPanel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
+
 
     private void showApplicants() {
         ViewApplicantsPanel applicantsPanel = new ViewApplicantsPanel() ;
