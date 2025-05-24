@@ -73,16 +73,16 @@ public class College {
     public void addProgram(Program program) {
         this.programs.add(program);
     }
-    // Convert College to file format string
+
     public String toFileFormat() {
         String result = name;
         for (Program p : programs) {
-            result += ";" + p.toFileFormat(); // Concatenate each program
+            result += ";" + p.toFileFormat();
         }
         return result;
     }
-//
-    // Load from a saved string line
+
+
     public static College fromFileLine(String line) {
         String[] parts = line.split(";");
         College college = new College(parts[0]);

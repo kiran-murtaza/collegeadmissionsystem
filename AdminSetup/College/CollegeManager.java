@@ -49,18 +49,7 @@ public class CollegeManager {
         }
         return result;
     }
-//    public void addCollege(String name) {
-//        if (getCollegeByName(name) == null) {
-//            colleges.add(new College(name));
-//        }
-//    }
 
-//    public void addProgramToCollege(String collegeName, String name, int seats) {
-//        College college = getCollegeByName(collegeName);
-//        if (college != null) {
-//            college.addProgram(name);
-//        }
-//    }
 
     public boolean updateCollegeProgramsByName(String collegeName, ArrayList<Program> newPrograms) {
         for (College c : colleges) {
@@ -71,8 +60,7 @@ public class CollegeManager {
         }
         return false;
     }
-//
-    // Save colleges and their programs to file
+
     public void saveToFile(String filename) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
             for (College c : colleges) {
@@ -82,7 +70,6 @@ public class CollegeManager {
         }
     }
 
-    // Load from file
     public void loadFromFile(String filename) throws IOException {
         colleges.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -100,102 +87,4 @@ public class CollegeManager {
 
 
 
-//example
-//
-
-
-//ArrayList<String> medPrograms = new ArrayList<>();
-//medPrograms.add("Medical");
-//
-//ArrayList<String> engPrograms = new ArrayList<>();
-//engPrograms.add("Engineering");
-//
-//CollegeManager collegeManager = new CollegeManager();
-//collegeManager.addCollege("C001", "Dow Medical College", medPrograms);
-//collegeManager.addCollege("C002", "NED University", engPrograms);
-//
-//// To get colleges offering "Medical"
-//ArrayList<College> medicalColleges = collegeManager.getCollegesByProgram("Medical");
-//for (College c : medicalColleges) {
-//        System.out.println(c.getName());
-//        }
-
-
-
-
-
-//...........................................//
-//import java.io.*;
-//        import java.util.ArrayList;
-//import java.util.List;
-//
-//public class CollegeManager {
-//    private final List<College> colleges = new ArrayList<>();
-//
-//    public void addCollege(String name) {
-//        if (getCollegeByName(name) == null) {
-//            colleges.add(new College(name));
-//        }
-//    }
-//
-//    public void addProgramToCollege(String collegeName, String programName, int seatLimit) {
-//        College college = getCollegeByName(collegeName);
-//        if (college != null) {
-//            college.addProgram(programName, seatLimit);
-//        }
-//    }
-//
-//    public List<College> getAllColleges() {
-//        return colleges;
-//    }
-//
-//    public College getCollegeByName(String name) {
-//        for (College c : colleges) {
-//            if (c.getName().equalsIgnoreCase(name)) return c;
-//        }
-//        return null;
-//    }
-//
-//    // Save colleges and their programs to file
-//    public void saveToFile(String filename) throws IOException {
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
-//            for (College c : colleges) {
-//                bw.write(c.toFileFormat());
-//                bw.newLine();
-//            }
-//        }
-//    }
-//
-//    // Load from file
-//    public void loadFromFile(String filename) throws IOException {
-//        colleges.clear();
-//        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                colleges.add(College.fromFileLine(line));
-//            }
-//        }
-//    }
-//
-//    // For dropdown: get list of college names
-//    public List<String> getCollegeNames() {
-//        List<String> names = new ArrayList<>();
-//        for (College c : colleges) {
-//            names.add(c.getName());
-//        }
-//        return names;
-//    }
-//
-//    // For dropdown: get program names by college
-//    public List<String> getProgramNames(String collegeName) {
-//        College c = getCollegeByName(collegeName);
-//        List<String> names = new ArrayList<>();
-//        if (c != null) {
-//            for (Program p : c.getPrograms()) {
-//                names.add(p.getName());
-//            }
-//        }
-//        return names;
-//    }
-//}
 

@@ -1,7 +1,5 @@
 package AdminSetup.Program;
 
-import AdminSetup.College.College;
-
 import java.util.ArrayList;
 
 
@@ -67,52 +65,5 @@ public class Program {
     }
 
 }
-//...................................................................................//
-//public class Program {
-//    private final String name;
-//    private final int seatLimit;
-//    private int eligibility;
-//
-//    public Program(String name, int seatLimit, int eligibility) {
-//        this.name = name;
-//        this.seatLimit = seatLimit;
-//        this.eligibility = eligibility;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public int getSeats() {
-//        return seatLimit;
-//    }
-//    public void setEligibility(int eligibility) {
-//        this.eligibility = eligibility;
-//    }
-//    public int getEligibility() {
-//        return eligibility;
-//    }
-//
-//    // Convert to file format: "ProgramName,SeatLimit"
-//    public String toFileFormat() {
-//        return name + "," + seatLimit + "," + eligibility;
-//    }
-//
-//    public static Program fromFileLine(String line) {
-//        String[] parts = line.split(",");
-//        if (parts.length == 3) {
-//            return new Program(parts[0], Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-//        }
-//        else {
-//            // Backward compatibility if no eligibility stored yet
-//            return new Program(parts[0], Integer.parseInt(parts[1]),Integer.parseInt(parts[2]));
-//        }
-//
-//    }
-//
-//    public String getProgramDetails() {
-//        return getName() + " (Seats: " + getSeats() + ", Min Score: " + getEligibility() + ")";
-//    }
-//}
 
 
