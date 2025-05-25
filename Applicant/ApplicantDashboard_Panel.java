@@ -114,7 +114,7 @@ public class ApplicantDashboard_Panel extends JFrame{
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm();
-            case "Submitted Form List" -> showSubmittedFormList();
+//            case "Submitted Form List" -> showSubmittedFormList();
 //            case "View Colleges & Programs" -> showCollegeAndProgramViewer();
             case "Payment Portal" -> showPaymentPortal();
             case "Apply for Scholarship" -> showScholarshipForm();
@@ -133,13 +133,13 @@ public class ApplicantDashboard_Panel extends JFrame{
         contentPanel.repaint();
     }
 
-    private void showSubmittedFormList() {
-        SubmittedFormList_Panel submittedFormListPanel = new SubmittedFormList_Panel(userInfo);
-        contentPanel.removeAll();
-        contentPanel.add(submittedFormListPanel, BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
+//    private void showSubmittedFormList() {
+//        SubmittedFormList_Panel submittedFormListPanel = new SubmittedFormList_Panel(userInfo);
+//        contentPanel.removeAll();
+//        contentPanel.add(submittedFormListPanel, BorderLayout.CENTER);
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
+//    }
 
 //    private void showCollegeAndProgramViewer() {
 //        CollegeAndProgramViewer_Panel viewerPanel = new CollegeAndProgramViewer_Panel(collegeManager, programManager);

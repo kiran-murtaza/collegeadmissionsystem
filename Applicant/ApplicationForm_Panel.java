@@ -9,11 +9,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
-//Application form class to submit forms - this class will also generate id of forms globally for every applicant
+// Application form class to submit forms - this class will also generate id of forms globally for every applicant
 public class ApplicationForm_Panel extends JPanel {
 
     // Constants for UI colors
@@ -21,8 +21,7 @@ public class ApplicationForm_Panel extends JPanel {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
 
-
-    private  String applicationId;
+    private String applicationId;
     private static final String COUNTER_FILE = "application_counter.txt";
     private int applicationCount;
 
@@ -38,7 +37,6 @@ public class ApplicationForm_Panel extends JPanel {
     private Applicant userInfo;
     private Status status;
     private ArrayList<College> colleges;
-
 
     public String generateApplicationId() {
         applicationCount++;
@@ -174,59 +172,65 @@ public class ApplicationForm_Panel extends JPanel {
         }
     }
 
-    // Validate form and create application data
     private void validateForm() {
+        // Check if any required field is empty
         if (addressField.getText().isEmpty() || board10Field.getText().isEmpty() ||
                 year10Field.getText().isEmpty() || percent10Field.getText().isEmpty() ||
                 stream10Field.getText().isEmpty() || board12Field.getText().isEmpty() ||
                 year12Field.getText().isEmpty() || percent12Field.getText().isEmpty()) {
 
             JOptionPane.showMessageDialog(this,
-                    "Please fill in all fields.",
+                    "Please fill in all required fields.",
                     "Validation Error",
                     JOptionPane.ERROR_MESSAGE
             );
             return;
         }
 
-        applicationId = generateApplicationId();
-
-        String selectedProgramName = (String) programDropdown.getSelectedItem();
-        String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
-
-        Program selectedProgram = programManager.getProgramByName(selectedProgramName);
-        College selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
-
-        ApplicationFormData applicationFormData = new ApplicationFormData(
-                applicationId, userInfo,
-                addressField.getText(),
-                board10Field.getText(),
-                year10Field.getText(),
-                percent10Field.getText(),
-                stream10Field.getText(),
-                board12Field.getText(),
-                year12Field.getText(),
-                percent12Field.getText(),
-                stream12Dropdown.getSelectedItem().toString(),
-                selectedProgram,
-                selectedCollege
-        );
-
-        String directoryPath = "applications/" + userInfo.getUserID();
-        String filename = directoryPath + "/" + applicationId + ".txt";
-
         try {
-            File directory = new File(directoryPath);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
+            // Generate a unique application ID
+            applicationId = generateApplicationId();
 
-            ApplicantManager.saveToFile(applicationFormData, new File(filename));
+            // Get selected program and college from dropdowns
+            String selectedProgramName = (String) programDropdown.getSelectedItem();
+            String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
+
+            Program selectedProgram = programManager.getProgramByName(selectedProgramName);
+            College selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
+
+            // Create ApplicationFormData object with collected inputs
+            ApplicationFormData applicationFormData = new ApplicationFormData(
+                    applicationId,
+                    userInfo,                 // User object, not email
+                    addressField.getText(),
+                    board10Field.getText(),
+                    year10Field.getText(),
+                    percent10Field.getText(),
+                    stream10Field.getText(),
+                    board12Field.getText(),
+                    year12Field.getText(),
+                    percent12Field.getText(),
+                    stream12Dropdown.getSelectedItem().toString(),
+                    selectedProgram,
+                    selectedCollege
+            );
+
+// Now set the remaining fields with setters:
+            applicationFormData.setEmail(userInfo.getEmail());
+            applicationFormData.setTestSchedule("N/A");
+            applicationFormData.setTestScore("N/A");
+            applicationFormData.setStatus(Status.SUBMITTED);
+
+            // applicationFormData.setTestSchedule(testSchedule);
+            // applicationFormData.setTestScore(testScore);
+//            applicationFormData.setStatus(Status.SUBMITTED);
+
+
+            //Save application details to the file "all_applications.txt"
+            ApplicantManager.saveToFile(applicationFormData);
 
             JOptionPane.showMessageDialog(this,
-                    "Application Submitted Successfully!\n" +
-                            "Application ID: " + applicationId + "\n" +
-                            "Saved to: " + filename,
+                    "Application Submitted Successfully!\nApplication ID: " + applicationId,
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE
             );
@@ -242,7 +246,6 @@ public class ApplicationForm_Panel extends JPanel {
             if (response == JOptionPane.YES_OPTION) {
                 clearForm();
             } else {
-                // Attempt to find the top-level frame that contains this panel
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
                 if (topFrame != null) {
@@ -258,17 +261,13 @@ public class ApplicationForm_Panel extends JPanel {
                 }
             }
 
-
-
-        } catch (Exception e) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                    "Error saving application: " + e.getMessage(),
-                    "File Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+                    "Unexpected error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
-
 
     private void clearForm() {
         addressField.setText("");
@@ -283,36 +282,22 @@ public class ApplicationForm_Panel extends JPanel {
         programDropdown.setSelectedIndex(0);
         collegeDropdown.setSelectedIndex(0);
     }
-    // Getters for retrieving form data (used for further processing or testing)
-    public String getAddress() { return addressField.getText(); }
-    public String getBoard10() { return board10Field.getText(); }
-    public String getYear10() { return year10Field.getText(); }
-    public String getPercent10() { return percent10Field.getText(); }
-    public String getStream10() { return stream10Field.getText(); }
-    public String getBoard12() { return board12Field.getText(); }
-    public String getYear12() { return year12Field.getText(); }
-    public String getPercent12() { return percent12Field.getText(); }
-    public String getStream12() { return (String) stream12Dropdown.getSelectedItem(); }
-    public String getSelectedProgram() { return (String) programDropdown.getSelectedItem(); }
-    public String getSelectedCollege() { return (String) collegeDropdown.getSelectedItem(); }
-    public String getApplicantID() { return userInfo.getUserID(); }
-    public String getApplicationId() { return applicationId; }
-    public Status getStatus() { return status; }
-    public String getEmailId() { return userInfo.getEmail(); }
 
+    // Reads application counter from file or returns 0 if file not found or invalid
     private int readCounter() {
-        try (Scanner sc = new Scanner(new File(COUNTER_FILE))) {
-            if (sc.hasNextInt()) return sc.nextInt();
-        } catch (Exception e) {
-            // agar file nahi mili ya error, start from 0
+        try (Scanner scanner = new Scanner(new File(COUNTER_FILE))) {
+            return scanner.nextInt();
+        } catch (IOException | NumberFormatException e) {
+            return 0;
         }
-        return 0;
     }
+
+    // Writes updated counter to file
     private void writeCounter(int count) {
-        try (FileWriter fw = new FileWriter(COUNTER_FILE)) {
-            fw.write(String.valueOf(count));
-        } catch (Exception e) {
-            e.printStackTrace();
+        try (FileWriter writer = new FileWriter(COUNTER_FILE)) {
+            writer.write(Integer.toString(count));
+        } catch (IOException e) {
+            // Handle write failure silently or log error
         }
     }
 }
