@@ -16,13 +16,13 @@ public class ProgramManager {
     public ProgramManager() {
         programList = new ArrayList<>();
     }
-    public boolean addProgram(String name, int seats, int eligibility) {
+    public boolean addProgram(String name, int seats, int eligibility , double fees) {
         for (Program p : programList) {
             if (p.getName().equalsIgnoreCase(name)) {
                 return false;
             }
         }
-        Program newProgram = new Program(name, seats, eligibility);
+        Program newProgram = new Program(name, seats, eligibility, fees);
         programList.add(newProgram);
         try {
             saveToFile(fileName);
@@ -67,29 +67,48 @@ public class ProgramManager {
     public void saveToFile(String filename) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
             for (Program p : programList) {
-                bw.write(p.getName() + "," + p.getSeats() + "," + p.getEligibility() + "," + String.join("|", p.getAllowedStreams()));
+                bw.write(p.getName() + "," +
+                        p.getSeats() + "," +
+                        p.getEligibility() + "," +
+                        p.getFee() + "," +
+                        String.join("|", p.getAllowedStreams()));
                 bw.newLine();
             }
         }
     }
+
     public void loadFromFile(String filename) throws IOException {
         programList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
+
                 String name = parts[0];
                 int seats = Integer.parseInt(parts[1]);
                 int eligibility = Integer.parseInt(parts[2]);
-                Program p = new Program(name, seats, eligibility);
+
+                double fee = 0.0;
                 if (parts.length > 3) {
-                    String[] streams = parts[3].split("\\|");
+                    try {
+                        fee = Double.parseDouble(parts[3]);
+                    } catch (NumberFormatException e) {
+                        fee = 0.0;
+                    }
+                }
+
+                Program p = new Program(name, seats, eligibility, fee);
+
+                if (parts.length > 4) {
+                    String[] streams = parts[4].split("\\|");
                     p.setAllowedStreams(new ArrayList<>(Arrays.asList(streams)));
                 }
+
                 programList.add(p);
             }
         }
     }
+
 
 
 }

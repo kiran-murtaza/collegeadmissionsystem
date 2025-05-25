@@ -2,40 +2,59 @@ package AdminSetup.Program;
 
 import java.util.ArrayList;
 
-
 public class Program {
     private String name;
     private int seats;
     private int eligibility;
+    private double fee;
     private ArrayList<String> allowedStreams;
 
-    public Program(String name, int seats, int eligibility) {
+    public Program(String name, int seats, int eligibility, double fee) {
         this.name = name;
         this.seats = seats;
         this.eligibility = eligibility;
+        this.fee = fee;
         this.allowedStreams = new ArrayList<>();
     }
 
+    public Program(String name, int seats, int eligibility) {
+        this(name, seats, eligibility, 0.0);
+    }
 
     public String getName() {
         return name;
     }
+
     public int getSeats() {
         return seats;
     }
+
     public int getEligibility() {
         return eligibility;
+    }
+
+    public double getFee() {
+        return fee;
+    }
+
+    public ArrayList<String> getAllowedStreams() {
+        return allowedStreams;
     }
 
     public void setSeats(int seats) {
         this.seats = seats;
     }
+
     public void setEligibility(int eligibility) {
         this.eligibility = eligibility;
     }
 
-    public String getProgramDetails() {
-        return getName() + " (Seats: " + getSeats() + ", Min Score: " + getEligibility() + ")";
+    public void setFee(double fee) {
+        this.fee = fee;
+    }
+
+    public void setAllowedStreams(ArrayList<String> streams) {
+        this.allowedStreams = streams;
     }
 
     public void addAllowedStream(String stream) {
@@ -48,22 +67,12 @@ public class Program {
         return allowedStreams.contains(stream);
     }
 
-    public ArrayList<String> getAllowedStreams() {
-        return allowedStreams;
+    public String getProgramDetails() {
+        return getName() + " (Seats: " + getSeats() +
+                ", Min Score: " + getEligibility() +
+                ", Fee: Rs." + getFee() + ")";
     }
-
-    public void setAllowedStreams(ArrayList<String> streams) {
-        this.allowedStreams = streams;
-    }
-//    public String toFileFormat() {
-//        return name + "," + seats + "," + eligibility;
-//    }
-//
-//    public static Program fromFileLine(String line) {
-//        String[] parts = line.split(",");
-//        return new Program(parts[0], Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
-//    }
-
 }
+
 
 
