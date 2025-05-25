@@ -45,7 +45,7 @@ public class ApplicationFormData {
         this.email = email;      // can be set later via setter
         this.testSchedule = "N/A";  // default initial value
         this.testScore = "N/A";     // default initial value
-        this.status = Status.SUBMITTED; // default initial status
+        this.status = Status.SUBMITTED; // default initial status//
     }
     public void saveToFile() throws IOException {
         try (FileWriter writer = new FileWriter("all_applications.txt", true)) {
