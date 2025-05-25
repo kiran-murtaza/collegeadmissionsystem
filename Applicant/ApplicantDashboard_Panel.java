@@ -1,6 +1,5 @@
 package Applicant;
 
-
 import AdminSetup.College.CollegeManager;
 import AdminSetup.Program.ProgramManager;
 import Authentication.LoginFrame;
@@ -9,7 +8,7 @@ import Authentication.Users;
 import javax.swing.*;
 import java.awt.*;
 
-public class ApplicantDashboard_Panel extends JFrame {
+public class ApplicantDashboard_Panel extends JFrame{
     private Applicant userInfo;
     private JPanel contentPanel;
     private ProgramManager programManager;
@@ -20,10 +19,7 @@ public class ApplicantDashboard_Panel extends JFrame {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
 
-
-
-
-    public ApplicantDashboard_Panel(Applicant userInfo, ProgramManager programManager , CollegeManager collegeManager){
+    public ApplicantDashboard_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
         this.userInfo = userInfo;
         this.programManager = programManager;
         this.collegeManager = collegeManager;
@@ -54,30 +50,40 @@ public class ApplicantDashboard_Panel extends JFrame {
 
         // Menu Bar
         JPanel menuPanel = new JPanel();
-        menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.X_AXIS));
         menuPanel.setBackground(COLORAZ_BLACK);
         menuPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        menuPanel.setPreferredSize(new Dimension(1000, 60));
 
         String[] menuItems = {
+                "Home",
                 "Apply for College",
                 "Submitted Form List",
-                "College List",
-                "Program List",
-                "View Eligibility",
+                "View Colleges & Programs",
                 "Payment Portal",
                 "Apply for Scholarship",
+                "Documents",
+                "Edit Profile",
                 "Logout"
         };
 
         for (String item : menuItems) {
             JButton menuButton = new JButton(item);
-            menuButton.setForeground(COLORAZ_WHITE);
-            menuButton.setBackground(COLORAZ_BLACK);
-            menuButton.setBorderPainted(false);
-            menuButton.setFocusPainted(false);
-            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+            // Styling the button
+            menuButton.setForeground(COLORAZ_WHITE);                 // Text color
+            menuButton.setBackground(COLORAZ_BLACK);                 // Button background
+            menuButton.setBorderPainted(false);                      // No border
+            menuButton.setFocusPainted(false);                       // No focus border
+            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font styling
+
+            // Add action listener for handling clicks
             menuButton.addActionListener(e -> handleMenuClick(item));
+
+            // Add button to the menu panel
             menuPanel.add(menuButton);
+
+            // Add spacing between buttons
             menuPanel.add(Box.createHorizontalStrut(10));
         }
 
@@ -99,8 +105,7 @@ public class ApplicantDashboard_Panel extends JFrame {
         JPanel footerPanel = new JPanel();
         footerPanel.setBackground(COLORAZ_SAGE);
         footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        JLabel copyright =
-                new JLabel("© 2025 Colaraz. All rights reserved.", SwingConstants.CENTER);
+        JLabel copyright = new JLabel("© 2025 Colaraz. All rights reserved.", SwingConstants.CENTER);
         copyright.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         footerPanel.add(copyright);
         add(footerPanel, BorderLayout.SOUTH);
@@ -108,68 +113,41 @@ public class ApplicantDashboard_Panel extends JFrame {
 
     private void handleMenuClick(String menuItem) {
         switch (menuItem) {
-            case "Apply for College" -> showApplicationForm(userInfo, programManager, collegeManager);
+            case "Apply for College" -> showApplicationForm();
             case "Submitted Form List" -> showSubmittedFormList();
-            case "College List" -> showCollegeList();
-            case "Program List" -> showProgramList();
-            case "View Eligibility" -> showEligibilityCriteria();
+//            case "View Colleges & Programs" -> showCollegeAndProgramViewer();
             case "Payment Portal" -> showPaymentPortal();
             case "Apply for Scholarship" -> showScholarshipForm();
-            case "Logout" -> {dispose();
-            new LoginFrame().setVisible(true);
+            case "Logout" -> {
+                dispose();
+                new LoginFrame().setVisible(true);
             }
         }
     }
 
-    // ---- Menu Action Stubs ----
-
-//    private void showApplicationForm() {
-//        contentPanel.removeAll();
-//        contentPanel.add(new JLabel("Application Form Here", SwingConstants.CENTER), BorderLayout.CENTER);
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
-//    }
-
-    private void showApplicationForm(Users user, ProgramManager programManager, CollegeManager collegeManager) {
-//
+    private void showApplicationForm() {
         ApplicationForm_Panel formPanel = new ApplicationForm_Panel(userInfo, this.programManager, this.collegeManager);
         contentPanel.removeAll();
-        contentPanel.setLayout(new BorderLayout());
         contentPanel.add(formPanel, BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
-//
-    private void showSubmittedFormList(){
+
+    private void showSubmittedFormList() {
         SubmittedFormList_Panel submittedFormListPanel = new SubmittedFormList_Panel(userInfo);
         contentPanel.removeAll();
-        contentPanel.setLayout(new BorderLayout());
         contentPanel.add(submittedFormListPanel, BorderLayout.CENTER);
-//        contentPanel.add(new JLabel("Application Status & PDF Download", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
-    private void showCollegeList() {
-        contentPanel.removeAll();
-        contentPanel.add(new JLabel("College List Dropdown (Admin)", SwingConstants.CENTER), BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    private void showProgramList() {
-        contentPanel.removeAll();
-        contentPanel.add(new JLabel("Course List / Programs / Departments", SwingConstants.CENTER), BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
-
-    private void showEligibilityCriteria() {
-        contentPanel.removeAll();
-        contentPanel.add(new JLabel("Eligibility / Admission Criteria", SwingConstants.CENTER), BorderLayout.CENTER);
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
+//    private void showCollegeAndProgramViewer() {
+//        CollegeAndProgramViewer_Panel viewerPanel = new CollegeAndProgramViewer_Panel(collegeManager, programManager);
+//        contentPanel.removeAll();
+//        contentPanel.add(viewerPanel, BorderLayout.CENTER);
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
+//    }
 
     private void showPaymentPortal() {
         contentPanel.removeAll();
@@ -184,7 +162,4 @@ public class ApplicantDashboard_Panel extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
-
-
-
 }

@@ -46,7 +46,7 @@ public class signUpFrame extends JFrame {
         JLabel email = new JLabel("Email:");
         JLabel password = new JLabel("Password:");
         JLabel security = new JLabel("Name of your pet:");
-        JLabel cnic = new JLabel("CNIC:");
+        JLabel cnic = new JLabel("CNIC (XXXXX-XXXXXXX-X):");
         JLabel dob = new JLabel("Date of Birth (YYYY-MM-DD):");
         JLabel gender = new JLabel("Gender:");
         JLabel phone = new JLabel("Phone:");
@@ -112,13 +112,13 @@ public class signUpFrame extends JFrame {
 
 
         enter.addActionListener(e -> {
-            String passWord = passwordField.getText();
-            String securityAnswer = securityField.getText();
-            String cnicVal = cnicField.getText();
-            String dobText = dobField.getText();
+            String passWord = passwordField.getText().trim();
+            String securityAnswer = securityField.getText().trim();
+            String cnicVal = cnicField.getText().trim();
+            String dobText = dobField.getText().trim();
             Gender genderVal = (Gender) genderBox.getSelectedItem();
-            String phoneVal = phoneField.getText();
-            String emailVal = emailField.getText();
+            String phoneVal = phoneField.getText().trim();
+            String emailVal = emailField.getText().trim();
 
             if (emailVal.isEmpty() || passWord.isEmpty() || securityAnswer.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Fields cannot be empty");
@@ -179,6 +179,9 @@ public class signUpFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, result, "Error", JOptionPane.ERROR_MESSAGE);
                     break;
                 case "Field can not be empty":
+                    JOptionPane.showMessageDialog(this, result, "Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+                case "Enter a valid pet name":
                     JOptionPane.showMessageDialog(this, result, "Error", JOptionPane.ERROR_MESSAGE);
                     break;
                 default:

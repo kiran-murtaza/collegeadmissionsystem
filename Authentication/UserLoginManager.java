@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
-import Applicant.Applicant;
 
 public class UserLoginManager{
     public ArrayList<Users> users;
@@ -36,7 +35,7 @@ public class UserLoginManager{
             writer.close();
         }
 
-        catch (Exception e){
+         catch (Exception e){
             e.printStackTrace();
         }
     }
