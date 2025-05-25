@@ -212,11 +212,12 @@ public class ApplicationForm_Panel extends JPanel {
                     percent12Field.getText(),
                     stream12Dropdown.getSelectedItem().toString(),
                     selectedProgram,
-                    selectedCollege
+                    selectedCollege,
+                    userInfo.getEmail()
             );
 
 // Now set the remaining fields with setters:
-            applicationFormData.setEmail(userInfo.getEmail());
+
             applicationFormData.setTestSchedule("N/A");
             applicationFormData.setTestScore("N/A");
             applicationFormData.setStatus(Status.SUBMITTED);

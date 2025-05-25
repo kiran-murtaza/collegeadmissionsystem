@@ -32,10 +32,14 @@ public class SubmittedFormList_Panel extends JPanel {
         searchPanel.add(searchField, BorderLayout.CENTER);
         add(searchPanel, BorderLayout.NORTH);
 
-        // Load applications by email using existing method
+        // Declare the variable outside
+        ArrayList<ApplicationFormData> userApplications;
+
         try {
-            userApplications = ApplicantManager.getApplicationsByUserEmail(userInfo.getEmail());
+            // Initialize inside try
+            userApplications = new ArrayList<>(ApplicantManager.getApplicationsByUserEmail(userInfo.getEmail()));
         } catch (Exception e) {
+            e.printStackTrace();  // This will print the actual error in the console
             add(new JLabel("Error loading applications.", SwingConstants.CENTER), BorderLayout.CENTER);
             return;
         }

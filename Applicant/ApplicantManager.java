@@ -104,7 +104,7 @@ public class ApplicantManager {
                         address,
                         board10, year10, percent10, stream10,
                         board12, year12, percent12, stream12,
-                        program, college
+                        program, college,email
                 );
 
                 app.setEmail(email);

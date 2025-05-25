@@ -28,7 +28,7 @@ public class ApplicationFormData {
     public ApplicationFormData(String applicationId, Applicant users, String address,
                                String board10, String year10, String percent10, String stream10,
                                String board12, String year12, String percent12, String stream12,
-                               Program selectedProgram, College selectedCollege) {
+                               Program selectedProgram, College selectedCollege,String email) {
         this.applicationId = applicationId;
         this.applicant = users;
         this.address = address;
@@ -42,7 +42,7 @@ public class ApplicationFormData {
         this.stream12 = stream12;
         this.selectedProgram = selectedProgram;
         this.selectedCollege = selectedCollege;
-        this.email = applicant.getEmail();         // can be set later via setter
+        this.email = email;      // can be set later via setter
         this.testSchedule = "N/A";  // default initial value
         this.testScore = "N/A";     // default initial value
         this.status = Status.SUBMITTED; // default initial status
