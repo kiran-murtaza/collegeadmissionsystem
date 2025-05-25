@@ -189,7 +189,7 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 
-    // Button Editor for Action column
+    // Button Editor for Action column//
     private class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String label;
