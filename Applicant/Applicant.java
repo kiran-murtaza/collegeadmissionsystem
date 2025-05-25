@@ -22,6 +22,8 @@ public class Applicant extends Users {
         this.admissions = new ArrayList<>();
     }
 
+
+
     public  void addSubmittedApplication(ApplicationFormData application) {
         submittedApplications.add(application);
     }

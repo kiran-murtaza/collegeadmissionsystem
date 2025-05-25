@@ -45,7 +45,7 @@ public class ApplicantManager {
     }
 
 
-    public static boolean hasAppliedBefore(List<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
+    public static boolean hasAppliedBefore(ArrayList<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
         for (ApplicationFormData app : existingApplications) {
             boolean sameUser = app.getUsers().equals(newApp.getUsers());
             boolean sameProgram = app.getSelectedProgram() != null && newApp.getSelectedProgram() != null &&
@@ -61,8 +61,8 @@ public class ApplicantManager {
     }
 
 
-    public static List<ApplicationFormData> loadAllApplications() {
-        List<ApplicationFormData> applications = new ArrayList<>();
+    public static ArrayList<ApplicationFormData> loadAllApplications() {
+        ArrayList<ApplicationFormData> applications = new ArrayList<>();
         File file = new File(APPLICATION_FILE);
 
         if (!file.exists()) return applications;
@@ -124,5 +124,17 @@ public class ApplicantManager {
         }
 
         return applications;
+    }
+    public static ArrayList<ApplicationFormData> getApplicationsByUserEmail(String email) {
+        ArrayList<ApplicationFormData> allApps = loadAllApplications();
+        ArrayList<ApplicationFormData> userApps = new ArrayList<>();
+
+        for (ApplicationFormData app : allApps) {
+            if (app.getEmail() != null && app.getEmail().equalsIgnoreCase(email)) {
+                userApps.add(app);
+            }
+        }
+
+        return userApps;
     }
 }
