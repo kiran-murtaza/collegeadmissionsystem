@@ -61,66 +61,51 @@ public class CollegeManager {
         return false;
     }
 
-//    public void saveToFile(String filename) throws IOException {
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
-//            for (College c : colleges) {
-//                bw.write(c.toFileFormat());
-//                bw.newLine();
-//            }
-//        }
-//    }
-//
-//    public void loadFromFile(String filename) throws IOException {
-//        colleges.clear();
-//        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                colleges.add(College.fromFileLine(line));
-//            }
-//        }
-//    }
 public void saveToFile(String filename) throws IOException {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename))) {
-        for (College college : colleges) {
-            bw.write("COLLEGE," + college.getName());
-            bw.newLine();
-
-            for (Program program : college.getPrograms()) {
-                bw.write("PROGRAM," + program.getName() + "," + program.getSeats() + "," + program.getEligibility());
-                bw.newLine();
+    BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+    for (College college : colleges) {
+        writer.write("College:" + college.getName());
+        writer.newLine();
+        for (Program program : college.getPrograms()) {
+            writer.write("Program:" + program.getName() + "," + program.getSeats() + "," +
+                    program.getEligibility() + "," + program.getFee());
+            writer.newLine();
+            for (String stream : program.getAllowedStreams()) {
+                writer.write("Stream:" + stream);
+                writer.newLine();
             }
-            bw.newLine();
         }
     }
+    writer.close();
 }
+
     public void loadFromFile(String filename) throws IOException {
-        colleges.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            College currentCollege = null;
+        BufferedReader reader = new BufferedReader(new FileReader(filename));
+        String line;
+        College currentCollege = null;
+        Program currentProgram = null;
 
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) {
-                    currentCollege = null;
-                    continue;
-                }
-
-                String[] parts = line.split(",");
-
-                if (parts[0].equalsIgnoreCase("COLLEGE")) {
-                    String collegeName = parts[1];
-                    currentCollege = new College(collegeName);
-                    colleges.add(currentCollege);
-                } else if (parts[0].equalsIgnoreCase("PROGRAM") && currentCollege != null) {
-                    String programName = parts[1];
-                    int seats = Integer.parseInt(parts[2]);
-                    int eligibility = Integer.parseInt(parts[3]);
-                    currentCollege.addProgram(new Program(programName, seats, eligibility));
-                }
+        while ((line = reader.readLine()) != null) {
+            if (line.startsWith("College:")) {
+                String collegeName = line.substring(8).trim();
+                currentCollege = new College(collegeName);
+                colleges.add(currentCollege);
+            } else if (line.startsWith("Program:")) {
+                String[] parts = line.substring(8).split(",");
+                String name = parts[0].trim();
+                int seats = Integer.parseInt(parts[1].trim());
+                int eligibility = Integer.parseInt(parts[2].trim());
+                double fee = Double.parseDouble(parts[3].trim());
+                currentProgram = new Program(name, seats, eligibility, fee);
+                currentCollege.addProgram(currentProgram);
+            } else if (line.startsWith("Stream:")) {
+                String stream = line.substring(7).trim();
+                currentProgram.addAllowedStream(stream);
             }
         }
+        reader.close();
     }
+
 
 
 }

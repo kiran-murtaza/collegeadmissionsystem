@@ -15,6 +15,8 @@ public class ProgramPanel extends JPanel {
     private final JTextField nameField;
     private final JTextField seatsField;
     private final JTextField eligibilityField;
+    private final JTextField programFeeField;
+
 
     private final DefaultListModel<String> programListModel;
     private final JList<String> programList;
@@ -25,13 +27,14 @@ public class ProgramPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createTitledBorder("Program Details"));
 
         collegeDropdown = new JComboBox<>();
         nameField = new JTextField();
         seatsField = new JTextField();
         eligibilityField = new JTextField();
+        programFeeField = new JTextField();
 
         inputPanel.add(new JLabel("Select College:"));
         inputPanel.add(collegeDropdown);
@@ -41,6 +44,8 @@ public class ProgramPanel extends JPanel {
         inputPanel.add(seatsField);
         inputPanel.add(new JLabel("Eligibility Score:"));
         inputPanel.add(eligibilityField);
+        inputPanel.add(new JLabel("Program Fee:"));
+        inputPanel.add(programFeeField);
 
         programListModel = new DefaultListModel<>();
         programList = new JList<>(programListModel);
@@ -70,6 +75,7 @@ public class ProgramPanel extends JPanel {
             nameField.setText("");
             seatsField.setText("");
             eligibilityField.setText("");
+            programFeeField.setText("");
         });
 
 
@@ -86,8 +92,9 @@ public class ProgramPanel extends JPanel {
         String name = nameField.getText().trim();
         String seatsText = seatsField.getText().trim();
         String eligibilityText = eligibilityField.getText().trim();
+        String feeText = programFeeField.getText().trim();
 
-        if (collegeName == null || name.isEmpty() || seatsText.isEmpty() || eligibilityText.isEmpty()) {
+        if (collegeName == null || name.isEmpty() || seatsText.isEmpty() || eligibilityText.isEmpty() || feeText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please fill all fields");
             return;
         }
@@ -95,6 +102,7 @@ public class ProgramPanel extends JPanel {
         try {
             int seats = Integer.parseInt(seatsText);
             int eligibility = Integer.parseInt(eligibilityText);
+            double fee = Double.parseDouble(feeText);
 
             College college = collegeManager.getCollegeByName(collegeName);
             if (college != null) {
@@ -105,7 +113,7 @@ public class ProgramPanel extends JPanel {
                     }
                 }
 
-                Program newProgram = new Program(name, seats, eligibility);
+                Program newProgram = new Program(name, seats, eligibility,fee);
                 college.addProgram(newProgram);
                 collegeManager.saveToFile("colleges.txt");
                 JOptionPane.showMessageDialog(this, "Program added to " + collegeName);
@@ -113,7 +121,7 @@ public class ProgramPanel extends JPanel {
                 refreshProgramList();
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Seats and Eligibility must be numbers");
+            JOptionPane.showMessageDialog(this, "Seats, Eligibility and Fee must be numbers");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error saving program: " + ex.getMessage());
         }
