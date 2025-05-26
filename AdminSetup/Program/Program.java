@@ -70,7 +70,7 @@ public class Program {
     public String getProgramDetails() {
         return getName() + " (Seats: " + getSeats() +
                 ", Min Score: " + getEligibility() +
-                ", Fee: Rs." + getFee() + ")";
+                ", Fee: Rs." + getFee() + " Stream:  "+getAllowedStreams() +" )";
     }
 }
 

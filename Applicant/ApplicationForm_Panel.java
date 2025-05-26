@@ -45,13 +45,13 @@ public class ApplicationForm_Panel extends JPanel {
     }
 
     // Constructor
-    public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) {
+    public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) throws IOException {
         this.userInfo = userInfo;
         this.programManager = programManager;
         this.collegeManager = collegeManager;
         this.colleges = new ArrayList<>();
         applicationCount = readCounter();
-
+        collegeManager.loadFromFile("colleges.txt");
         setLayout(new GridLayout(0, 2));
         setBackground(COLORAZ_WHITE);
 
@@ -90,7 +90,7 @@ public class ApplicationForm_Panel extends JPanel {
         // Stream Dropdown for 12th
         stream12Dropdown = new JComboBox<>();
         add(new JLabel("12th Stream/Field:"));
-        String[] streams = {"Commerce", "Engineering", "Medical"};
+        String[] streams = {"Commerce", "Engineering", "Biology"};
         for (String s : streams) stream12Dropdown.addItem(s);
 
         stream12Dropdown.addActionListener(e -> {
@@ -153,7 +153,8 @@ public class ApplicationForm_Panel extends JPanel {
         ArrayList<Program> filteredPrograms = programManager.getProgramsByStream(stream);
         if (filteredPrograms.isEmpty()) {
             programDropdown.addItem("No programs available");
-        } else {
+        }
+        else {
             for (Program p : filteredPrograms) {
                 programDropdown.addItem(p.getName());
             }
@@ -216,7 +217,7 @@ public class ApplicationForm_Panel extends JPanel {
                     userInfo.getEmail()
             );
 
-// Now set the remaining fields with setters:
+            // Now set the remaining fields with setters:
 
             applicationFormData.setTestSchedule("N/A");
             applicationFormData.setTestScore("N/A");
@@ -262,7 +263,8 @@ public class ApplicationForm_Panel extends JPanel {
                 }
             }
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     "Unexpected error: " + ex.getMessage(),
                     "Error",

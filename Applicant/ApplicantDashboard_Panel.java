@@ -7,6 +7,8 @@ import Authentication.Users;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ApplicantDashboard_Panel extends JFrame{
     private Applicant userInfo;
@@ -78,7 +80,13 @@ public class ApplicantDashboard_Panel extends JFrame{
             menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font styling
 
             // Add action listener for handling clicks
-            menuButton.addActionListener(e -> handleMenuClick(item));
+            menuButton.addActionListener(e -> {
+                try {
+                    handleMenuClick(item);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
 
             // Add button to the menu panel
             menuPanel.add(menuButton);
@@ -111,7 +119,7 @@ public class ApplicantDashboard_Panel extends JFrame{
         add(footerPanel, BorderLayout.SOUTH);
     }
 
-    private void handleMenuClick(String menuItem) {
+    private void handleMenuClick(String menuItem) throws IOException {
         switch (menuItem) {
             case "Apply for College" -> showApplicationForm();
             case "Submitted Form List" -> showSubmittedFormList();
@@ -125,7 +133,7 @@ public class ApplicantDashboard_Panel extends JFrame{
         }
     }
 
-    private void showApplicationForm() {
+    private void showApplicationForm() throws IOException {
         ApplicationForm_Panel formPanel = new ApplicationForm_Panel(userInfo, this.programManager, this.collegeManager);
         contentPanel.removeAll();
         contentPanel.add(formPanel, BorderLayout.CENTER);
@@ -150,13 +158,19 @@ public class ApplicantDashboard_Panel extends JFrame{
 //    }
 
     private void showPaymentPortal() {
+        PaymentPortal_Panel portalPanel = new PaymentPortal_Panel(userInfo);
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Payment Portal", SwingConstants.CENTER), BorderLayout.CENTER);
+//        contentPanel.add(portalPanel,BorderLayout.CENTER); // Use the actual panel
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
+
     private void showScholarshipForm() {
+        ScholarshipForm_Panel scholarshipFormPanel = new ScholarshipForm_Panel(
+                Arrays.asList("Merit Based", "Need Based", "Sports Scholarship")
+        );
+        contentPanel.add(scholarshipFormPanel);
         contentPanel.removeAll();
         contentPanel.add(new JLabel("Scholarship Form", SwingConstants.CENTER), BorderLayout.CENTER);
         contentPanel.revalidate();

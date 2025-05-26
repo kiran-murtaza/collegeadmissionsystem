@@ -2,7 +2,6 @@ package AdminSetup.College;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class College_Panel extends JPanel {
     private static final Color COLORAZ_BLACK = Color.BLACK;
@@ -15,17 +14,11 @@ public class College_Panel extends JPanel {
 
 
     public College_Panel() {
-    setLayout(new BorderLayout());
-    setBackground(COLORAZ_WHITE);
-    try {
-        collegeManager.loadFromFile("colleges.txt");
+        setLayout(new BorderLayout());
+        setBackground(COLORAZ_WHITE);
+         initUI();
+         refreshCollegeList();
     }
-    catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Failed to load colleges.");
-    }
-    initUI();
-    refreshCollegeList();
-}
 
 
     private void initUI() {
@@ -93,13 +86,7 @@ private void handleAddCollege() {
         }
     }
     collegeManager.addCollege(collegeName);
-    try {
-        collegeManager.saveToFile("colleges.txt");
-    }
-    catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error saving college.", "File Error", JOptionPane.ERROR_MESSAGE);
-    }
-
+    collegeManager.saveToFile("colleges.txt");
     refreshCollegeList();
     collegeNameField.setText("");
     JOptionPane.showMessageDialog(this, "College added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);

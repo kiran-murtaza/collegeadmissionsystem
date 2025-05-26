@@ -42,7 +42,7 @@ public class ApplicationFormData {
         this.stream12 = stream12;
         this.selectedProgram = selectedProgram;
         this.selectedCollege = selectedCollege;
-        this.email = email;      // can be set later via setter
+        this.email = email;         // can be set later via setter
         this.testSchedule = "N/A";  // default initial value
         this.testScore = "N/A";     // default initial value
         this.status = Status.SUBMITTED; // default initial status//

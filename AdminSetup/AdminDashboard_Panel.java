@@ -26,7 +26,6 @@ public class AdminDashboard_Panel extends JFrame {
         this.programManager = programManager;
         this.collegeManager = collegeManager;
 
-
         setupFrame();
         initUI();
     }
@@ -132,7 +131,7 @@ public class AdminDashboard_Panel extends JFrame {
     }
 
     private void showColleges() {
-        College_Panel collegePanel= new College_Panel();
+        College_Panel collegePanel = new College_Panel();
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(collegePanel, BorderLayout.CENTER);
@@ -140,7 +139,7 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.repaint();
     }
     private void showPrograms() {
-        ProgramPanel programPanel = new ProgramPanel(programManager, collegeManager);
+        ProgramPanel programPanel = new ProgramPanel();
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(programPanel, BorderLayout.CENTER);

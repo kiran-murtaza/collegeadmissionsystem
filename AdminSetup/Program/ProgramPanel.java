@@ -5,125 +5,177 @@ import AdminSetup.College.CollegeManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.util.List;
 
 public class ProgramPanel extends JPanel {
-    private ProgramManager programManager;
-    private CollegeManager collegeManager;
-
+    private final CollegeManager collegeManager;
     private final JComboBox<String> collegeDropdown;
     private final JTextField nameField;
     private final JTextField seatsField;
     private final JTextField eligibilityField;
-    private final JTextField programFeeField;
-
-
+    private final JTextField feeField;
+    private final JCheckBox engCheck;
+    private final JCheckBox comCheck;
+    private final JCheckBox bioCheck;
     private final DefaultListModel<String> programListModel;
     private final JList<String> programList;
 
-    public ProgramPanel(ProgramManager programManager, CollegeManager collegeManager) {
-        this.programManager = programManager;
-        this.collegeManager = collegeManager;
+    public ProgramPanel() {
+        this.collegeManager = new CollegeManager();
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
 
-        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 10, 10));
-        inputPanel.setBorder(BorderFactory.createTitledBorder("Program Details"));
+        // Input Form Panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setBorder(BorderFactory.createTitledBorder("Add New Program"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        JLabel collegeLabel = new JLabel("Select College:");
         collegeDropdown = new JComboBox<>();
-        nameField = new JTextField();
-        seatsField = new JTextField();
-        eligibilityField = new JTextField();
-        programFeeField = new JTextField();
+        loadColleges();
 
-        inputPanel.add(new JLabel("Select College:"));
-        inputPanel.add(collegeDropdown);
-        inputPanel.add(new JLabel("Program Name:"));
-        inputPanel.add(nameField);
-        inputPanel.add(new JLabel("Seats:"));
-        inputPanel.add(seatsField);
-        inputPanel.add(new JLabel("Eligibility Score:"));
-        inputPanel.add(eligibilityField);
-        inputPanel.add(new JLabel("Program Fee:"));
-        inputPanel.add(programFeeField);
+        JLabel nameLabel = new JLabel("Program Name:");
+        nameField = new JTextField(15);
 
+        JLabel seatsLabel = new JLabel("Total Seats:");
+        seatsField = new JTextField(10);
+
+        JLabel eligibilityLabel = new JLabel("Eligibility Score:");
+        eligibilityField = new JTextField(10);
+
+        JLabel feeLabel = new JLabel("Program Fee:");
+        feeField = new JTextField(10);
+
+        engCheck = new JCheckBox("Engineering");
+        comCheck = new JCheckBox("Commerce");
+        bioCheck = new JCheckBox("Biology");
+
+        // Row 0
+        gbc.gridx = 0; gbc.gridy = 0;
+        formPanel.add(collegeLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(collegeDropdown, gbc);
+
+        // Row 1
+        gbc.gridx = 0; gbc.gridy++;
+        formPanel.add(nameLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(nameField, gbc);
+
+        // Row 2
+        gbc.gridx = 0; gbc.gridy++;
+        formPanel.add(seatsLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(seatsField, gbc);
+
+        // Row 3
+        gbc.gridx = 0; gbc.gridy++;
+        formPanel.add(eligibilityLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(eligibilityField, gbc);
+
+        // Row 4
+        gbc.gridx = 0; gbc.gridy++;
+        formPanel.add(feeLabel, gbc);
+        gbc.gridx = 1;
+        formPanel.add(feeField, gbc);
+
+        // Row 5 - Checkboxes
+        gbc.gridx = 0; gbc.gridy++;
+        formPanel.add(new JLabel("Allowed Streams:"), gbc);
+        gbc.gridx = 1;
+        JPanel streamPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        streamPanel.add(engCheck);
+        streamPanel.add(comCheck);
+        streamPanel.add(bioCheck);
+        formPanel.add(streamPanel, gbc);
+
+        // Program List Panel
         programListModel = new DefaultListModel<>();
         programList = new JList<>(programListModel);
         JScrollPane listScrollPane = new JScrollPane(programList);
-        listScrollPane.setBorder(BorderFactory.createTitledBorder("Programs"));
+        listScrollPane.setBorder(BorderFactory.createTitledBorder("Programs in College"));
 
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton addButton = new JButton("Add");
-        JButton removeButton = new JButton("Remove");
+        // Buttons Panel
+        JPanel buttonPanel = new JPanel();
+        JButton addButton = new JButton("Add Program");
+        JButton removeButton = new JButton("Remove Program");
         JButton refreshButton = new JButton("Refresh");
 
         buttonPanel.add(addButton);
         buttonPanel.add(removeButton);
         buttonPanel.add(refreshButton);
 
-        add(inputPanel, BorderLayout.NORTH);
+        // Add panels to main layout
+        add(formPanel, BorderLayout.NORTH);
         add(listScrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-
+        // Event Listeners
         addButton.addActionListener(e -> addProgram());
         removeButton.addActionListener(e -> removeProgram());
-        refreshButton.addActionListener(e -> {
-            loadCollegesIntoDropdown();
-            refreshProgramList();
-
-            nameField.setText("");
-            seatsField.setText("");
-            eligibilityField.setText("");
-            programFeeField.setText("");
-        });
-
-
+        refreshButton.addActionListener(e -> clearFields());
 
         collegeDropdown.addActionListener(e -> refreshProgramList());
 
-
-        loadCollegesIntoDropdown();
-        refreshProgramList();
+        refreshProgramList(); // on load
     }
+
 
     private void addProgram() {
         String collegeName = (String) collegeDropdown.getSelectedItem();
-        String name = nameField.getText().trim();
-        String seatsText = seatsField.getText().trim();
+        String programName = nameField.getText().trim();
+        String seatText = seatsField.getText().trim();
         String eligibilityText = eligibilityField.getText().trim();
-        String feeText = programFeeField.getText().trim();
+        String feeText = feeField.getText().trim();
 
-        if (collegeName == null || name.isEmpty() || seatsText.isEmpty() || eligibilityText.isEmpty() || feeText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill all fields");
+        if (collegeName == null || programName.isEmpty() || seatText.isEmpty()
+                || eligibilityText.isEmpty() || feeText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
             return;
         }
 
         try {
-            int seats = Integer.parseInt(seatsText);
+            int seats = Integer.parseInt(seatText);
             int eligibility = Integer.parseInt(eligibilityText);
             double fee = Double.parseDouble(feeText);
 
             College college = collegeManager.getCollegeByName(collegeName);
             if (college != null) {
                 for (Program p : college.getPrograms()) {
-                    if (p.getName().equalsIgnoreCase(name)) {
-                        JOptionPane.showMessageDialog(this, "Program already exists in this college");
+                    if (p.getName().equalsIgnoreCase(programName)) {
+                        JOptionPane.showMessageDialog(this, "Program already exists in this college.");
                         return;
                     }
                 }
 
-                Program newProgram = new Program(name, seats, eligibility,fee);
+                Program newProgram = new Program(programName, seats, eligibility, fee);
+                if (!engCheck.isSelected() && !comCheck.isSelected() && !bioCheck.isSelected()) {
+                    JOptionPane.showMessageDialog(this, "Please select at least one allowed stream.");
+                    return;
+                }
+                if (engCheck.isSelected()){
+                    newProgram.addAllowedStream("Engineering");
+
+                }
+                if (comCheck.isSelected()){
+                    newProgram.addAllowedStream("Commerce");
+                }
+                if (bioCheck.isSelected()){
+                    newProgram.addAllowedStream("Biology");
+                }
+
                 college.addProgram(newProgram);
                 collegeManager.saveToFile("colleges.txt");
-                JOptionPane.showMessageDialog(this, "Program added to " + collegeName);
 
+                JOptionPane.showMessageDialog(this, "Program added successfully!");
                 refreshProgramList();
+                clearFields();
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Seats, Eligibility and Fee must be numbers");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error saving program: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Seats, Eligibility, and Fee must be valid numbers.");
         }
     }
 
@@ -140,23 +192,21 @@ public class ProgramPanel extends JPanel {
         if (collegeName != null) {
             College college = collegeManager.getCollegeByName(collegeName);
             if (college != null) {
-                college.getPrograms().removeIf(p -> p.getName().equalsIgnoreCase(programName));
-                try {
-                    collegeManager.saveToFile("colleges.txt");
-                    refreshProgramList();
-                    JOptionPane.showMessageDialog(this, "Program removed");
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(this, "Error saving file: " + e.getMessage());
-                }
+                List<Program> programs = college.getPrograms();
+                programs.removeIf(p -> p.getName().equalsIgnoreCase(programName));
+
+                collegeManager.saveToFile("colleges.txt");
+                refreshProgramList();
+                JOptionPane.showMessageDialog(this, "Program removed.");
             }
         }
     }
 
     private void refreshProgramList() {
         programListModel.clear();
-        String selectedCollege = (String) collegeDropdown.getSelectedItem();
-        if (selectedCollege != null) {
-            College college = collegeManager.getCollegeByName(selectedCollege);
+        String collegeName = (String) collegeDropdown.getSelectedItem();
+        if (collegeName != null) {
+            College college = collegeManager.getCollegeByName(collegeName);
             if (college != null) {
                 for (Program p : college.getPrograms()) {
                     programListModel.addElement(p.getProgramDetails());
@@ -165,21 +215,33 @@ public class ProgramPanel extends JPanel {
         }
     }
 
-    private void loadCollegesIntoDropdown() {
-        collegeDropdown.removeAllItems();
-        try {
-            collegeManager.loadFromFile("colleges.txt");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error loading colleges: " + e.getMessage());
-        }
-
-        for (College c : collegeManager.getAllColleges()) {
-            collegeDropdown.addItem(c.getName());
-        }
+//    private void loadColleges() {
+//        collegeDropdown.removeAllItems();
+//        for (College c : collegeManager.getAllColleges()) {
+//            collegeDropdown.addItem(c.getName());
+//        }
+//    }
+private void loadColleges() {
+    String selectedCollege = (String) collegeDropdown.getSelectedItem(); // Save current selection
+    collegeDropdown.removeAllItems();
+    for (College c : collegeManager.getAllColleges()) {
+        collegeDropdown.addItem(c.getName());
+    }
+    if (selectedCollege != null) {
+        collegeDropdown.setSelectedItem(selectedCollege); // Restore selection
     }
 }
 
 
-
-
-
+    private void clearFields() {
+        nameField.setText("");
+        seatsField.setText("");
+        eligibilityField.setText("");
+        feeField.setText("");
+        engCheck.setSelected(false);
+        comCheck.setSelected(false);
+        bioCheck.setSelected(false);
+        loadColleges();
+        refreshProgramList();
+    }
+}

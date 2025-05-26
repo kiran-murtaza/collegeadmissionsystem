@@ -72,7 +72,7 @@ public class ApplicantManager {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
 
-                if (parts.length < 17) continue;
+//                if (parts.length < 17) continue;
 
                 String applicationID = parts[0];
                 String fullName = parts[1];  // Can be used to lookup User if needed

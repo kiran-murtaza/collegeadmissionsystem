@@ -12,6 +12,8 @@ public class Applicant extends Users {
     private ArrayList<AdmissionRecord> admissions;
     private ArrayList<ApplicationFormData> submittedApplications;
     private ArrayList<Document> documents = new ArrayList<>();
+    private FeeStatus feeStatus = FeeStatus.UNPAID;
+
 
     public Applicant(String firstName, String lastName, String email, String password,
                      String securityAnswer, String cnic, LocalDate dob,
@@ -32,7 +34,13 @@ public class Applicant extends Users {
         return submittedApplications;
     }
 
+    public void setFeeStatus(FeeStatus feeStatus) {
+        this.feeStatus = feeStatus;
+    }
 
+    public FeeStatus getFeeStatus() {
+        return feeStatus;
+    }
 }
 
 
