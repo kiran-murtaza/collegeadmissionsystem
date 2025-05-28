@@ -42,31 +42,56 @@ public class CollegeManager {
     // Get all colleges that offer a given program
     public ArrayList<College> getCollegesByProgramName(String programName) {
         ArrayList<College> result = new ArrayList<>();
-        for (College c : colleges) {
-            for (Program p : c.getPrograms()) {
-                if (p.getName().equalsIgnoreCase(programName)) {
-                    result.add(c);
-                    break;
+
+        for (College college : colleges) {
+            for (Program program : college.getPrograms()) {
+                if (program.getName().equalsIgnoreCase(programName)) {
+                    boolean alreadyExists = false;
+
+                    for (College existing : result) {
+                        if (existing.getName().equalsIgnoreCase(college.getName())) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!alreadyExists) {
+                        result.add(college);
+                    }
+
+                    break; // No need to keep checking other programs in this college
                 }
             }
         }
+
         return result;
     }
 
     // Get all programs that allow a specific stream
     public ArrayList<Program> getProgramsByStream(String stream) {
         ArrayList<Program> result = new ArrayList<>();
+
         for (College college : colleges) {
             for (Program program : college.getPrograms()) {
-                if (program.getAllowedStreams().contains(stream) && !result.contains(program)) {
-                    result.add(program);
+                if (program.getAllowedStreams().contains(stream)) {
+                    boolean alreadyExists = false;
+
+                    for (Program existing : result) {
+                        if (existing.getName().equalsIgnoreCase(program.getName())) {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+
+                    if (!alreadyExists) {
+                        result.add(program);
+                    }
                 }
             }
         }
         return result;
     }
-
-    // Update programs of a college by its name
+        // Update programs of a college by its name
     public boolean updateCollegeProgramsByName(String collegeName, ArrayList<Program> newPrograms) {
         for (College c : colleges) {
             if (c.getName().equalsIgnoreCase(collegeName)) {
@@ -100,6 +125,8 @@ public class CollegeManager {
 
     // Load all college and program data from a file
     public void loadFromFile(String filename) {
+        colleges.clear();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             College currentCollege = null;
