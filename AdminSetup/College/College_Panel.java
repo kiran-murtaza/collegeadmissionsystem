@@ -42,8 +42,8 @@ public class College_Panel extends JPanel {
 
         JButton addButton = new JButton("Add College");
         addButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        addButton.setBackground(COLORAZ_BLACK);
-        addButton.setForeground(COLORAZ_WHITE);
+        addButton.setBackground(Color.BLACK);
+        addButton.setForeground(Color.WHITE);
         addButton.setAlignmentX(Component.LEFT_ALIGNMENT);
         addButton.addActionListener(e -> handleAddCollege());
 

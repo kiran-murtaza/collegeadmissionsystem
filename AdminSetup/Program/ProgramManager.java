@@ -51,6 +51,10 @@ public class ProgramManager {
         return null;
     }
 
+    public void addProgram(Program program) {
+        programList.add(program);
+    }
+
 }
 
 

@@ -1,23 +1,15 @@
 College:IBA
-Program:BS CS,200,150,10000.0
-Stream:Engineering
-Program:bba,190,299,10000.0
+Program:BBA,123,50,120000.0
+Stream:Pre-Engineering
+Stream:Computer Science
 Stream:Commerce
-Program:bs eco,100,100,1000.0
+Program:Finance,23,67,100000.0
 Stream:Commerce
-College:ksbl
-Program:BS ITM,100,100,5000.0
-Stream:Engineering
-Stream:Commerce
-Program:BSCS,190,180,10000.0
-Stream:Engineering
 College:NUST
-Program:bs eco,100,200,10000.0
-Stream:Commerce
-Program:BS CE,199,250,10000.0
-Stream:Engineering
+Program:BCS,321,89,1.0E7
+Stream:Pre-Engineering
+Stream:Computer Science
 College:LUMS
-Program:bba,100,120,90000.0
-Stream:Commerce
-Program:BS CS,199,120,80000.0
-Stream:Engineering
+College:Agha Khan
+Program:MBBS,300,230,1000002.0
+Stream:Pre-Medical

@@ -14,9 +14,15 @@ public class ProgramPanel extends JPanel {
     private final JTextField seatsField;
     private final JTextField eligibilityField;
     private final JTextField feeField;
-    private final JCheckBox engCheck;
-    private final JCheckBox comCheck;
-    private final JCheckBox bioCheck;
+    private final List<JCheckBox> streamChecks = new java.util.ArrayList<>();
+    private final String[] streams = {
+            "Pre-Medical",
+            "Pre-Engineering",
+            "Computer Science",
+            "Commerce",
+            "Humanities/Arts",
+            "General Science"
+    };
     private final DefaultListModel<String> programListModel;
     private final JList<String> programList;
 
@@ -48,9 +54,9 @@ public class ProgramPanel extends JPanel {
         JLabel feeLabel = new JLabel("Program Fee:");
         feeField = new JTextField(10);
 
-        engCheck = new JCheckBox("Engineering");
-        comCheck = new JCheckBox("Commerce");
-        bioCheck = new JCheckBox("Biology");
+        for (String stream : streams) {
+            streamChecks.add(new JCheckBox(stream));
+        }
 
         // Row 0
         gbc.gridx = 0; gbc.gridy = 0;
@@ -87,9 +93,9 @@ public class ProgramPanel extends JPanel {
         formPanel.add(new JLabel("Allowed Streams:"), gbc);
         gbc.gridx = 1;
         JPanel streamPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        streamPanel.add(engCheck);
-        streamPanel.add(comCheck);
-        streamPanel.add(bioCheck);
+        for (JCheckBox cb : streamChecks) {
+            streamPanel.add(cb);
+        }
         formPanel.add(streamPanel, gbc);
 
         // Program List Panel
@@ -152,21 +158,17 @@ public class ProgramPanel extends JPanel {
                 }
 
                 Program newProgram = new Program(programName, seats, eligibility, fee);
-                if (!engCheck.isSelected() && !comCheck.isSelected() && !bioCheck.isSelected()) {
+                boolean streamSelected = false;
+                for (JCheckBox cb : streamChecks) {
+                    if (cb.isSelected()) {
+                        newProgram.addAllowedStream(cb.getText());
+                        streamSelected = true;
+                    }
+                }
+                if (!streamSelected) {
                     JOptionPane.showMessageDialog(this, "Please select at least one allowed stream.");
                     return;
                 }
-                if (engCheck.isSelected()){
-                    newProgram.addAllowedStream("Engineering");
-
-                }
-                if (comCheck.isSelected()){
-                    newProgram.addAllowedStream("Commerce");
-                }
-                if (bioCheck.isSelected()){
-                    newProgram.addAllowedStream("Biology");
-                }
-
                 college.addProgram(newProgram);
                 collegeManager.saveToFile("colleges.txt");
 
@@ -215,22 +217,22 @@ public class ProgramPanel extends JPanel {
         }
     }
 
-//    private void loadColleges() {
+    //    private void loadColleges() {
 //        collegeDropdown.removeAllItems();
 //        for (College c : collegeManager.getAllColleges()) {
 //            collegeDropdown.addItem(c.getName());
 //        }
 //    }
-private void loadColleges() {
-    String selectedCollege = (String) collegeDropdown.getSelectedItem(); // Save current selection
-    collegeDropdown.removeAllItems();
-    for (College c : collegeManager.getAllColleges()) {
-        collegeDropdown.addItem(c.getName());
+    private void loadColleges() {
+        String selectedCollege = (String) collegeDropdown.getSelectedItem(); // Save current selection
+        collegeDropdown.removeAllItems();
+        for (College c : collegeManager.getAllColleges()) {
+            collegeDropdown.addItem(c.getName());
+        }
+        if (selectedCollege != null) {
+            collegeDropdown.setSelectedItem(selectedCollege); // Restore selection
+        }
     }
-    if (selectedCollege != null) {
-        collegeDropdown.setSelectedItem(selectedCollege); // Restore selection
-    }
-}
 
 
     private void clearFields() {
@@ -238,9 +240,9 @@ private void loadColleges() {
         seatsField.setText("");
         eligibilityField.setText("");
         feeField.setText("");
-        engCheck.setSelected(false);
-        comCheck.setSelected(false);
-        bioCheck.setSelected(false);
+        for (JCheckBox cb : streamChecks) {
+            cb.setSelected(false);
+        }
         loadColleges();
         refreshProgramList();
     }

@@ -8,6 +8,7 @@ public class Program {
     private int eligibility;
     private double fee;
     private ArrayList<String> allowedStreams;
+    private String collegeName;
 
     public Program(String name, int seats, int eligibility, double fee) {
         this.name = name;
@@ -71,6 +72,14 @@ public class Program {
         return getName() + " (Seats: " + getSeats() +
                 ", Min Score: " + getEligibility() +
                 ", Fee: Rs." + getFee() + " Stream:  "+getAllowedStreams() +" )";
+    }
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+
+    // Add getter for collegeName if needed
+    public String getCollegeName() {
+        return collegeName;
     }
 }
 
