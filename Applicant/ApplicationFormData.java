@@ -47,32 +47,6 @@ public class ApplicationFormData {
         this.testScore = "N/A";     // default initial value
         this.status = Status.SUBMITTED; // default initial status//
     }
-    public void saveToFile() throws IOException {
-        try (FileWriter writer = new FileWriter("all_applications.txt", true)) {
-            String line = String.join(",",
-                    applicationId,
-                    applicant.getUserID(),
-                    email,
-                    address,
-                    board10,
-                    year10,
-                    percent10,
-                    stream10,
-                    board12,
-                    year12,
-                    percent12,
-                    stream12,
-                    selectedProgram != null ? selectedProgram.getName() : "N/A",
-                    selectedCollege != null ? selectedCollege.getName() : "N/A",
-                    status.toString(),
-                    java.time.LocalDateTime.now().toString()
-            );
-            writer.write(line + "\n");
-        }
-    }
-
-
-    // Getters and Setters
 
 
 

@@ -2,6 +2,7 @@ package AdminSetup;
 
 import AdminSetup.AddAdmin.AddAdmin_Panel;
 //import AdminSetup.Applicants.ViewApplicantsPanel;
+import AdminSetup.Applicants.ViewApplicantsPanel;
 import AdminSetup.College.College;
 import AdminSetup.College.CollegeManager;
 import AdminSetup.College.College_Panel;
@@ -105,7 +106,7 @@ public class AdminDashboard_Panel extends JFrame {
 
         switch (menuItem) {
             case "View College" -> showColleges();
-//            case "View Applicant" -> showApplicants();
+            case "View Applicant" -> showApplicants();
             case "View Program" -> showPrograms();
             case "Set Test" -> contentPanel.add(new JLabel("Set Test Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
             case "Add Admin" -> showAddAdmin();
@@ -148,14 +149,14 @@ public class AdminDashboard_Panel extends JFrame {
     }
 
 
-//    private void showApplicants() {
-//        ViewApplicantsPanel applicantsPanel = new ViewApplicantsPanel() ;
-//        contentPanel.removeAll();
-//        contentPanel.setLayout(new BorderLayout());
-//        contentPanel.add(applicantsPanel, BorderLayout.CENTER);
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
-//    }
+    private void showApplicants() {
+        ViewApplicantsPanel applicantsPanel = new ViewApplicantsPanel() ;
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(applicantsPanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
 
 
 

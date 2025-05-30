@@ -125,7 +125,6 @@ public class ProgramPanel extends JPanel {
         refreshButton.addActionListener(e -> clearFields());
 
         collegeDropdown.addActionListener(e -> refreshProgramList());
-
         refreshProgramList(); // on load
     }
 

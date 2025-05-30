@@ -119,7 +119,8 @@ public class ApplicationForm_Panel extends JPanel {
 
             if (selectedStream != null && !selectedStream.equals("Select your 12th Stream")) {
                 loadProgramsByStream(selectedStream);
-            } else {
+            }
+            else {
                 programDropdown.removeAllItems();
                 programDropdown.addItem("Select a stream first");
 
@@ -184,6 +185,7 @@ public class ApplicationForm_Panel extends JPanel {
             for (Program p : filteredPrograms) {
                 programDropdown.addItem(p.getName());
             }
+
             // Select the first valid program automatically:
             programDropdown.setSelectedIndex(0);
         }

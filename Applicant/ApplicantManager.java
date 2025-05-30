@@ -92,7 +92,10 @@ public class ApplicantManager {
                 String testSchedule = parts[15];
                 String testScore = parts[16];
 
-                Program program = new ProgramManager().getProgramByName(selectedProgramName);
+                Program program = null;
+                if (!"N/A".equalsIgnoreCase(selectedProgramName)) {
+                    program = new ProgramManager().getProgramByName(selectedProgramName);
+                }
                 College college = new CollegeManager().getCollegeByName(selectedCollegeName);
 
 
