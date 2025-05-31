@@ -5,4 +5,3 @@ APP-FORM-003,Unknown,check,check,check,checkcheck,check,check,check,check,Commer
 APP-FORM-004,Unknown,test,test,test,test,test,test,test,test,Computer Science,N/A,IBA,ahmed12@gmail.com,SUBMITTED,N/A,N/A
 APP-FORM-005,Unknown,karachi,akeub,20202,90,akueb,ak,302,90,Pre-Engineering,N/A,IBA,ki@gmail.com,SUBMITTED,N/A,N/A
 APP-FORM-001,Unknown,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,APPROVED,N/A,N/A
-APP-FORM-006,KIRAN,lahore,sindh,2023,80,Biology,akueb,2024,78,Commerce,N/A,IBA,ki@gmail.com,SUBMITTED,N/A,N/A
