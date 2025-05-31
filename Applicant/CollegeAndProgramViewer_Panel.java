@@ -101,7 +101,7 @@ public class CollegeAndProgramViewer_Panel extends JPanel {
                         programPanel.add(new JLabel("Program Name: " + programName));
                         programPanel.add(new JLabel("Seats: " + seats));
                         programPanel.add(new JLabel("Eligibility: " + eligibility + "%"));
-                        programPanel.add(new JLabel("Fee: PKR " + String.format("%,.2f", fee)));
+                        programPanel.add(new JLabel("Fee: PKR " + String.format("%,.2f", fee)+ " per semester"));
                         programPanel.add(new JLabel("Streams: " + String.join(", ", streams)));
 
                         collegePanel.add(programPanel);

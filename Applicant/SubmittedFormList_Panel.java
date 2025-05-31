@@ -54,7 +54,7 @@ public class SubmittedFormList_Panel extends JPanel {
                 "Status",
                 "Test Schedule",
                 "Test Score",
-                "Action"
+                "Give Test"
         };
 
         model = new DefaultTableModel(columns, 0);
@@ -67,8 +67,8 @@ public class SubmittedFormList_Panel extends JPanel {
 
         table.setRowHeight(40);
         table.setDefaultRenderer(Object.class, new CustomRowRenderer());
-        table.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn("Give Test").setCellRenderer(new ButtonRenderer());
+        table.getColumn("Give Test").setCellEditor(new ButtonEditor(new JCheckBox()));
 
         populateTable(userApplications);
 

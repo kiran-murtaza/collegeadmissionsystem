@@ -140,4 +140,44 @@ public class ApplicantManager {
 
         return userApps;
     }
+
+    public static void updateApplicationStatus(String applicationId, Status newStatus) {
+        ArrayList<ApplicationFormData> allApps = loadAllApplications();
+
+        for (ApplicationFormData app : allApps) {
+            if (app.getApplicationId().equals(applicationId)) {
+                app.setStatus(newStatus);
+                break;
+            }
+        }
+
+        // Now overwrite the file with updated list
+        try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite
+            for (ApplicationFormData app : allApps) {
+                String line = String.join(",",
+                        app.getApplicationId(),
+                        app.getUsers() != null ? app.getUsers().getFirstName() : "Unknown",
+                        app.getAddress(),
+                        app.getBoard10(),
+                        app.getYear10(),
+                        app.getPercent10(),
+                        app.getStream10(),
+                        app.getBoard12(),
+                        app.getYear12(),
+                        app.getPercent12(),
+                        app.getStream12(),
+                        app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
+                        app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
+                        app.getEmail(),
+                        app.getStatus().name(),
+                        app.getTestSchedule() != null ? app.getTestSchedule() : "null",
+                        app.getTestScore() != null ? app.getTestScore() : "null"
+                );
+                writer.write(line + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error updating application status: " + e.getMessage());
+        }
+    }
+
 }
