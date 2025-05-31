@@ -20,7 +20,7 @@ public class SubmittedFormList_Panel extends JPanel {
         setBackground(Color.WHITE);
 
 
-        // Title and Search Panel setup
+        // Title and Search
         JPanel searchPanel = new JPanel(new BorderLayout());
         searchField = new JTextField();
         searchField.setToolTipText("Search by Application No., Program or College");
@@ -33,14 +33,10 @@ public class SubmittedFormList_Panel extends JPanel {
         searchPanel.add(searchField, BorderLayout.CENTER);
         add(searchPanel, BorderLayout.NORTH);
 
-        // Declare the variable outside
-        ArrayList<ApplicationFormData> userApplications;
-
         try {
-            // Initialize inside try
-            userApplications = new ArrayList<>(ApplicantManager.getApplicationsByUserEmail(userInfo.getEmail()));
+            this.userApplications = new ArrayList<>(ApplicantManager.getApplicationsByUserEmail(userInfo.getEmail()));
         } catch (Exception e) {
-            e.printStackTrace();  // This will print the actual error in the console
+            e.printStackTrace();
             add(new JLabel("Error loading applications.", SwingConstants.CENTER), BorderLayout.CENTER);
             return;
         }
@@ -50,7 +46,6 @@ public class SubmittedFormList_Panel extends JPanel {
             return;
         }
 
-        // Define table columns
         String[] columns = {
                 "Application No.",
                 "Program",
@@ -66,7 +61,7 @@ public class SubmittedFormList_Panel extends JPanel {
         table = new JTable(model) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 7; // Only "Action" column editable (for button)
+                return column == 7;
             }
         };
 
@@ -77,12 +72,11 @@ public class SubmittedFormList_Panel extends JPanel {
 
         populateTable(userApplications);
 
-        // Search functionality: filter table rows live as user types
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String query = searchField.getText().toLowerCase();
-                model.setRowCount(0); // Clear table
+                model.setRowCount(0);
                 for (ApplicationFormData app : userApplications) {
                     if (app.getApplicationId().toLowerCase().contains(query)
                             || app.getSelectedProgram().getName().toLowerCase().contains(query)
@@ -153,14 +147,13 @@ public class SubmittedFormList_Panel extends JPanel {
         };
     }
 
-    // Custom cell renderer for row colors by status
+    // Renderer for status coloring
     private class CustomRowRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
             String status = table.getValueAt(row, 4).toString();
             switch (status) {
                 case "Approved" -> c.setBackground(new Color(198, 239, 206));
@@ -172,7 +165,7 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 
-    // Button Renderer for Action column
+    // Renderer for button column
     private class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
             setOpaque(true);
@@ -184,16 +177,14 @@ public class SubmittedFormList_Panel extends JPanel {
                                                        int row, int column) {
             String text = (value == null) ? "" : value.toString();
             setText(text);
-
             boolean isGiveTest = "Give Test Now".equals(text);
             setEnabled(isGiveTest);
-
             setBackground(isGiveTest ? Color.GREEN : Color.LIGHT_GRAY);
             return this;
         }
     }
 
-    // Button Editor for Action column//
+    // Editor for button column
     private class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String label;
@@ -220,11 +211,22 @@ public class SubmittedFormList_Panel extends JPanel {
         @Override
         public Object getCellEditorValue() {
             if (isPushed && "Give Test Now".equals(label)) {
-                JOptionPane.showMessageDialog(button, "Test Started for Application Row " + (selectedRow + 1));
-                // You can launch your test window or logic here
+                ApplicationFormData selectedApp = userApplications.get(selectedRow);
+
+                // Replace this with your real TestPanel logic
+                JFrame testFrame = new JFrame("Online Test");
+                testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                testFrame.setSize(600, 400);
+                testFrame.setLocationRelativeTo(null);
+
+//                // Simulated TestPanel (Replace with real implementation)
+//                JPanel testPanel = new TestPanel(selectedApp); // Make sure this class exists!
+//                testFrame.setContentPane(testPanel);
+//                testFrame.setVisible(true);
             }
             isPushed = false;
             return label;
         }
     }
 }
+
