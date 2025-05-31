@@ -19,6 +19,7 @@ public class SubmittedFormList_Panel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
+
         // Title and Search Panel setup
         JPanel searchPanel = new JPanel(new BorderLayout());
         searchField = new JTextField();
@@ -103,13 +104,15 @@ public class SubmittedFormList_Panel extends JPanel {
 
     private void addRow(ApplicationFormData app) {
         String schedule = (app.getStatus() == Status.TEST_SCHEDULED || app.getStatus() == Status.TEST_TAKEN)
-                ? app.getTestSchedule()
+                ? (app.getTestSchedule() == null || app.getTestSchedule().equals("N/A") ? "Not Scheduled" : app.getTestSchedule())
                 : "Not Scheduled";
 
-        String score = (app.getStatus() == Status.TEST_TAKEN) ? app.getTestScore() : "N/A";
+        String score = (app.getStatus() == Status.TEST_TAKEN && app.getTestScore() != null && !app.getTestScore().equals("N/A"))
+                ? app.getTestScore()
+                : "N/A";
 
         String actionText = "Unavailable";
-        if (app.getStatus() == Status.TEST_SCHEDULED && isToday(app.getTestSchedule())) {
+        if ("Give Test Now".equals(actionText) && isToday(app.getTestSchedule())) {
             actionText = "Give Test Now";
         } else if (app.getStatus() == Status.TEST_TAKEN) {
             actionText = "Completed";
@@ -117,15 +120,16 @@ public class SubmittedFormList_Panel extends JPanel {
 
         model.addRow(new Object[]{
                 app.getApplicationId(),
-                app.getSelectedProgram().getName(),
-                app.getSelectedCollege().getName(),
-                app.getUsers().getEmail(),
+                app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
+                app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
+                app.getUsers() != null ? app.getUsers().getEmail() : "N/A",
                 formatStatus(app.getStatus()),
                 schedule,
                 score,
                 actionText
         });
     }
+
 
     private boolean isToday(String dateStr) {
         try {

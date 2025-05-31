@@ -147,7 +147,6 @@ public class ApplicationForm_Panel extends JPanel {
         // Program dropdown action
         programDropdown.addActionListener(e -> {
             String selectedProgram = (String) programDropdown.getSelectedItem();
-
             System.out.println("Program selected: " + selectedProgram);
 
             if (selectedProgram != null

@@ -99,7 +99,7 @@ public class ApplicantManager {
                 College college = new CollegeManager().getCollegeByName(selectedCollegeName);
 
 
-                Applicant user = null;
+                Applicant user= null;
 
                 ApplicationFormData app = new ApplicationFormData(
                         applicationID,
