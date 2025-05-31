@@ -1,6 +1,7 @@
-APP-FORM-001,KIRAN,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-002,KIRAN,islamad,akueb,2022,90,cs,akueb,2022,90,Pre-Medical,N/A,Agha Khan,ki@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-002,ahmed,house no 66,Cambridge,2022,88,Commerce,Cambridge,2024,89,Computer Science,N/A,GIKI,ahmed12@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-003,ahmed,check,check,check,checkcheck,check,check,check,check,Commerce,N/A,IBA,ahmed12@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-004,ahmed,test,test,test,test,test,test,test,test,Computer Science,N/A,IBA,ahmed12@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-005,KIRAN,karachi,akeub,20202,90,akueb,ak,302,90,Pre-Engineering,N/A,IBA,ki@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-001,Unknown,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-002,Unknown,islamad,akueb,2022,90,cs,akueb,2022,90,Pre-Medical,N/A,Agha Khan,ki@gmail.com,APPROVED,N/A,N/A
+APP-FORM-002,Unknown,house no 66,Cambridge,2022,88,Commerce,Cambridge,2024,89,Computer Science,N/A,GIKI,ahmed12@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-003,Unknown,check,check,check,checkcheck,check,check,check,check,Commerce,N/A,IBA,ahmed12@gmail.com,APPROVED,N/A,N/A
+APP-FORM-004,Unknown,test,test,test,test,test,test,test,test,Computer Science,N/A,IBA,ahmed12@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-005,Unknown,karachi,akeub,20202,90,akueb,ak,302,90,Pre-Engineering,N/A,IBA,ki@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-001,Unknown,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,APPROVED,N/A,N/A
