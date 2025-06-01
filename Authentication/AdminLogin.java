@@ -7,6 +7,15 @@ import java.util.Scanner;
 
 public class AdminLogin {
     public ArrayList <Admins> adminsArrayList;
+    private static Admins currentAdmin;
+
+    public static void setCurrentAdmin(Admins admin) {
+        currentAdmin = admin;
+    }
+
+    public static Admins getCurrentAdmin() {
+        return currentAdmin;
+    }
 
     public AdminLogin(){
         adminsArrayList= new ArrayList<>();
@@ -14,12 +23,12 @@ public class AdminLogin {
     }
 
     public boolean login(String email,String password){
-        for (int i = 0; i <adminsArrayList.size() ; i++) {
-            if(email.equals(adminsArrayList.get(i).getEmail()) && password.equals(adminsArrayList.get(i).getPassword()) ){
+        for (Admins admin : adminsArrayList) {
+            if (email.equals(admin.getEmail()) && password.equals(admin.getPassword())) {
+                setCurrentAdmin(admin);
                 return true;
             }
         }
-
         return false;
     }
 
@@ -31,11 +40,10 @@ public class AdminLogin {
                 file.createNewFile();
             }
             FileWriter writer = new FileWriter(file,false);
-
             for (int i = 0; i <adminsArrayList.size() ; i++) {
 
                 writer.write(adminsArrayList.get(i).getEmail()+ "," +
-                        adminsArrayList.get(i).getPassword() + "\n");
+                        adminsArrayList.get(i).getPassword() + "," +adminsArrayList.get(i).isSuperAdmin()  +"\n" );
             }
             writer.close();
         }
@@ -57,14 +65,27 @@ public class AdminLogin {
                 String line = readFile.nextLine();
                 String [] parts = line.split(",");
 
-                adminsArrayList.add(new Admins(parts[0], parts[1]));
+                Admins admin = new Admins(parts[0], parts[1]);
 
+                if (parts.length >= 3) {
+                    admin.setSuperAdmin(Boolean.parseBoolean(parts[2]));
+                }
+
+                adminsArrayList.add(admin);
 
             }
         }
 
         catch (Exception e){
             e.printStackTrace();
+        }
+
+        if (adminsArrayList.isEmpty()) {
+            Admins superAdmin = new Admins("superadmin@gmail.com", "superpassword");
+            superAdmin.setSuperAdmin(true);
+            adminsArrayList.add(superAdmin);
+            saveAdmin();
+            System.out.println("Default super admin created.");
         }
     }
 

@@ -8,9 +8,10 @@ import java.util.ArrayList;
 
 public class AddAdmin extends AdminLogin {
 
-
-
-    public String setAdmin(String email, String password){
+    public String setAdmin(Admins currentAdmin,String email, String password){
+        if (currentAdmin == null || !currentAdmin.isSuperAdmin()) {
+            return "Only a super admin can add new admins.";
+        }
         if (email.isEmpty() || password.isEmpty()) {
             return "All fields are required.";
         }
@@ -35,6 +36,8 @@ public class AddAdmin extends AdminLogin {
 
         Admins admins = new Admins(
                 email, password
+                // new admin is not super admin by default
+
         );
 
         adminsArrayList.add(admins);

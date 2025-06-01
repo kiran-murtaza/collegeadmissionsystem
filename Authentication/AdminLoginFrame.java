@@ -80,6 +80,7 @@ public class AdminLoginFrame extends JFrame{
 
             boolean success = adminLogin.login(Username,Password);
 
+
             if(success){
                 dispose();
                 ProgramManager programManager= new ProgramManager();

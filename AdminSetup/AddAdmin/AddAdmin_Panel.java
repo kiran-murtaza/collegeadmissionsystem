@@ -1,6 +1,7 @@
 package AdminSetup.AddAdmin;
 
 import Authentication.AdminLogin;
+import Authentication.Admins;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ public class AddAdmin_Panel extends JPanel {
     private JTextField emailField;
     private JPasswordField passwordField;
     AddAdmin addAdmin;
+
 
     public AddAdmin_Panel() {
         setLayout(new BorderLayout());
@@ -69,14 +71,18 @@ public class AddAdmin_Panel extends JPanel {
     private void handleAddAdmin() {
         String email = emailField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
+        Admins currentAdmin = AdminLogin.getCurrentAdmin();  // Get the currently logged-in admin
 
+        String result = addAdmin.setAdmin(currentAdmin, email, password);
 
-
-        String result = addAdmin.setAdmin(email,password);
 
         switch (result) {
             case "All fields are required.":
                 JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Missing Information", JOptionPane.WARNING_MESSAGE);
+                break;
+
+            case "Only a super admin can add new admins.":
+                JOptionPane.showMessageDialog(this, result, "Missing Information", JOptionPane.WARNING_MESSAGE);
                 break;
 
             case "Fields cannot contain commas.":
