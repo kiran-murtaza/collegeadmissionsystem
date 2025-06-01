@@ -3,12 +3,10 @@ package Applicant;
 import AdminSetup.College.CollegeManager;
 import AdminSetup.Program.ProgramManager;
 import Authentication.LoginFrame;
-import Authentication.Users;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ApplicantDashboard_Panel extends JFrame{
     private Applicant userInfo;
@@ -122,16 +120,32 @@ public class ApplicantDashboard_Panel extends JFrame{
 
     private void handleMenuClick(String menuItem) throws IOException {
         switch (menuItem) {
+            case "Home" -> showHome();
             case "Apply for College" -> showApplicationForm();
             case "Submitted Form List" -> showSubmittedFormList();
             case "View Colleges & Programs" -> showCollegeAndProgramViewer();
             case "Payment Portal" -> showPaymentPortal();
             case "Apply for Scholarship" -> showScholarshipForm();
+//            case "Documents" -> showDocumentsPanel();
+//            case "Edit Profile" -> showEditProfilePanel();
             case "Logout" -> {
                 dispose();
                 new LoginFrame().setVisible(true);
             }
         }
+    }
+
+    private void showHome() {
+        contentPanel.removeAll();
+
+        JPanel messagePanel = new JPanel(new GridBagLayout());
+        JLabel welcomeLabel = new JLabel("<html><div style='text-align: center;'>Please select an option from the menu above.</div></html>");
+        welcomeLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        messagePanel.add(welcomeLabel);
+
+        contentPanel.add(messagePanel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     private void showApplicationForm() throws IOException {
@@ -174,4 +188,20 @@ public class ApplicantDashboard_Panel extends JFrame{
         contentPanel.revalidate();
         contentPanel.repaint();
     }
+
+//    private void showDocumentsPanel() {
+//        DocumentsPanel documentsPanel = new DocumentsPanel(userInfo); // Replace with actual panel
+//        contentPanel.removeAll();
+//        contentPanel.add(documentsPanel, BorderLayout.CENTER);
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
+//    }
+
+//    private void showEditProfilePanel() {
+//        EditProfilePanel editPanel = new EditProfilePanel(userInfo); // Replace with actual panel
+//        contentPanel.removeAll();
+//        contentPanel.add(editPanel, BorderLayout.CENTER);
+//        contentPanel.revalidate();
+//        contentPanel.repaint();
+//    }
 }
