@@ -276,6 +276,7 @@ public class ApplicationForm_Panel extends JPanel {
             applicationFormData.setTestSchedule("N/A");
             applicationFormData.setTestScore("N/A");
             applicationFormData.setStatus(Status.SUBMITTED);
+            applicationFormData.setSubmitted(true);
 
             // applicationFormData.setTestSchedule(testSchedule);
             // applicationFormData.setTestScore(testScore);

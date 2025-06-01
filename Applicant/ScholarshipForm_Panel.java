@@ -1,76 +1,251 @@
 package Applicant;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
-import java.util.List;
+import java.io.*;
 
 public class ScholarshipForm_Panel extends JPanel {
-    private JComboBox<String> scholarshipComboBox;
-    private JTextField studentNameField;
-    private JTextField studentIdField;
-    private JButton applyButton;
+    // Applicant info loaded from file
+    private String applicantId;
+    private String name;
+    private String email;
+    private String gender;
+    private String dob;
 
-    public ScholarshipForm_Panel(List<String> scholarships) {
-        // Set layout to null for absolute positioning
-        setLayout(null);
+    // Form fields
+    private JTextField schoolField, percentageField, incomeField, otherAidField,
+            clubsField, volunteerField, sportsField, leadershipField,
+            signatureField;
+    private JTextArea achievementsArea, explanationArea;
+    private JCheckBox proofIncomeCheck, portfolioCheck;
+    private JButton submitButton;
+    private JLabel statusLabel;
+    private Applicant userInfo;
 
-        setVisible(true);
-
-
-        JLabel selectLabel = new JLabel("Select Scholarship:");
-        selectLabel.setBounds(20, 20, 150, 25);
-        add(selectLabel);
-
-        scholarshipComboBox = new JComboBox<>(scholarships.toArray(new String[0]));
-        scholarshipComboBox.setBounds(180, 20, 180, 25);
-        add(scholarshipComboBox);
-
-        JLabel nameLabel = new JLabel("Student Name:");
-        nameLabel.setBounds(20, 60, 150, 25);
-        add(nameLabel);
-
-        studentNameField = new JTextField();
-        studentNameField.setBounds(180, 60, 180, 25);
-        add(studentNameField);
-
-        JLabel idLabel = new JLabel("Student ID:");
-        idLabel.setBounds(20, 100, 150, 25);
-        add(idLabel);
-
-        studentIdField = new JTextField();
-        studentIdField.setBounds(180, 100, 180, 25);
-        add(studentIdField);
-
-        applyButton = new JButton("Apply");
-        applyButton.setBounds(120, 150, 100, 30);
-        add(applyButton);
-
-        applyButton.addActionListener(e -> applyForScholarship());
-    }
-
-    private void applyForScholarship() {
-        String scholarship = (String) scholarshipComboBox.getSelectedItem();
-        String name = studentNameField.getText().trim();
-        String studentId = studentIdField.getText().trim();
-
-        if (name.isEmpty() || studentId.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter all student details.", "Error", JOptionPane.ERROR_MESSAGE);
+    public ScholarshipForm_Panel(Applicant userInfo) {
+        setLayout(new BorderLayout());
+this.userInfo= userInfo;
+        // Load applicant info from file
+        boolean found = loadApplicantInfoByEmail(userInfo.getEmail());
+        if (!found) {
+            add(new JLabel("You must submit at least one admission application before applying for a scholarship."), BorderLayout.CENTER);
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Application submitted!\n" +
-                        "Student: " + name + "\n" +
-                        "ID: " + studentId + "\n" +
-                        "Scholarship: " + scholarship,
-                "Success", JOptionPane.INFORMATION_MESSAGE);
+        // Build form panel
+        JPanel formPanel = new JPanel(new GridLayout(0, 1, 10, 5));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        clearFields();
+        // Show loaded applicant info
+        formPanel.add(new JLabel("Applicant ID: " + applicantId));
+        formPanel.add(new JLabel("Name: " + name));
+        formPanel.add(new JLabel("Email: " + email));
+        formPanel.add(new JLabel("Gender: " + (gender == null ? "N/A" : gender)));
+        formPanel.add(new JLabel("Date of Birth: " + (dob == null ? "N/A" : dob)));
+
+        // Academic Info
+        formPanel.add(new JLabel("Current School/College:"));
+        schoolField = new JTextField();
+        formPanel.add(schoolField);
+
+        formPanel.add(new JLabel("Percentage (attach transcripts):"));
+        percentageField = new JTextField();
+        formPanel.add(percentageField);
+
+        formPanel.add(new JLabel("Academic Achievements (awards, honors, publications):"));
+        achievementsArea = new JTextArea(3, 20);
+        formPanel.add(new JScrollPane(achievementsArea));
+
+        // Financial Info
+        formPanel.add(new JLabel("Annual Family Income:"));
+        incomeField = new JTextField();
+        formPanel.add(incomeField);
+
+        formPanel.add(new JLabel("Other Financial Aid Received:"));
+        otherAidField = new JTextField();
+        formPanel.add(otherAidField);
+
+        formPanel.add(new JLabel("Brief Explanation of Need (100-200 words):"));
+        explanationArea = new JTextArea(4, 20);
+        formPanel.add(new JScrollPane(explanationArea));
+
+        // Extracurricular Info
+        formPanel.add(new JLabel("Clubs/Societies (with roles):"));
+        clubsField = new JTextField();
+        formPanel.add(clubsField);
+
+        formPanel.add(new JLabel("Volunteer Work / Community Service:"));
+        volunteerField = new JTextField();
+        formPanel.add(volunteerField);
+
+        formPanel.add(new JLabel("Sports / Arts / Other Talents:"));
+        sportsField = new JTextField();
+        formPanel.add(sportsField);
+
+        formPanel.add(new JLabel("Leadership Positions Held:"));
+        leadershipField = new JTextField();
+        formPanel.add(leadershipField);
+
+        // Additional Requirements
+        formPanel.add(new JLabel("Additional Requirements:"));
+        proofIncomeCheck = new JCheckBox("Proof of Income attached (tax documents/pay stubs)");
+        portfolioCheck = new JCheckBox("Portfolio attached (for arts/design scholarships)");
+        formPanel.add(proofIncomeCheck);
+        formPanel.add(portfolioCheck);
+
+        // Declaration
+        formPanel.add(new JLabel("Declaration:"));
+        formPanel.add(new JLabel("\"I certify that all information provided is accurate. I understand that false statements may disqualify my application.\""));
+
+        formPanel.add(new JLabel("Signature:"));
+        signatureField = new JTextField();
+        formPanel.add(signatureField);
+
+        // Submit button
+        submitButton = new JButton("Submit Scholarship Form");
+        formPanel.add(submitButton);
+
+        // Status message label
+        statusLabel = new JLabel();
+        formPanel.add(statusLabel);
+
+        // Add scrollable form panel
+        add(new JScrollPane(formPanel), BorderLayout.CENTER);
+
+        // Submit button action
+        submitButton.addActionListener(e -> validateAndSave());
     }
 
-    private void clearFields() {
-        studentNameField.setText("");
-        studentIdField.setText("");
-        scholarshipComboBox.setSelectedIndex(0);
+    private boolean loadApplicantInfoByEmail(String emailToFind) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("all_applications.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 14) {
+                    String existingEmail = parts[13].trim();
+                    if (existingEmail.equalsIgnoreCase(emailToFind.trim())) {
+                        applicantId = parts[0].trim();
+                        name = parts[1].trim();
+                        // Your example data does not have gender and dob fields,
+                        // so set these as "N/A" or read if you add those fields.
+                        gender = "N/A";
+                        dob = "N/A";
+                        email = existingEmail;
+                        return true;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading applications: " + e.getMessage());
+        }
+        return false;
+    }
+
+    private void validateAndSave() {
+        // Trim all relevant fields for easier reuse
+        String school = schoolField.getText().trim();
+        String percentageText = percentageField.getText().trim();
+        String incomeText = incomeField.getText().trim();
+        String achievements = achievementsArea.getText().trim();
+        String explanation = explanationArea.getText().trim();
+        String signature = signatureField.getText().trim();
+
+        // Check required fields not empty
+        if (school.isEmpty() || percentageText.isEmpty() || incomeText.isEmpty() ||
+                achievements.isEmpty() || explanation.isEmpty() || signature.isEmpty()) {
+            statusLabel.setText("Please complete all required fields.");
+            return;
+        }
+
+        // Explanation word count >= 100
+        if (explanation.split("\\s+").length < 100) {
+            statusLabel.setText("Explanation must be at least 100 words.");
+            return;
+        }
+
+        // Validate GPA: numeric and between 0 and 4.0 (adjust if your scale differs)
+        double percentage;
+        try {
+            percentage = Double.parseDouble(percentageText);
+            if (percentage < 0 || percentage > 100.0) {
+                statusLabel.setText("Percentage must be between 0.0 and 100.0");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            statusLabel.setText("Please enter a valid numeric GPA.");
+            return;
+        }
+
+        // Validate Income: numeric and non-negative
+        double income;
+        try {
+            income = Double.parseDouble(incomeText);
+            if (income < 0) {
+                statusLabel.setText("Income cannot be negative.");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            statusLabel.setText("Please enter a valid numeric Income.");
+            return;
+        }
+
+        // Optional: Limit max length for certain fields (example: achievements and signature)
+        if (achievements.length() > 500) {
+            statusLabel.setText("Achievements text is too long (max 500 characters).");
+            return;
+        }
+        if (signature.length() < 3) {
+            statusLabel.setText("Signature seems too short.");
+            return;
+        }
+        if (signature.length() > 100) {
+            statusLabel.setText("Signature is too long (max 100 characters).");
+            return;
+        }
+
+        // Optional: Check for dangerous special characters in text fields (basic check)
+        if (school.matches(".*[<>\"'%;)(&+].*") ||
+                achievements.matches(".*[<>\"'%;)(&+].*") ||
+                explanation.matches(".*[<>\"'%;)(&+].*") ||
+                signature.matches(".*[<>\"'%;)(&+].*")) {
+            statusLabel.setText("Input contains invalid special characters.");
+            return;
+        }
+
+        // Checkbox validation example: require proof of income checked if income > 0
+        if (income > 0 && !proofIncomeCheck.isSelected()) {
+            statusLabel.setText("Proof of Income must be attached if annual income is declared.");
+            return;
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("allscholarships.txt", true))) {
+            writer.write(String.join("|",
+                    applicantId,
+                    name,
+                    email,
+                    gender,
+                    dob,
+                    schoolField.getText().trim(),
+                    percentageField.getText().trim(),
+                    achievementsArea.getText().trim(),
+                    incomeField.getText().trim(),
+                    otherAidField.getText().trim(),
+                    explanationArea.getText().trim(),
+                    clubsField.getText().trim(),
+                    volunteerField.getText().trim(),
+                    sportsField.getText().trim(),
+                    leadershipField.getText().trim(),
+                    proofIncomeCheck.isSelected() ? "Yes" : "No",
+                    portfolioCheck.isSelected() ? "Yes" : "No",
+                    signatureField.getText().trim(),
+                    java.time.LocalDate.now().toString()
+            ));
+            writer.newLine();
+            statusLabel.setText("Scholarship form submitted successfully!");
+            submitButton.setEnabled(false);
+        } catch (IOException ex) {
+            statusLabel.setText("Error saving scholarship form.");
+        }
     }
 }

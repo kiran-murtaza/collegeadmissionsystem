@@ -15,6 +15,7 @@ public class ApplicantDashboard_Panel extends JFrame{
     private JPanel contentPanel;
     private ProgramManager programManager;
     private CollegeManager collegeManager;
+    private ApplicationFormData applicationFormData;
 
     // Color theme
     private static final Color COLORAZ_BLACK = Color.BLACK;
@@ -167,12 +168,9 @@ public class ApplicantDashboard_Panel extends JFrame{
 
 
     private void showScholarshipForm() {
-        ScholarshipForm_Panel scholarshipFormPanel = new ScholarshipForm_Panel(
-                Arrays.asList("Merit Based", "Need Based", "Sports Scholarship")
-        );
-        contentPanel.add(scholarshipFormPanel);
+        ScholarshipForm_Panel scholarshipFormPanel = new ScholarshipForm_Panel(userInfo);
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Scholarship Form", SwingConstants.CENTER), BorderLayout.CENTER);
+        contentPanel.add(scholarshipFormPanel);
         contentPanel.revalidate();
         contentPanel.repaint();
     }

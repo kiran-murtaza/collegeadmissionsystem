@@ -25,6 +25,9 @@ public class ApplicationFormData {
     private String testSchedule;
     private String testScore;
     private Status status;
+    private Boolean submitted;
+    private Boolean scholarshipSubmitted;
+
     public ApplicationFormData(String applicationId, Applicant users, String address,
                                String board10, String year10, String percent10, String stream10,
                                String board12, String year12, String percent12, String stream12,
@@ -185,6 +188,17 @@ public class ApplicationFormData {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public boolean isSubmitted() { return submitted; }
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
+    }
+
+    public boolean isScholarshipSubmitted() { return scholarshipSubmitted; }
+    public void setScholarshipSubmitted(boolean scholarshipSubmitted) {
+        this.scholarshipSubmitted = scholarshipSubmitted;
+    }
+
 
 
 }
