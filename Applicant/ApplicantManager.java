@@ -180,4 +180,17 @@ public class ApplicantManager {
         }
     }
 
+    public static List<String> getAllApplicantIds() {
+        List<String> ids = new ArrayList<>();
+        try {
+            ArrayList<ApplicationFormData> apps = loadAllApplications();
+            for (ApplicationFormData app : apps) {
+                ids.add(app.getApplicationId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ids;
+    }
+
 }

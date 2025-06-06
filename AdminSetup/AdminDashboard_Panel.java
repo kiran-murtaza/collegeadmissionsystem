@@ -1,14 +1,13 @@
 package AdminSetup;
 
 import AdminSetup.AddAdmin.AddAdmin_Panel;
-//import AdminSetup.Applicants.ViewApplicantsPanel;
 import AdminSetup.Applicants.ViewApplicantsPanel;
-import AdminSetup.College.College;
 import AdminSetup.College.CollegeManager;
 import AdminSetup.College.College_Panel;
+import AdminSetup.EntryTest.EntryTestRecordManager;
+import AdminSetup.EntryTest.SetTestDatePanel;
 import AdminSetup.Program.ProgramManager;
 import AdminSetup.Program.ProgramPanel;
-import Applicant.Applicant;
 import Authentication.LoginFrame;
 
 import javax.swing.*;
@@ -108,7 +107,7 @@ public class AdminDashboard_Panel extends JFrame {
             case "View College" -> showColleges();
             case "View Applicant" -> showApplicants();
             case "View Program" -> showPrograms();
-            case "Set Test" -> contentPanel.add(new JLabel("Set Test Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
+            case "Set Test" -> showSetTestDatePanel();
             case "Add Admin" -> showAddAdmin();
             case "Set Criteria" -> contentPanel.add(new JLabel("Admission Criteria Panel Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
             case "Logout" -> {
@@ -157,6 +156,18 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
+
+    private void showSetTestDatePanel() {
+        EntryTestRecordManager recordManager = new EntryTestRecordManager();
+        SetTestDatePanel panel = new SetTestDatePanel(recordManager);
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(panel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+
 
 
 

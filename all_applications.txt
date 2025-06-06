@@ -1,4 +1,4 @@
-APP-FORM-001,Unknown,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,SUBMITTED,N/A,N/A
+APP-FORM-001,Unknown,Karachi,akueb,2020,89,Computer Science ,akueb,2022,89,Computer Science,N/A,NUST,ki@gmail.com,REJECTED,N/A,N/A
 APP-FORM-002,Unknown,islamad,akueb,2022,90,cs,akueb,2022,90,Pre-Medical,N/A,Agha Khan,ki@gmail.com,APPROVED,N/A,N/A
 APP-FORM-002,Unknown,house no 66,Cambridge,2022,88,Commerce,Cambridge,2024,89,Computer Science,N/A,GIKI,ahmed12@gmail.com,SUBMITTED,N/A,N/A
 APP-FORM-003,Unknown,check,check,check,checkcheck,check,check,check,check,Commerce,N/A,IBA,ahmed12@gmail.com,REJECTED,N/A,N/A
