@@ -49,8 +49,8 @@ public class ViewApplicantsPanel extends JPanel {
                         app.getYear12(),
                         app.getPercent12(),
                         app.getStream12(),
-                        app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
-                        app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
+                        app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
+                        app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
                         "Action"
                 });
             }

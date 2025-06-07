@@ -47,8 +47,8 @@ public class ApplicationForm_Panel extends JPanel {
     // Constructor
     public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) throws IOException {
         this.userInfo = userInfo;
-      this.collegeManager = collegeManager;
-       this.programManager = programManager;
+        this.collegeManager = collegeManager;
+        this.programManager = programManager;
         this.colleges = new ArrayList<>();
         applicationCount = readCounter();
         collegeManager.loadFromFile("colleges.txt");
@@ -250,8 +250,8 @@ public class ApplicationForm_Panel extends JPanel {
             String selectedProgramName = (String) programDropdown.getSelectedItem();
             String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
 
-            Program selectedProgram = programManager.getProgramByName(selectedProgramName);
-            College selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
+//            String selectedProgram = programManager.getProgramByName(selectedProgramName);
+//            String selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
 
             // Create ApplicationFormData object with collected inputs
             ApplicationFormData applicationFormData = new ApplicationFormData(
@@ -266,8 +266,8 @@ public class ApplicationForm_Panel extends JPanel {
                     year12Field.getText(),
                     percent12Field.getText(),
                     stream12Dropdown.getSelectedItem().toString(),
-                    selectedProgram,
-                    selectedCollege,
+                    selectedProgramName,
+                    selectedCollegeName,
                     userInfo.getEmail()
             );
 

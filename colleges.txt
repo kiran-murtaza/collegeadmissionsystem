@@ -5,6 +5,11 @@ Stream:Computer Science
 Stream:Commerce
 Program:Finance,23,67,100000.0
 Stream:Commerce
+Program:social science,100,20,180000.0
+Stream:Pre-Medical
+Stream:Commerce
+Stream:Humanities/Arts
+Stream:General Science
 College:NUST
 Program:BCS,321,89,1.0E7
 Stream:Pre-Engineering
@@ -21,3 +26,4 @@ College:GIKI
 Program:BS EE,190,170,180000.0
 Stream:Pre-Engineering
 Stream:Computer Science
+College:KSBL

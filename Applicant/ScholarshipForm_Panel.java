@@ -12,6 +12,7 @@ public class ScholarshipForm_Panel extends JPanel {
     private String email;
     private String gender;
     private String dob;
+    private ScholarshipFormStatus scholarshipFormStatus;
 
     // Form fields
     private JTextField schoolField, percentageField, incomeField, otherAidField,
@@ -218,7 +219,7 @@ this.userInfo= userInfo;
             statusLabel.setText("Proof of Income must be attached if annual income is declared.");
             return;
         }
-
+        scholarshipFormStatus = ScholarshipFormStatus.SUBMITTED;
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("allscholarships.txt", true))) {
             writer.write(String.join("|",
                     applicantId,
@@ -239,6 +240,7 @@ this.userInfo= userInfo;
                     proofIncomeCheck.isSelected() ? "Yes" : "No",
                     portfolioCheck.isSelected() ? "Yes" : "No",
                     signatureField.getText().trim(),
+                    scholarshipFormStatus.name(),
                     java.time.LocalDate.now().toString()
             ));
             writer.newLine();
