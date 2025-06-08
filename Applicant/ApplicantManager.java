@@ -5,9 +5,7 @@ import AdminSetup.College.CollegeManager;
 import AdminSetup.Program.Program;
 import AdminSetup.Program.ProgramManager;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -227,6 +225,27 @@ public class ApplicantManager {
         }
         return Status.SUBMITTED; // Default fallback
     }
+//    public static List<String> getPaidApplicants() {
+//        List<String> paidApplicants = new ArrayList<>();
+//
+//        try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATION_FILE))) {
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                String[] parts = line.split(",");
+//                if (parts.length >= 16) {
+//                    String appId = parts[0].trim();
+//                    String status = parts[14].trim().toUpperCase();
+//                    if ("PAYMENT_CLEARED".equals(status)) {
+//                        paidApplicants.add(appId);
+//                    }
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.err.println("Error reading applications: " + e.getMessage());
+//        }
+//
+//        return paidApplicants;
+//    }
 
 
 }

@@ -1,5 +1,6 @@
 package AdminSetup.EntryTest;
 
+import AdminSetup.PaymentManager;
 import Applicant.ApplicantManager;
 
 import javax.swing.*;
@@ -48,56 +49,43 @@ public class SetTestDatePanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-//    private void loadTestData() {
-//        model.setRowCount(0);
-//        List<EntryTestRecordManager.EntryTestRecord> records = recordManager.loadAllRecords();
-//
-//        if (records == null || records.isEmpty()) {
-//            model.addRow(new Object[]{"No Records Found", "", "", "", ""});
-//            return;
-//        }
-//
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-//        for (EntryTestRecordManager.EntryTestRecord record : records) {
-//            model.addRow(new Object[]{
-//                    record.getApplicantId(),
-//                    record.getTestDateTime() != null ? record.getTestDateTime().format(formatter) : "Not Set",
-//                    record.isAttempted() ? "Yes" : "No",
-//                    record.getScore(),
-//                    "Set Date"
-//            });
-//        }
-//    }
+    private void loadTestData() {
+        model.setRowCount(0);
+        List<EntryTestRecordManager.EntryTestRecord> existingRecords = recordManager.loadAllRecords();
+        List<String> applicantIds = ApplicantManager.getAllApplicantIds(); // All applicants
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    //checking
-private void loadTestData() {
-    model.setRowCount(0);
-    List<EntryTestRecordManager.EntryTestRecord> existingRecords = recordManager.loadAllRecords();
-    List<String> applicantIds = ApplicantManager.getAllApplicantIds(); // Load all applicants
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-    for (String id : applicantIds) {
-        EntryTestRecordManager.EntryTestRecord record = null;
-        for (EntryTestRecordManager.EntryTestRecord r : existingRecords) {
-            if (r.getApplicantId().equals(id)) {
-                record = r;
-                break;
+        for (String id : applicantIds) {
+            if (!PaymentManager.isFeePaid(id)) {
+                continue;
             }
+
+            EntryTestRecordManager.EntryTestRecord record = null;
+            for (EntryTestRecordManager.EntryTestRecord r : existingRecords) {
+                if (r.getApplicantId().equals(id)) {
+                    record = r;
+                    break;
+                }
+            }
+
+            if (record == null) {
+                record = new EntryTestRecordManager.EntryTestRecord(id, null, false, 0);
+            }
+
+            model.addRow(new Object[]{
+                    record.getApplicantId(),
+                    record.getTestDateTime() != null ? record.getTestDateTime().format(formatter) : "Not Set",
+                    record.isAttempted() ? "Yes" : "No",
+                    record.getScore(),
+                    "Set Date"
+            });
         }
 
-        if (record == null) {
-            record = new EntryTestRecordManager.EntryTestRecord(id, null, false, 0);
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No applicants have paid the fee yet.", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        model.addRow(new Object[]{
-                record.getApplicantId(),
-                record.getTestDateTime() != null ? record.getTestDateTime().format(formatter) : "Not Set",
-                record.isAttempted() ? "Yes" : "No",
-                record.getScore(),
-                "Set Date"
-        });
     }
-}
+
 
 
 
