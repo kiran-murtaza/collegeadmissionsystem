@@ -5,7 +5,6 @@ import Applicant.ApplicantManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
 
 import javax.swing.table.DefaultTableModel;
