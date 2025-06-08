@@ -1,3 +1,0 @@
-AppID,Name,Address,Board10,Year10,Percent10,Stream10,Board12,Year12,Percent12,Stream12,Program,College,Email,Status,TestSchedule,TestScore
-APP-FORM-001,KIRAN,karachi,AKUEB,2023,90,SCIENCE,AKUEB,2023,89,Pre-Engineering,BBA,IBA,ki@gmail.com,SUBMITTED,N/A,N/A
-APP-FORM-002,KIRAN,karachi,akueb,2023,89,sicen,akueb,2024,89,Pre-Medical,social science,IBA,ki@gmail.com,SUBMITTED,N/A,N/A

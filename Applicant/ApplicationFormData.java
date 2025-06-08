@@ -28,12 +28,12 @@ public class ApplicationFormData {
     private Boolean submitted;
     private Boolean scholarshipSubmitted;
 
-    public ApplicationFormData(String applicationId, Applicant users, String address,
+    public ApplicationFormData(String applicationId, Applicant userInfo, String address,
                                String board10, String year10, String percent10, String stream10,
                                String board12, String year12, String percent12, String stream12,
                               String selectedProgram, String selectedCollege,String email) {
         this.applicationId = applicationId;
-        this.applicant = users;
+        this.applicant = userInfo;
         this.address = address;
         this.board10 = board10;
         this.year10 = year10;
