@@ -79,8 +79,8 @@ public class SubmittedFormList_Panel extends JPanel {
                 model.setRowCount(0);
                 for (ApplicationFormData app : userApplications) {
                     if (app.getApplicationId().toLowerCase().contains(query)
-                            || app.getSelectedProgram().getName().toLowerCase().contains(query)
-                            || app.getSelectedCollege().getName().toLowerCase().contains(query)) {
+                            || app.getSelectedProgram().toLowerCase().contains(query)
+                            || app.getSelectedCollege().toLowerCase().contains(query)) {
                         addRow(app);
                     }
                 }
@@ -114,8 +114,8 @@ public class SubmittedFormList_Panel extends JPanel {
 
         model.addRow(new Object[]{
                 app.getApplicationId(),
-                app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
-                app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
+                app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
+                app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
                 app.getUsers() != null ? app.getUsers().getEmail() : "N/A",
                 formatStatus(app.getStatus()),
                 schedule,
@@ -136,8 +136,9 @@ public class SubmittedFormList_Panel extends JPanel {
     private String formatStatus(Status status) {
         return switch (status) {
             case SUBMITTED -> "Submitted";
-            case APPROVED -> "Approved";
+            case APPROVED -> "Approved(Pay now)";
             case REJECTED -> "Rejected";
+            case PAYMENT_CLEARED -> "Payment Cleared- take test";
             case TEST_SCHEDULED -> "Test Scheduled";
             case TEST_TAKEN -> "Test Taken";
             case ADMISSION_OFFERED -> "Admission Offered";

@@ -19,8 +19,8 @@ public class ApplicationFormData {
     private String year12;
     private String percent12;
     private String stream12;
-    private Program selectedProgram;
-    private College selectedCollege;
+    private String selectedProgram;
+    private String selectedCollege;
     private String email;
     private String testSchedule;
     private String testScore;
@@ -28,12 +28,12 @@ public class ApplicationFormData {
     private Boolean submitted;
     private Boolean scholarshipSubmitted;
 
-    public ApplicationFormData(String applicationId, Applicant users, String address,
+    public ApplicationFormData(String applicationId, Applicant userInfo, String address,
                                String board10, String year10, String percent10, String stream10,
                                String board12, String year12, String percent12, String stream12,
-                               Program selectedProgram, College selectedCollege,String email) {
+                              String selectedProgram, String selectedCollege,String email) {
         this.applicationId = applicationId;
-        this.applicant = users;
+        this.applicant = userInfo;
         this.address = address;
         this.board10 = board10;
         this.year10 = year10;
@@ -141,19 +141,19 @@ public class ApplicationFormData {
         this.stream12 = stream12;
     }
 
-    public Program getSelectedProgram() {
+    public String getSelectedProgram() {
         return selectedProgram;
     }
 
-    public void setSelectedProgram(Program selectedProgram) {
+    public void setSelectedProgram(String selectedProgram) {
         this.selectedProgram = selectedProgram;
     }
 
-    public College getSelectedCollege() {
+    public String getSelectedCollege() {
         return selectedCollege;
     }
 
-    public void setSelectedCollege(College selectedCollege) {
+    public void setSelectedCollege(String selectedCollege) {
         this.selectedCollege = selectedCollege;
     }
 

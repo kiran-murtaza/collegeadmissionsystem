@@ -81,6 +81,11 @@ public class Program {
     public String getCollegeName() {
         return collegeName;
     }
+
+    @Override
+    public String toString() {
+        return this.name;  // or getName()
+    }
 }
 
 

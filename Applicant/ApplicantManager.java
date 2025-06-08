@@ -16,42 +16,47 @@ public class ApplicantManager {
 
     private static final String APPLICATION_FILE = "all_applications.txt";
 
-
     public static void saveToFile(ApplicationFormData app) {
         try (FileWriter writer = new FileWriter(APPLICATION_FILE, true)) {
             String line = String.join(",",
-                    app.getApplicationId(),
-                    app.getUsers() != null ? app.getUsers().getFirstName() : "Unknown",
-                    app.getAddress(),
-                    app.getBoard10(),
-                    app.getYear10(),
-                    app.getPercent10(),
-                    app.getStream10(),
-                    app.getBoard12(),
-                    app.getYear12(),
-                    app.getPercent12(),
-                    app.getStream12(),
-                    app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
-                    app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
-                    app.getEmail(),
-                    app.getStatus() != null ? app.getStatus().name() : "UNKNOWN",
-                    app.getTestSchedule() != null ? app.getTestSchedule() : "null",
-                    app.getTestScore() != null ? app.getTestScore() : "null"
+                    nullSafe(app.getApplicationId()),
+                    nullSafe(app.getUsers() != null ? app.getUsers().getFirstName() : "Unknown"),
+                    nullSafe(app.getAddress()),
+                    nullSafe(app.getBoard10()),
+                    nullSafe(app.getYear10()),
+                    nullSafe(app.getPercent10()),
+                    nullSafe(app.getStream10()),
+                    nullSafe(app.getBoard12()),
+                    nullSafe(app.getYear12()),
+                    nullSafe(app.getPercent12()),
+                    nullSafe(app.getStream12()),
+                    nullSafe(app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A"),
+                    nullSafe(app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A"),
+                    nullSafe(app.getUsers().getEmail()),
+                    nullSafe(app.getStatus() != null ? app.getStatus().name() : "UNKNOWN"),
+                    nullSafe(app.getTestSchedule()),
+                    nullSafe(app.getTestScore())
             );
-            writer.write(line + "\n");
+            writer.write(line + System.lineSeparator());
         } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
+    // Helper method to avoid null values causing issues
+    private static String nullSafe(String value) {
+        return value == null ? "" : value;
+    }
+
 
 
     public static boolean hasAppliedBefore(ArrayList<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
         for (ApplicationFormData app : existingApplications) {
             boolean sameUser = app.getUsers().equals(newApp.getUsers());
             boolean sameProgram = app.getSelectedProgram() != null && newApp.getSelectedProgram() != null &&
-                    app.getSelectedProgram().getName().equalsIgnoreCase(newApp.getSelectedProgram().getName());
+                    app.getSelectedProgram().equalsIgnoreCase(newApp.getSelectedProgram());
             boolean sameCollege = app.getSelectedCollege() != null && newApp.getSelectedCollege() != null &&
-                    app.getSelectedCollege().getName().equalsIgnoreCase(newApp.getSelectedCollege().getName());
+                    app.getSelectedCollege().equalsIgnoreCase(newApp.getSelectedCollege());
 
             if (sameUser && (sameProgram || sameCollege)) {
                 return true;
@@ -72,10 +77,13 @@ public class ApplicantManager {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
 
-//                if (parts.length < 17) continue;
+                if (parts.length < 17) {
+                    // Skip invalid lines
+                    continue;
+                }
 
                 String applicationID = parts[0];
-                String fullName = parts[1];  // Can be used to lookup User if needed
+                String fullName = parts[1];  // You may lookup user by name/email if needed
                 String address = parts[2];
                 String board10 = parts[3];
                 String year10 = parts[4];
@@ -85,21 +93,14 @@ public class ApplicantManager {
                 String year12 = parts[8];
                 String percent12 = parts[9];
                 String stream12 = parts[10];
-                String selectedProgramName = parts[11];
-                String selectedCollegeName = parts[12];
+                String selectedProgramName = parts[11];  // keep as String
+                String selectedCollegeName = parts[12];  // keep as String
                 String email = parts[13];
                 String statusStr = parts[14];
                 String testSchedule = parts[15];
                 String testScore = parts[16];
 
-                Program program = null;
-                if (!"N/A".equalsIgnoreCase(selectedProgramName)) {
-                    program = new ProgramManager().getProgramByName(selectedProgramName);
-                }
-                College college = new CollegeManager().getCollegeByName(selectedCollegeName);
-
-
-                Applicant user= null;
+                Applicant user = null;  // You may implement user lookup if needed
 
                 ApplicationFormData app = new ApplicationFormData(
                         applicationID,
@@ -107,10 +108,11 @@ public class ApplicantManager {
                         address,
                         board10, year10, percent10, stream10,
                         board12, year12, percent12, stream12,
-                        program, college,email
+                        selectedProgramName,
+                        selectedCollegeName,
+                        email
                 );
 
-                app.setEmail(email);
                 app.setTestSchedule(testSchedule);
                 app.setTestScore(testScore);
 
@@ -128,6 +130,7 @@ public class ApplicantManager {
 
         return applications;
     }
+
     public static ArrayList<ApplicationFormData> getApplicationsByUserEmail(String email) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
         ArrayList<ApplicationFormData> userApps = new ArrayList<>();
@@ -166,9 +169,9 @@ public class ApplicantManager {
                         app.getYear12(),
                         app.getPercent12(),
                         app.getStream12(),
-                        app.getSelectedProgram() != null ? app.getSelectedProgram().getName() : "N/A",
-                        app.getSelectedCollege() != null ? app.getSelectedCollege().getName() : "N/A",
-                        app.getEmail(),
+                        app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
+                        app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
+                        app.getUsers().getEmail(),
                         app.getStatus().name(),
                         app.getTestSchedule() != null ? app.getTestSchedule() : "null",
                         app.getTestScore() != null ? app.getTestScore() : "null"
