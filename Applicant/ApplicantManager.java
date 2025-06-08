@@ -146,6 +146,7 @@ public class ApplicantManager {
 
     public static void updateApplicationStatus(String applicationId, Status newStatus) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
+        System.out.println("Applications loaded: " + allApps.size());
 
         for (ApplicationFormData app : allApps) {
             if (app.getApplicationId().equals(applicationId)) {
@@ -155,32 +156,51 @@ public class ApplicantManager {
         }
 
         // Now overwrite the file with updated list
-        try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite
+        try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite entire file
             for (ApplicationFormData app : allApps) {
+                String firstName = (app.getUsers() != null && app.getUsers().getFirstName() != null)
+                        ? app.getUsers().getFirstName() : "Unknown";
+                String address = app.getAddress() != null ? app.getAddress() : "";
+                String board10 = app.getBoard10() != null ? app.getBoard10() : "";
+                String year10 = app.getYear10() != null ? app.getYear10() : "";
+                String percent10 = app.getPercent10() != null ? app.getPercent10() : "";
+                String stream10 = app.getStream10() != null ? app.getStream10() : "";
+                String board12 = app.getBoard12() != null ? app.getBoard12() : "";
+                String year12 = app.getYear12() != null ? app.getYear12() : "";
+                String percent12 = app.getPercent12() != null ? app.getPercent12() : "";
+                String stream12 = app.getStream12() != null ? app.getStream12() : "";
+                String program = app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A";
+                String college = app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A";
+                String email = app.getEmail() != null ? app.getEmail() : "n/a";
+                String status = app.getStatus() != null ? app.getStatus().name() : "UNKNOWN";
+                String testSchedule = app.getTestSchedule() != null ? app.getTestSchedule() : "null";
+                String testScore = app.getTestScore() != null ? app.getTestScore() : "null";
+
                 String line = String.join(",",
-                        app.getApplicationId(),
-                        app.getUsers() != null ? app.getUsers().getFirstName() : "Unknown",
-                        app.getAddress(),
-                        app.getBoard10(),
-                        app.getYear10(),
-                        app.getPercent10(),
-                        app.getStream10(),
-                        app.getBoard12(),
-                        app.getYear12(),
-                        app.getPercent12(),
-                        app.getStream12(),
-                        app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
-                        app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
-                        app.getUsers().getEmail(),
-                        app.getStatus().name(),
-                        app.getTestSchedule() != null ? app.getTestSchedule() : "null",
-                        app.getTestScore() != null ? app.getTestScore() : "null"
+                        applicationId,
+                        firstName,
+                        address,
+                        board10,
+                        year10,
+                        percent10,
+                        stream10,
+                        board12,
+                        year12,
+                        percent12,
+                        stream12,
+                        program,
+                        college,
+                        email,
+                        status,
+                        testSchedule,
+                        testScore
                 );
-                writer.write(line + "\n");
+                writer.write(line + System.lineSeparator());
             }
         } catch (IOException e) {
             System.out.println("Error updating application status: " + e.getMessage());
         }
+
     }
 
     public static List<String> getAllApplicantIds() {
@@ -195,5 +215,17 @@ public class ApplicantManager {
         }
         return ids;
     }
+
+    public static Status getApplicationStatus(String applicationId) {
+        // Example: Look up from saved applications
+        ArrayList<ApplicationFormData> all = loadAllApplications();
+        for (ApplicationFormData app : all) {
+            if (app.getApplicationId().equals(applicationId)) {
+                return app.getStatus(); // Ensure this method exists in ApplicationFormData
+            }
+        }
+        return Status.SUBMITTED; // Default fallback
+    }
+
 
 }

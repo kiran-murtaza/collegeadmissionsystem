@@ -3,13 +3,18 @@ package AdminSetup.Applicants;
 import Applicant.ApplicantManager;
 import Applicant.ApplicationFormData;
 import Applicant.Status;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ViewApplicantsPanel extends JPanel {
+
+    private DefaultTableModel model;
+    private JTable table;
 
     public ViewApplicantsPanel() {
         setLayout(new BorderLayout());
@@ -22,22 +27,33 @@ public class ViewApplicantsPanel extends JPanel {
 
         String[] columns = {
                 "Application ID", "10th Board", "10th Year", "10th %", "10th Stream",
-                "12th Board", "12th Year", "12th %", "12th Stream", "Program", "College", "Action"
+                "12th Board", "12th Year", "12th %", "12th Stream",
+                "Program", "College", "Status", "Action"
         };
 
-        DefaultTableModel model = new DefaultTableModel(columns, 0) {
+        model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 11; // Only the "Action" column is editable
+                return column == 12; // Only "Action" column editable
             }
         };
 
-        JTable table = new JTable(model);
+        table = new JTable(model);
         table.setRowHeight(40);
 
+        loadApplicants();
+
+        table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
+        table.getColumn("Action").setCellEditor(new ActionCellEditor(table, model));
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    private void loadApplicants() {
+        model.setRowCount(0); // Clear previous rows
         try {
             ArrayList<ApplicationFormData> applicants = ApplicantManager.loadAllApplications();
-
             for (ApplicationFormData app : applicants) {
                 model.addRow(new Object[]{
                         app.getApplicationId(),
@@ -51,81 +67,117 @@ public class ViewApplicantsPanel extends JPanel {
                         app.getStream12(),
                         app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
                         app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
+                        app.getStatus().toString(),
                         "Action"
                 });
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
-        table.getColumn("Action").setCellEditor(new ActionCellEditor(new JCheckBox(), model));
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        add(scrollPane, BorderLayout.CENTER);
     }
 
-    // Renderer for buttons
     class ActionCellRenderer extends JPanel implements TableCellRenderer {
+        private final JButton btnAccept = new JButton("Accept");
+        private final JButton btnReject = new JButton("Reject");
+
         public ActionCellRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-            add(new JButton("Accept"));
-            add(new JButton("Reject"));
+            add(btnAccept);
+            add(btnReject);
+            setOpaque(true);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
+            String status = (String) table.getValueAt(row, 11);
+            boolean enabled = status.equalsIgnoreCase(Status.SUBMITTED.toString());
+            btnAccept.setEnabled(enabled);
+            btnReject.setEnabled(enabled);
+
+            setBackground(isSelected ? table.getSelectionBackground() : Color.WHITE);
             return this;
         }
     }
 
-    // Editor for buttons
-    class ActionCellEditor extends DefaultCellEditor {
-        protected JPanel panel;
-        protected JButton btnAccept;
-        protected JButton btnReject;
-        private int editingRow = -1;
+    class ActionCellEditor extends AbstractCellEditor implements TableCellEditor {
+        private JPanel panel;
+        private JButton btnAccept;
+        private JButton btnReject;
+        private JTable table;
+        private DefaultTableModel model;
 
-        public ActionCellEditor(JCheckBox checkBox, DefaultTableModel model) {
-            super(checkBox);
-            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        public ActionCellEditor(JTable table, DefaultTableModel model) {
+            this.table = table;
+            this.model = model;
+
             btnAccept = new JButton("Accept");
             btnReject = new JButton("Reject");
 
+            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             panel.add(btnAccept);
             panel.add(btnReject);
 
             btnAccept.addActionListener(e -> {
-                int row = editingRow;
-                if (row == -1) return;
+                try {
+                    int row = table.getEditingRow();
+                    if (row == -1) return;
 
-                String appId = (String) model.getValueAt(row, 0);
-                ApplicantManager.updateApplicationStatus(appId, Status.APPROVED);
-                JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been ACCEPTED.");
-                fireEditingStopped();
+                    String appId = (String) model.getValueAt(row, 0);
+                    Status status = ApplicantManager.getApplicationStatus(appId);
+
+                    if (status == Status.SUBMITTED) {
+                        ApplicantManager.updateApplicationStatus(appId, Status.APPROVED);
+                        model.setValueAt(Status.APPROVED.toString(), row, 11);
+                        JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been ACCEPTED.");
+                        stopCellEditing();
+                        table.repaint();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Application already processed.");
+                        stopCellEditing();
+                        table.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error while accepting application.");
+                }
             });
-
-
 
             btnReject.addActionListener(e -> {
-                int row = editingRow;
-                if (row == -1) return;
+                try {
+                    int row = table.getEditingRow();
+                    if (row == -1) return;
 
-                String appId = (String) model.getValueAt(row, 0);
-                ApplicantManager.updateApplicationStatus(appId, Status.REJECTED);
-                JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been REJECTED.");
-                fireEditingStopped();
+                    String appId = (String) model.getValueAt(row, 0);
+                    Status status = ApplicantManager.getApplicationStatus(appId);
+
+                    if (status == Status.SUBMITTED) {
+                        ApplicantManager.updateApplicationStatus(appId, Status.REJECTED);
+                        model.setValueAt(Status.REJECTED.toString(), row, 11);
+                        JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been REJECTED.");
+                        stopCellEditing();
+                        table.repaint();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Application already processed.");
+                        stopCellEditing();
+                        table.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error while rejecting application.");
+                }
             });
-
         }
 
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value,
                                                      boolean isSelected, int row, int column) {
-            editingRow = row;
+            String status = (String) model.getValueAt(row, 11);
+            boolean submitted = status.equalsIgnoreCase(Status.SUBMITTED.toString());
+            btnAccept.setEnabled(submitted);
+            btnReject.setEnabled(submitted);
+
             return panel;
         }
 
