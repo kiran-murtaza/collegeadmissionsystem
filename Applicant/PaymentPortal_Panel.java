@@ -1,194 +1,197 @@
 package Applicant;
+
 import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
-import Applicant.Applicant;//
-
 
 public class PaymentPortal_Panel extends JPanel {
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
+
     private JTable paymentTable;
     private DefaultTableModel tableModel;
     private JComboBox<String> statusFilter;
     private JTextField searchField;
-    private JLabel applicantIdLabel;
+    private JLabel applicantEmailLabel;
+
     private Applicant userInfo;
-    private List<String[]> approvedApplications;
-    private final String[] columns = {"App ID", "Program", "College", "Amount", "Due Date", "Method", "Status", "Ref#", "Action"};
+    private List<String[]> allApplications;
+
+    private final String APPLICATION_FILE = "all_applications.txt";
+
+    private final String[] TABLE_COLUMNS = {"App ID", "Program", "College", "Status"};
 
     public PaymentPortal_Panel(Applicant userInfo) {
         this.userInfo = userInfo;
         setLayout(new BorderLayout());
-        setBackground(COLORAZ_WHITE);
+        setBackground(COLORAZ_SAGE);
 
-        // Header panel
-        JPanel topPanel = new JPanel(new BorderLayout());
-        applicantIdLabel = new JLabel("Applicant ID: " + userInfo.getUserID());
-        applicantIdLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        topPanel.add(applicantIdLabel, BorderLayout.WEST);
+        // Top panel with search and filter
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.setBackground(COLORAZ_SAGE);
 
-        // Search and filter panel
-        JPanel searchPanel = new JPanel();
-        searchField = new JTextField(20);
-        JButton searchButton = new JButton("Search");
-        statusFilter = new JComboBox<>(new String[]{"All", "Paid", "Unpaid"});
-        searchPanel.add(new JLabel("Search: "));
-        searchPanel.add(searchField);
-        searchPanel.add(searchButton);
-        searchPanel.add(new JLabel("Payment Status: "));
-        searchPanel.add(statusFilter);
-        topPanel.add(searchPanel, BorderLayout.EAST);
+        topPanel.add(new JLabel("Search (App ID / Program): "));
+        searchField = new JTextField(15);
+        topPanel.add(searchField);
+
+        topPanel.add(new JLabel("Status Filter: "));
+        statusFilter = new JComboBox<>(new String[]{"All", "Payment Cleared", "Unpaid"});
+        topPanel.add(statusFilter);
+
+        JButton refreshBtn = new JButton("Refresh");
+        topPanel.add(refreshBtn);
+
+        JButton markPaidBtn = new JButton("Mark Payment Cleared");
+        topPanel.add(markPaidBtn);
+
+        applicantEmailLabel = new JLabel("Applicant: " + userInfo.getEmail());
+        applicantEmailLabel.setForeground(Color.DARK_GRAY);
+        topPanel.add(applicantEmailLabel);
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Table
-        tableModel = new DefaultTableModel(columns, 0) {
+        // Table setup
+        tableModel = new DefaultTableModel(TABLE_COLUMNS, 0) {
+            @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 8; // Only Pay button is editable
+                return false; // no direct editing
             }
         };
         paymentTable = new JTable(tableModel);
-        paymentTable.getColumn("Action").setCellRenderer(new ButtonRenderer());
-        paymentTable.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
+        paymentTable.setFillsViewportHeight(true);
+        paymentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        paymentTable.getTableHeader().setReorderingAllowed(false);
+
         JScrollPane scrollPane = new JScrollPane(paymentTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Load data
-        loadApprovedApplications();
-        updateTable("", "All");
+        // Load data and apply filters on init
+        loadApplicationsFromFile();
+        applyFilters();
 
-        // Action listeners
-        searchButton.addActionListener(e -> updateTable(searchField.getText(), (String) statusFilter.getSelectedItem()));
-        statusFilter.addActionListener(e -> updateTable(searchField.getText(), (String) statusFilter.getSelectedItem()));
+        // Add listeners for filter/search
+        searchField.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                applyFilters();
+            }
+        });
+
+        statusFilter.addActionListener(e -> applyFilters());
+
+        refreshBtn.addActionListener(e -> {
+            loadApplicationsFromFile();
+            applyFilters();
+        });
+
+        markPaidBtn.addActionListener(e -> markSelectedAsPaid());
     }
 
-    private void loadApprovedApplications() {
-        approvedApplications = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("all_applications.txt"))) {
+    private void loadApplicationsFromFile() {
+        allApplications = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(APPLICATION_FILE))) {
             String line;
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length >= 15 && parts[13].equals(userInfo.getEmail()) && parts[14].equals("APPROVED")) {
-                    approvedApplications.add(parts);
+                String[] parts = line.split(",", -1);
+                if (parts.length >= 17) {
+                    // Validate status field
+                    try {
+                        Status.valueOf(parts[14]);
+                    } catch (IllegalArgumentException ex) {
+                        parts[14] = Status.APPROVED.name();
+                    }
+                    allApplications.add(parts);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading applications file: " + e.getMessage());
         }
     }
 
-    private void updateTable(String keyword, String statusFilter) {
+    private void applyFilters() {
+        String searchText = searchField.getText().trim().toLowerCase();
+        String statusSelected = (String) statusFilter.getSelectedItem();
+
         tableModel.setRowCount(0);
-        for (String[] app : approvedApplications) {
-            String appId = app[0];
-            String program = app[11];
-            String college = app[12];
-            String amount = "10000";
-            String dueDate = "30-June-2025";
-            String method = "Online";
-            String status = getPaymentStatus(appId);
-            String ref = status.equals("Paid") ? generateRef(appId) : "";
 
-            boolean matchesSearch = keyword.isEmpty() || appId.contains(keyword) || program.toLowerCase().contains(keyword.toLowerCase()) || college.toLowerCase().contains(keyword.toLowerCase());
-            boolean matchesFilter = statusFilter.equals("All") || status.equalsIgnoreCase(statusFilter);
+        for (String[] app : allApplications) {
+            String email = app[13];
+            if (!email.equalsIgnoreCase(userInfo.getEmail())) continue;
 
-            if (matchesSearch && matchesFilter) {
-                tableModel.addRow(new Object[]{appId, program, college, amount, dueDate, method, status, ref, "Pay Now"});
+            Status status = Status.valueOf(app[14]);
+            if (!(status == Status.APPROVED || status == Status.PAYMENT_CLEARED)) continue;
+
+            // Status filter logic
+            if (statusSelected != null && !statusSelected.equals("All")) {
+                if (statusSelected.equals("Payment Cleared") && status != Status.PAYMENT_CLEARED) continue;
+                if (statusSelected.equals("Unpaid") && status == Status.PAYMENT_CLEARED) continue;
             }
+
+            if (!searchText.isEmpty()) {
+                String appId = app[0] != null ? app[0].toLowerCase() : "";
+                String program = app[11] != null ? app[11].toLowerCase() : "";
+                if (!appId.contains(searchText) && !program.contains(searchText)) continue;
+            }
+
+            tableModel.addRow(new Object[]{
+                    app[0],   // App ID
+                    app[11],  // Program
+                    app[12],  // College
+                    app[14]   // Status
+            });
         }
     }
 
-    private String getPaymentStatus(String appId) {
-        try (BufferedReader br = new BufferedReader(new FileReader("payment_status.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts[0].equals(appId)) return parts[1];
+    private void markSelectedAsPaid() {
+        int selectedRow = paymentTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an application to mark as payment cleared.");
+            return;
+        }
+
+        String appId = (String) tableModel.getValueAt(selectedRow, 0);
+        Status currentStatus = Status.valueOf((String) tableModel.getValueAt(selectedRow, 3));
+
+        if (currentStatus == Status.PAYMENT_CLEARED) {
+            JOptionPane.showMessageDialog(this, "This application is already marked as PAYMENT_CLEARED.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Mark application ID " + appId + " as PAYMENT_CLEARED?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        boolean updated = false;
+        for (int i = 0; i < allApplications.size(); i++) {
+            String[] app = allApplications.get(i);
+            if (app[0].equals(appId)) {
+                app[14] = Status.PAYMENT_CLEARED.name();  // update status field
+                allApplications.set(i, app);
+                updated = true;
+                break;
+            }
+        }
+
+        if (!updated) {
+            JOptionPane.showMessageDialog(this, "Application not found or cannot update.");
+            return;
+        }
+
+        // Write back all apps to file
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(APPLICATION_FILE, false))) {
+            for (String[] app : allApplications) {
+                bw.write(String.join(",", app));
+                bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "Unpaid";
-    }
-
-    private void updatePaymentStatus(String appId) {
-        File inputFile = new File("payment_status.txt");
-        File tempFile = new File("temp_payment_status.txt");
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
-
-            String line;
-            boolean found = false;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts[0].equals(appId)) {
-                    writer.write(appId + ",Paid\n");
-                    found = true;
-                } else {
-                    writer.write(line + "\n");
-                }
-            }
-            if (!found) writer.write(appId + ",Paid\n");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        inputFile.delete();
-        tempFile.renameTo(inputFile);
-    }
-
-    private String generateRef(String appId) {
-        return "REF-" + appId.substring(appId.length() - 4) + "-PAID";
-    }
-
-    class ButtonRenderer extends JButton implements TableCellRenderer {
-        public ButtonRenderer() {
-            setText("Pay Now");
+            JOptionPane.showMessageDialog(this, "Error updating applications file: " + e.getMessage());
+            return;
         }
 
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            setText((value == null) ? "Pay Now" : value.toString());
-            return this;
-        }
-    }
-
-    class ButtonEditor extends DefaultCellEditor {
-        private JButton button;
-        private String appId;
-        private boolean isPushed;
-
-        public ButtonEditor(JCheckBox checkBox) {
-            super(checkBox);
-            button = new JButton();
-            button.setOpaque(true);
-            button.addActionListener(e -> fireEditingStopped());
-        }
-
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
-            appId = table.getValueAt(row, 0).toString();
-            button.setText("Pay Now");
-            isPushed = true;
-            return button;
-        }
-
-        public Object getCellEditorValue() {
-            if (isPushed) {
-                updatePaymentStatus(appId);
-                JOptionPane.showMessageDialog(button, "Payment successful for: " + appId);
-                updateTable(searchField.getText(), (String) statusFilter.getSelectedItem());
-            }
-            isPushed = false;
-            return "Pay Now";
-        }
+        JOptionPane.showMessageDialog(this, "Application marked as PAYMENT_CLEARED successfully.");
+        applyFilters();
     }
 }
