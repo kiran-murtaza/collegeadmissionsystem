@@ -1,2 +1,3 @@
-APP-FORM-001,Unknown,check,check,check,checkcheck,check,check,check,check,Commerce,BBA,IBA,ahmed12@gmail.com,APPROVED,N/A,N/A
+APP-FORM-001,Unknown,check,check,check,checkcheck,check,check,check,check,Commerce,BBA,IBA,ahmed12@gmail.com,PAYMENT_CLEARED,N/A,N/A
 APP-FORM-002,Unknown,check,checkcheck,check,check,check,check,check,check,Computer Science,Accounting and Finance,LUMS,ahmed12@gmail.com,REJECTED,N/A,N/A
+APP-FORM-003,Unknown,karachi,akueb,2020,89,art,akueb,2024,89,Computer Science,BBA,IBA,ahmed12@gmail.com,APPROVED,N/A,N/A

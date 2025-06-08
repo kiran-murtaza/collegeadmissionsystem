@@ -138,7 +138,7 @@ public class SubmittedFormList_Panel extends JPanel {
             case SUBMITTED -> "Submitted";
             case APPROVED -> "Approved(Pay now)";
             case REJECTED -> "Rejected";
-            case PAYMENT_CLEARED -> "Payment Cleared- take test";
+            case PAYMENT_CLEARED -> "Payment Cleared";
             case TEST_SCHEDULED -> "Test Scheduled";
             case TEST_TAKEN -> "Test Taken";
             case ADMISSION_OFFERED -> "Admission Offered";
