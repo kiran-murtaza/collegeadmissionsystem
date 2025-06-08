@@ -171,7 +171,7 @@ public class ApplicantManager {
                         app.getStream12(),
                         app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
                         app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
-                        app.getEmail(),
+                        app.getUsers().getEmail(),
                         app.getStatus().name(),
                         app.getTestSchedule() != null ? app.getTestSchedule() : "null",
                         app.getTestScore() != null ? app.getTestScore() : "null"

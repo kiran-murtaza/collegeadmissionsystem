@@ -22,11 +22,9 @@ public class ScholarshipForm_Panel extends JPanel {
     private JCheckBox proofIncomeCheck, portfolioCheck;
     private JButton submitButton;
     private JLabel statusLabel;
-    private Applicant userInfo;
 
     public ScholarshipForm_Panel(Applicant userInfo) {
         setLayout(new BorderLayout());
-this.userInfo= userInfo;
         // Load applicant info from file
         boolean found = loadApplicantInfoByEmail(userInfo.getEmail());
         if (!found) {

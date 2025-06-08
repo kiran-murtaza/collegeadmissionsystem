@@ -58,7 +58,7 @@ public class ApplicantDashboard_Panel extends JFrame{
 
         String[] menuItems = {
                 "Home",
-                "Apply for College",
+                "Apply Now",
                 "Submitted Form List",
                 "View Colleges & Programs",
                 "Payment Portal",
@@ -121,7 +121,7 @@ public class ApplicantDashboard_Panel extends JFrame{
     private void handleMenuClick(String menuItem) throws IOException {
         switch (menuItem) {
             case "Home" -> showHome();
-            case "Apply for College" -> showApplicationForm();
+            case "Apply Now" -> showApplicationForm();
             case "Submitted Form List" -> showSubmittedFormList();
             case "View Colleges & Programs" -> showCollegeAndProgramViewer();
 //            case "Payment Portal" -> showPaymentPortal();

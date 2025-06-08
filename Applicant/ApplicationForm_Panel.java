@@ -17,7 +17,7 @@ import java.util.Scanner;
 public class ApplicationForm_Panel extends JPanel {
     private ProgramManager programManager;
     private CollegeManager collegeManager;
-    // Constants for UI colors
+
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
@@ -26,13 +26,10 @@ public class ApplicationForm_Panel extends JPanel {
     private static final String COUNTER_FILE = "application_counter.txt";
     private int applicationCount;
 
-    // UI components
     private JComboBox<String> programDropdown, collegeDropdown, stream12Dropdown;
     private JTextField addressField, board10Field, year10Field, percent10Field, stream10Field;
     private JTextField board12Field, year12Field, percent12Field;
     private JButton submitButton;
-
-    // Managers and state
 
     private Applicant userInfo;
     private Status status;
@@ -44,7 +41,6 @@ public class ApplicationForm_Panel extends JPanel {
         return "APP-FORM-" + String.format("%03d", applicationCount);
     }
 
-    // Constructor
     public ApplicationForm_Panel(Applicant userInfo, ProgramManager programManager, CollegeManager collegeManager) throws IOException {
         this.userInfo = userInfo;
         this.collegeManager = collegeManager;
@@ -52,75 +48,52 @@ public class ApplicationForm_Panel extends JPanel {
         this.colleges = new ArrayList<>();
         applicationCount = readCounter();
         collegeManager.loadFromFile("colleges.txt");
-        setLayout(new GridLayout(0, 2));
+
+        setLayout(new BorderLayout());
         setBackground(COLORAZ_WHITE);
 
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridBagLayout());
+        formPanel.setBackground(COLORAZ_WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 12, 8, 12);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Title
+        int row = 0;
+
         JLabel title = new JLabel("Admission Application Form", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 18));
+        title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setForeground(COLORAZ_BLACK);
-        setVisible(true);
-        this.add(title);
-        this.add(new JLabel(""));
-
-        // Initialize dropdowns
-        collegeDropdown = new JComboBox<>();
-        programDropdown = new JComboBox<>();
+        add(title, BorderLayout.NORTH);
 
         // Applicant Info Display
-        addField("Applicant ID:", userInfo.getUserID());
-        addField("Email:", userInfo.getEmail());
-        addField("First Name:", userInfo.getFirstName());
-        addField("Last Name:", userInfo.getLastName());
-        addField("Phone Number:", userInfo.getPhone());
-        addField("Date of Birth:", String.valueOf(userInfo.getDateOfBirth()));
-        addField("Gender:", String.valueOf(userInfo.getGender()));
+        row = addLabelAndValue(formPanel, "Applicant ID:", userInfo.getUserID(), row, gbc);
+        row = addLabelAndValue(formPanel, "Email:", userInfo.getEmail(), row, gbc);
+        row = addLabelAndValue(formPanel, "First Name:", userInfo.getFirstName(), row, gbc);
+        row = addLabelAndValue(formPanel, "Last Name:", userInfo.getLastName(), row, gbc);
+        row = addLabelAndValue(formPanel, "Phone Number:", userInfo.getPhone(), row, gbc);
+        row = addLabelAndValue(formPanel, "Date of Birth:", String.valueOf(userInfo.getDateOfBirth()), row, gbc);
+        row = addLabelAndValue(formPanel, "Gender:", String.valueOf(userInfo.getGender()), row, gbc);
 
-        // Address and Education Fields
-        addressField = addTextField("Address:");
-        board10Field = addTextField("10th Board:");
-        year10Field = addTextField("10th Year:");
-        percent10Field = addTextField("10th Percentage:");
-        stream10Field = addTextField("10th Stream/Field:");
+        addressField = addFieldWithPlaceholder(formPanel, "Address:", "Enter your address", row++, gbc);
+        board10Field = addFieldWithPlaceholder(formPanel, "10th Board:", "Enter your 10th board", row++, gbc);
+        year10Field = addFieldWithPlaceholder(formPanel, "10th Year:", "Enter year of 10th", row++, gbc);
+        percent10Field = addFieldWithPlaceholder(formPanel, "10th Percentage:", "Enter your 10th %", row++, gbc);
+        stream10Field = addFieldWithPlaceholder(formPanel, "10th Stream:", "Enter your 10th stream", row++, gbc);
 
-        board12Field = addTextField("12th Board:");
-        year12Field = addTextField("12th Year:");
-        percent12Field = addTextField("12th Percentage:");
+        board12Field = addFieldWithPlaceholder(formPanel, "12th Board:", "Enter your 12th board", row++, gbc);
+        year12Field = addFieldWithPlaceholder(formPanel, "12th Year:", "Enter year of 12th", row++, gbc);
+        percent12Field = addFieldWithPlaceholder(formPanel, "12th Percentage:", "Enter your 12th %", row++, gbc);
 
-        // Stream Dropdown for 12th
-//        stream12Dropdown = new JComboBox<>();
-        add(new JLabel("12th Stream/Field:"));
-
-        stream12Dropdown = new JComboBox<>();
-
-        String[] streams = {
-                "Pre-Medical",
-                "Pre-Engineering",
-                "Computer Science",
-                "Commerce",
-                "Humanities/Arts",
-                "General Science"
-        };
-
-        stream12Dropdown.addItem("Select your 12th Stream");
-// Add items to dropdown
-        for (String s : streams) {
-            stream12Dropdown.addItem(s);
-        }
-
-        add(stream12Dropdown);
-
-// Listener for stream selection
+        stream12Dropdown = new JComboBox<>(new String[] {
+                "Select your 12th Stream", "Pre-Medical", "Pre-Engineering",
+                "Computer Science", "Commerce", "Humanities/Arts", "General Science"
+        });
         stream12Dropdown.addActionListener(e -> {
             String selectedStream = (String) stream12Dropdown.getSelectedItem();
-
-            System.out.println("Stream selected: " + selectedStream);
-
             if (selectedStream != null && !selectedStream.equals("Select your 12th Stream")) {
                 loadProgramsByStream(selectedStream);
-            }
-            else {
+            } else {
                 programDropdown.removeAllItems();
                 programDropdown.addItem("Select a stream first");
 
@@ -128,32 +101,18 @@ public class ApplicationForm_Panel extends JPanel {
                 collegeDropdown.addItem("Select a program first");
             }
         });
+        addLabelAndComponent(formPanel, "12th Stream:", stream12Dropdown, row++, gbc);
 
+        programDropdown = new JComboBox<>();
+        addLabelAndComponent(formPanel, "Program:", programDropdown, row++, gbc);
 
-        // Program and College dropdowns
-        add(new JLabel("Select Program:"));
-        add(programDropdown);
-        add(new JLabel("Select College:"));
-        add(collegeDropdown);
+        collegeDropdown = new JComboBox<>();
+        addLabelAndComponent(formPanel, "College:", collegeDropdown, row++, gbc);
 
-        // Load initial programs and colleges
-        if (stream12Dropdown.getItemCount() > 0) {
-            loadProgramsByStream((String) stream12Dropdown.getItemAt(0));
-            if (programDropdown.getItemCount() > 0) {
-                updateCollegeDropdown((String) programDropdown.getSelectedItem());
-            }
-        }
-
-        // Program dropdown action
         programDropdown.addActionListener(e -> {
             String selectedProgram = (String) programDropdown.getSelectedItem();
-            System.out.println("Program selected: " + selectedProgram);
-
-            if (selectedProgram != null
-                    && !selectedProgram.equals("No programs available")
-                    && !selectedProgram.equals("Select a stream first")
-                    && !selectedProgram.trim().isEmpty()) {
-
+            if (selectedProgram != null && !selectedProgram.equals("No programs available") &&
+                    !selectedProgram.equals("Select a stream first") && !selectedProgram.trim().isEmpty()) {
                 updateCollegeDropdown(selectedProgram);
             } else {
                 collegeDropdown.removeAllItems();
@@ -161,14 +120,49 @@ public class ApplicationForm_Panel extends JPanel {
             }
         });
 
-        // Submit button
         submitButton = new JButton("Submit");
         submitButton.setBackground(COLORAZ_SAGE);
         submitButton.addActionListener(e -> validateForm());
-        add(submitButton);
+
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        formPanel.add(submitButton, gbc);
+
+        add(new JScrollPane(formPanel), BorderLayout.CENTER);
     }
 
+    private int addLabelAndValue(JPanel panel, String label, String value, int row, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        panel.add(new JLabel(label), gbc);
 
+        gbc.gridx = 1;
+        panel.add(new JLabel(value), gbc);
+
+        return row + 1;
+    }
+
+    private JTextField addFieldWithPlaceholder(JPanel panel, String label, String placeholder, int row, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        panel.add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        JTextField field = new JTextField();
+        field.setToolTipText(placeholder);
+        panel.add(field, gbc);
+
+        return field;
+    }
+
+    private void addLabelAndComponent(JPanel panel, String label, JComponent component, int row, GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        panel.add(new JLabel(label), gbc);
+
+        gbc.gridx = 1;
+        panel.add(component, gbc);
+    }
     // Load programs based on selected stream
     private void loadProgramsByStream(String stream) {
         programDropdown.removeAllItems();
