@@ -63,8 +63,7 @@ public class ApplicantDashboard_Panel extends JFrame{
                 "View Colleges & Programs",
                 "Payment Portal",
                 "Apply for Scholarship",
-                "Documents",
-                "Edit Profile",
+//                "Edit Profile",
                 "Logout"
         };
 

@@ -22,9 +22,14 @@ Stream:Commerce
 College:Agha Khan
 Program:MBBS,300,230,1000002.0
 Stream:Pre-Medical
+Program:BDS,2340,98,40000.0
+Stream:Pre-Medical
 College:GIKI
 Program:BS EE,190,170,180000.0
 Stream:Pre-Engineering
 Stream:Computer Science
 College:Bahria
+Program:BCS,23,80,12000.0
+Stream:Pre-Engineering
+Stream:Computer Science
 College:KSBL

@@ -40,18 +40,31 @@ public class ViewApplicantsPanel extends JPanel {
 
         table = new JTable(model);
         table.setRowHeight(40);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         loadApplicants();
 
+        // Set column widths manually for better spacing
+        int[] columnWidths = {100, 90, 80, 70, 90, 90, 80, 80, 130, 110, 110, 130, 220};
+        for (int i = 0; i < columnWidths.length; i++) {
+            if (i < table.getColumnModel().getColumnCount()) {
+                table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+                table.getColumnModel().getColumn(i).setMinWidth(columnWidths[i] / 2);
+            }
+        }
+
+        // Renderer and Editor for Action column
         table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
         table.getColumn("Action").setCellEditor(new ActionCellEditor(table, model));
 
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(table,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
     }
 
     private void loadApplicants() {
-        model.setRowCount(0); // Clear previous rows
+        model.setRowCount(0);
         try {
             ArrayList<ApplicationFormData> applicants = ApplicantManager.loadAllApplications();
             for (ApplicationFormData app : applicants) {
@@ -76,9 +89,35 @@ public class ViewApplicantsPanel extends JPanel {
         }
     }
 
+    class ColorButton extends JButton {
+        private Color bgColor;
+
+        public ColorButton(String text, Color bgColor) {
+            super(text);
+            this.bgColor = bgColor;
+            setForeground(Color.WHITE);
+            setFocusPainted(false);
+            setOpaque(true);
+            setBorderPainted(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            if (getModel().isPressed()) {
+                g.setColor(bgColor.darker());
+            } else if (getModel().isRollover()) {
+                g.setColor(bgColor.brighter());
+            } else {
+                g.setColor(bgColor);
+            }
+            g.fillRect(0, 0, getWidth(), getHeight());
+            super.paintComponent(g);
+        }
+    }
+
     class ActionCellRenderer extends JPanel implements TableCellRenderer {
-        private final JButton btnAccept = new JButton("Accept");
-        private final JButton btnReject = new JButton("Reject");
+        private final JButton btnAccept = new ColorButton("Approve", new Color(76, 175, 80)); // Green
+        private final JButton btnReject = new ColorButton("Reject", new Color(244, 67, 54));   // Red
 
         public ActionCellRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -112,61 +151,55 @@ public class ViewApplicantsPanel extends JPanel {
             this.table = table;
             this.model = model;
 
-            btnAccept = new JButton("Accept");
-            btnReject = new JButton("Reject");
+            btnAccept = new ColorButton("Approve", new Color(76, 175, 80)); // Green
+            btnReject = new ColorButton("Reject", new Color(244, 67, 54));  // Red
 
             panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             panel.add(btnAccept);
             panel.add(btnReject);
 
             btnAccept.addActionListener(e -> {
+                int row = table.getEditingRow();
+                if (row == -1) return;
+
+                String appId = (String) model.getValueAt(row, 0);
                 try {
-                    int row = table.getEditingRow();
-                    if (row == -1) return;
-
-                    String appId = (String) model.getValueAt(row, 0);
                     Status status = ApplicantManager.getApplicationStatus(appId);
-
                     if (status == Status.SUBMITTED) {
                         ApplicantManager.updateApplicationStatus(appId, Status.APPROVED);
                         model.setValueAt(Status.APPROVED.toString(), row, 11);
-                        JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been ACCEPTED.");
-                        stopCellEditing();
-                        table.repaint();
+                        JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been APPROVED.");
                     } else {
                         JOptionPane.showMessageDialog(null, "Application already processed.");
-                        stopCellEditing();
-                        table.repaint();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error while accepting application.");
+                    JOptionPane.showMessageDialog(null, "Error while approving application.");
                 }
+                stopCellEditing();
+                table.repaint();
             });
 
             btnReject.addActionListener(e -> {
+                int row = table.getEditingRow();
+                if (row == -1) return;
+
+                String appId = (String) model.getValueAt(row, 0);
                 try {
-                    int row = table.getEditingRow();
-                    if (row == -1) return;
-
-                    String appId = (String) model.getValueAt(row, 0);
                     Status status = ApplicantManager.getApplicationStatus(appId);
-
                     if (status == Status.SUBMITTED) {
                         ApplicantManager.updateApplicationStatus(appId, Status.REJECTED);
                         model.setValueAt(Status.REJECTED.toString(), row, 11);
                         JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been REJECTED.");
-                        stopCellEditing();
-                        table.repaint();
                     } else {
                         JOptionPane.showMessageDialog(null, "Application already processed.");
-                        stopCellEditing();
-                        table.repaint();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error while rejecting application.");
                 }
+                stopCellEditing();
+                table.repaint();
             });
         }
 
