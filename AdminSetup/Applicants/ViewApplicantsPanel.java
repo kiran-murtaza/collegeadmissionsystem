@@ -45,7 +45,7 @@ public class ViewApplicantsPanel extends JPanel {
         loadApplicants();
 
         // Set column widths manually for better spacing
-        int[] columnWidths = {100, 90, 80, 70, 90, 90, 80, 80, 140, 110, 120, 130, 220};
+        int[] columnWidths = {100, 90, 80, 70, 90, 90, 80, 80, 135, 110, 120, 115, 220};
         for (int i = 0; i < columnWidths.length; i++) {
             if (i < table.getColumnModel().getColumnCount()) {
                 table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
