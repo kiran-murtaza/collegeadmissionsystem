@@ -1,4 +1,4 @@
-package AdminSetup;
+package AdminSetup.Scholarship;
 
 public class ScholarshipManager {
 
