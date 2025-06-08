@@ -124,7 +124,7 @@ public class ApplicantDashboard_Panel extends JFrame{
             case "Apply Now" -> showApplicationForm();
             case "Submitted Form List" -> showSubmittedFormList();
             case "View Colleges & Programs" -> showCollegeAndProgramViewer();
-//            case "Payment Portal" -> showPaymentPortal();
+            case "Payment Portal" -> showPaymentPortal();
             case "Apply for Scholarship" -> showScholarshipForm();
 //            case "Documents" -> showDocumentsPanel();
 //            case "Edit Profile" -> showEditProfilePanel();
@@ -172,13 +172,13 @@ public class ApplicantDashboard_Panel extends JFrame{
         contentPanel.repaint();
     }
 
-//    private void showPaymentPortal() {
-//        PaymentPortal_Panel portalPanel = new PaymentPortal_Panel(userInfo);
-//        contentPanel.removeAll();
-//        contentPanel.add(portalPanel,BorderLayout.CENTER); // Use the actual panel
-//        contentPanel.revalidate();
-//        contentPanel.repaint();
-//    }
+    private void showPaymentPortal() {
+        PaymentPortal_Panel portalPanel = new PaymentPortal_Panel(userInfo);
+        contentPanel.removeAll();
+        contentPanel.add(portalPanel,BorderLayout.CENTER); // Use the actual panel
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
 
 
     private void showScholarshipForm() {
