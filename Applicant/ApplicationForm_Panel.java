@@ -345,7 +345,8 @@ public class ApplicationForm_Panel extends JPanel {
     private int readCounter() {
         try (Scanner scanner = new Scanner(new File(COUNTER_FILE))) {
             return scanner.nextInt();
-        } catch (IOException | NumberFormatException e) {
+        }
+        catch (IOException | NumberFormatException e) {
             return 0;
         }
     }
