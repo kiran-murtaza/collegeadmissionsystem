@@ -104,7 +104,7 @@ public class PaymentPortal_Panel extends JPanel {
                 }
 
                 // Show only APPROVED, SUBMITTED, PAYMENT_CLEARED applications
-                if (!(status.equals("APPROVED") || status.equals("SUBMITTED") || status.equals("PAYMENT_CLEARED"))) {
+                if (!(status.equals("APPROVED") || status.equals("PAYMENT_CLEARED"))) {
                     continue;
                 }
 
