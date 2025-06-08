@@ -158,6 +158,7 @@ public class ApplicantManager {
         // Now overwrite the file with updated list
         try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite entire file
             for (ApplicationFormData app : allApps) {
+                String applicationId1 = app.getApplicationId() != null ? app.getApplicationId() : "";
                 String firstName = (app.getUsers() != null && app.getUsers().getFirstName() != null)
                         ? app.getUsers().getFirstName() : "Unknown";
                 String address = app.getAddress() != null ? app.getAddress() : "";
@@ -177,7 +178,7 @@ public class ApplicantManager {
                 String testScore = app.getTestScore() != null ? app.getTestScore() : "null";
 
                 String line = String.join(",",
-                        applicationId,
+                        applicationId1,
                         firstName,
                         address,
                         board10,
