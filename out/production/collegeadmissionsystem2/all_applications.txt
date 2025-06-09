@@ -1,4 +1,2 @@
-APP-FORM-001,Unknown,karachi,akueb,2023,89,ART,akueb,2023,89,Pre-Medical,MBBS,Agha Khan,ki@gmail.com,PAYMENT_CLEARED,N/A,N/A
-APP-FORM-002,Unknown,karachi,check,xkwh,39,ksaW,AKUEB,2023,89,Pre-Engineering,BBA,IBA,ki@gmail.com,APPROVED,N/A,N/A
-APP-FORM-003,Unknown,check,check,check,check,check,chekc,check,check,Computer Science,BBA,IBA,ki@gmail.com,PAYMENT_CLEARED,N/A,N/A
-APP-FORM-004,Unknown,skajd,jdasdjsn,jksnsjkf,nsjnd,dnsndk,ndsand,ndsn,dsds,Computer Science,BBA,IBA,ki@gmail.com,APPROVED,N/A,N/A
+APP-FORM-006,Unknown,check,check,check,check,check,checkcheck,check,check,Computer Science,BS EE,GIKI,ahmed12@gmail.com,TEST_SCHEDULED,N/A,N/A,PAID
+APP-FORM-007,Unknown,test,test,test,test,test,test,test,test,Computer Science,BBA,IBA,ahmed12@gmail.com,APPROVED,N/A,N/A,PAID

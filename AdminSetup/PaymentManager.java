@@ -1,6 +1,8 @@
 package AdminSetup;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class PaymentManager {
     private static final String APPLICATION_FILE = "all_applications.txt";
@@ -10,19 +12,22 @@ public class PaymentManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length < 15) continue;
+
+                if (parts.length < 18) continue; // 18 fields = last index is 17
 
                 String id = parts[0].trim();
-                String status = parts[14].trim().toUpperCase();
+                String feeStatus = parts[17].trim(); // Fixed index
 
-                if (id.equals(applicantId)) {
-                    return status.equals("PAYMENT_CLEARED");
+                if (id.equalsIgnoreCase(applicantId)) {
+                    return feeStatus.equalsIgnoreCase("PAID");
                 }
             }
         } catch (IOException e) {
-            System.err.println("Error reading payment status: " + e.getMessage());
+            e.printStackTrace();
         }
-        return false;
+        return false; // Default: unpaid if not found
     }
-}
 
+
+
+}

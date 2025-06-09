@@ -5,6 +5,8 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SubmittedFormList_Panel extends JPanel {
@@ -18,7 +20,6 @@ public class SubmittedFormList_Panel extends JPanel {
         this.userInfo = userInfo;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
-
 
         // Title and Search
         JPanel searchPanel = new JPanel(new BorderLayout());
@@ -51,7 +52,7 @@ public class SubmittedFormList_Panel extends JPanel {
                 "Program",
                 "College",
                 "Email",
-                "Status",
+                "Status",           // combined application + fee status
                 "Test Schedule",
                 "Test Score",
                 "Give Test"
@@ -61,7 +62,7 @@ public class SubmittedFormList_Panel extends JPanel {
         table = new JTable(model) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 7;
+                return column == 7; // Only "Give Test" button editable
             }
         };
 
@@ -97,27 +98,45 @@ public class SubmittedFormList_Panel extends JPanel {
     }
 
     private void addRow(ApplicationFormData app) {
-        String schedule = (app.getStatus() == Status.TEST_SCHEDULED || app.getStatus() == Status.TEST_TAKEN)
-                ? (app.getTestSchedule() == null || app.getTestSchedule().equals("N/A") ? "Not Scheduled" : app.getTestSchedule())
-                : "Not Scheduled";
+        // Debug print
+        System.out.println("App ID: " + app.getApplicationId()
+                + ", Status: " + app.getStatus()
+                + ", TestSchedule: " + app.getTestSchedule()
+                + ", FeeStatus: " + app.getFeeStatus());
 
-        String score = (app.getStatus() == Status.TEST_TAKEN && app.getTestScore() != null && !app.getTestScore().equals("N/A"))
-                ? app.getTestScore()
+        String schedule = "Not Scheduled";
+
+        if (app.getTestSchedule() != null && !app.getTestSchedule().equals("null")) {
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(app.getTestSchedule().toString());
+                schedule = dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a"));
+            } catch (Exception e) {
+                System.err.println("Error parsing date for app " + app.getApplicationId() + ": " + e.getMessage());
+                schedule = "Invalid Format";
+            }
+        }
+
+        String score = (app.getStatus() == Status.TEST_TAKEN && app.getTestScore() != null)
+                ? String.valueOf(app.getTestScore())
                 : "N/A";
 
         String actionText = "Unavailable";
-        if ("Give Test Now".equals(actionText) && isToday(app.getTestSchedule())) {
+
+        if (app.getFeeStatus() == FeeStatus.PAID && isToday(app.getTestSchedule().toString())) {
             actionText = "Give Test Now";
         } else if (app.getStatus() == Status.TEST_TAKEN) {
             actionText = "Completed";
         }
+
+        // Don't override status here – just display what's set
+        String combinedStatus = formatCombinedStatus(app.getStatus(), app.getFeeStatus());
 
         model.addRow(new Object[]{
                 app.getApplicationId(),
                 app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
                 app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
                 app.getUsers() != null ? app.getUsers().getEmail() : "N/A",
-                formatStatus(app.getStatus()),
+                combinedStatus,
                 schedule,
                 score,
                 actionText
@@ -125,20 +144,22 @@ public class SubmittedFormList_Panel extends JPanel {
     }
 
 
-    private boolean isToday(String dateStr) {
+    private boolean isToday(String dateTimeStr) {
+        if (dateTimeStr == null) return false;
         try {
-            return LocalDate.now().toString().equals(dateStr);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDate date = LocalDateTime.parse(dateTimeStr, formatter).toLocalDate();
+            return LocalDate.now().equals(date);
         } catch (Exception e) {
             return false;
         }
     }
 
-    private String formatStatus(Status status) {
-        return switch (status) {
+    private String formatCombinedStatus(Status status, FeeStatus feeStatus) {
+        String statusText = switch (status) {
             case SUBMITTED -> "Submitted";
-            case APPROVED -> "Approved(Pay now)";
+            case APPROVED -> "Approved";
             case REJECTED -> "Rejected";
-            case PAYMENT_CLEARED -> "Payment Cleared";
             case TEST_SCHEDULED -> "Test Scheduled";
             case TEST_TAKEN -> "Test Taken";
             case ADMISSION_OFFERED -> "Admission Offered";
@@ -146,27 +167,43 @@ public class SubmittedFormList_Panel extends JPanel {
             case ADMISSION_SECURED -> "Admission Secured";
             case ADMISSION_WITHDRAWN -> "Withdrawn";
         };
+
+        String feeText = "";
+        if (feeStatus != null) {
+            feeText = switch (feeStatus) {
+                case PAID -> " (Fee Paid)";
+                case UNPAID -> " (Fee Unpaid)";
+                default -> "";
+            };
+        }
+
+        return statusText + feeText;
     }
 
-    // Renderer for status coloring
     private class CustomRowRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus,
                                                        int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            String status = table.getValueAt(row, 4).toString();
-            switch (status) {
-                case "Approved" -> c.setBackground(new Color(198, 239, 206));
-                case "Rejected" -> c.setBackground(new Color(255, 199, 206));
-                case "Submitted" -> c.setBackground(new Color(255, 235, 156));
-                default -> c.setBackground(Color.WHITE);
+
+            if (!isSelected) {  // only set background if not selected
+                String status = table.getValueAt(row, 4).toString();  // combined status column
+
+                if (status.contains("Approved")) {
+                    c.setBackground(new Color(198, 239, 206));
+                } else if (status.contains("Rejected")) {
+                    c.setBackground(new Color(255, 199, 206));
+                } else if (status.contains("Submitted")) {
+                    c.setBackground(new Color(255, 235, 156));
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
             }
             return c;
         }
     }
 
-    // Renderer for button column
     private class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
             setOpaque(true);
@@ -185,7 +222,6 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 
-    // Editor for button column
     private class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String label;
@@ -214,20 +250,18 @@ public class SubmittedFormList_Panel extends JPanel {
             if (isPushed && "Give Test Now".equals(label)) {
                 ApplicationFormData selectedApp = userApplications.get(selectedRow);
 
-                // Replace this with your real TestPanel logic
                 JFrame testFrame = new JFrame("Online Test");
                 testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 testFrame.setSize(600, 400);
                 testFrame.setLocationRelativeTo(null);
 
-//                // Simulated TestPanel (Replace with real implementation)
-//                JPanel testPanel = new TestPanel(selectedApp); // Make sure this class exists!
-//                testFrame.setContentPane(testPanel);
-//                testFrame.setVisible(true);
+                JPanel testPanel = new JPanel();
+                testPanel.add(new JLabel("Your test starts here..."));
+                testFrame.setContentPane(testPanel);
+                testFrame.setVisible(true);
             }
             isPushed = false;
             return label;
         }
     }
 }
-

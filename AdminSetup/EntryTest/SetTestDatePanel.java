@@ -1,6 +1,8 @@
 package AdminSetup.EntryTest;
 
 import AdminSetup.PaymentManager;
+import Applicant.ApplicationFormData;
+import Applicant.Status;
 import Applicant.ApplicantManager;
 
 import javax.swing.*;
@@ -136,14 +138,20 @@ public class SetTestDatePanel extends JPanel {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr.trim(), formatter);
 
+                    // 1. Update test record
                     EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
                     if (record == null) {
                         record = new EntryTestRecordManager.EntryTestRecord(applicantId, dateTime, false, 0);
                     } else {
                         record.setTestDateTime(dateTime);
                     }
-
                     recordManager.saveRecord(record);
+
+                    // 2. Update ApplicationFormData
+
+                    // 3. Update status
+                    ApplicantManager.updateApplicationStatus(applicantId, Status.TEST_SCHEDULED);
+
                     JOptionPane.showMessageDialog(null, "Test date updated for applicant " + applicantId);
                     loadTestData();
 

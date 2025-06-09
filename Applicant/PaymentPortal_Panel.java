@@ -22,39 +22,30 @@ public class PaymentPortal_Panel extends JPanel {
         this.userInfo = userInfo;
         setLayout(new BorderLayout());
 
-        // Info panel at top with user details
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         infoPanel.add(new JLabel("Applicant ID: " + userInfo.getUserID()));
         infoPanel.add(new JLabel(" | Email: " + userInfo.getEmail()));
         add(infoPanel, BorderLayout.NORTH);
 
-        // Define columns
         String[] columnNames = {"Application Form", "Program", "College", "Due Date", "Fee Status", "Action"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Only "Action" column (Pay Now button) is editable
                 return column == 5;
             }
         };
 
-        // Setup table
         table = new JTable(tableModel);
         table.setRowHeight(30);
-
-        // Custom renderer for Action column to display buttons properly
         table.getColumn("Action").setCellRenderer(new ButtonRenderer());
         table.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox()));
 
-        // Enable sorting
         sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
 
-        // Scroll pane for table
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Search filter panel at bottom
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JTextField filterField = new JTextField(20);
         filterField.setToolTipText("Filter by any column...");
@@ -62,17 +53,19 @@ public class PaymentPortal_Panel extends JPanel {
         filterPanel.add(filterField);
         add(filterPanel, BorderLayout.SOUTH);
 
-        // Filter listener for live search
         filterField.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 search(filterField.getText());
             }
+
             public void removeUpdate(DocumentEvent e) {
                 search(filterField.getText());
             }
+
             public void changedUpdate(DocumentEvent e) {
                 search(filterField.getText());
             }
+
             private void search(String text) {
                 if (text.trim().length() == 0) {
                     sorter.setRowFilter(null);
@@ -86,25 +79,24 @@ public class PaymentPortal_Panel extends JPanel {
     }
 
     private void loadApplications() {
-        tableModel.setRowCount(0); // clear existing data
+        tableModel.setRowCount(0);
         boolean foundAny = false;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATION_FILE))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length < 16) continue;
+                if (parts.length < 18) continue;
 
                 String appId = parts[0];
                 String email = parts[13];
-                String status = parts[14].toUpperCase();
+                String status = parts[14].toUpperCase();     // Application status
+                String feeStatus = parts[17].toUpperCase();  // Fee status
 
-                if (!userInfo.getEmail().equalsIgnoreCase(email)) {
-                    continue; // skip non-user records
-                }
+                if (!userInfo.getEmail().equalsIgnoreCase(email)) continue;
 
-                // Show only APPROVED, SUBMITTED, PAYMENT_CLEARED applications
-                if (!(status.equals("APPROVED") || status.equals("PAYMENT_CLEARED"))) {
+                // Show if application was approved, scheduled, or payment cleared
+                if (!(status.equals("APPROVED") || status.equals("TEST_SCHEDULED") || status.equals("PAYMENT_CLEARED"))) {
                     continue;
                 }
 
@@ -112,14 +104,9 @@ public class PaymentPortal_Panel extends JPanel {
 
                 String program = parts[11];
                 String college = parts[12];
-
-                // Fee status for display
-                String feeStatusDisplay = status.equals("PAYMENT_CLEARED") ? "Paid" : "Unpaid";
-
-                // For simplicity, due date = today + 7 days
                 String dueDate = DATE_FORMAT.format(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000));
+                String feeStatusDisplay = feeStatus.equals("PAID") ? "Paid" : "Unpaid";
 
-                // Add row: Action column will hold button label (button editor will handle actual button)
                 tableModel.addRow(new Object[]{appId, program, college, dueDate, feeStatusDisplay, "Pay Now"});
             }
 
@@ -131,7 +118,6 @@ public class PaymentPortal_Panel extends JPanel {
         }
     }
 
-    // Updates the payment status and refreshes the table
     private void markAsPaid(String appId) {
         File originalFile = new File(APPLICATION_FILE);
         File tempFile = new File("all_applications_temp.txt");
@@ -144,21 +130,24 @@ public class PaymentPortal_Panel extends JPanel {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length < 16) {
+                if (parts.length < 18) {
                     writer.write(line);
                     writer.newLine();
                     continue;
                 }
 
                 if (parts[0].equals(appId)) {
-                    parts[14] = "PAYMENT_CLEARED"; // status
-                    parts[15] = "N/A"; // test schedule reset
-                    if (parts.length > 16) {
-                        parts[16] = "N/A"; // test score reset if exists
-                    }
+                    // ✅ ONLY update fee status
+                    // DO NOT touch parts[14] — this is the application status (e.g. APPROVED)
+
+                    parts[17] = "PAID";        // feeStatus
+                    parts[15] = "N/A";         // extra fee fields, optional
+                    if (parts.length > 16) parts[16] = "N/A";
+
                     updated = true;
                     line = String.join(",", parts);
                 }
+
                 writer.write(line);
                 writer.newLine();
             }
@@ -167,7 +156,6 @@ public class PaymentPortal_Panel extends JPanel {
             return;
         }
 
-        // Replace original file with updated temp file
         if (!originalFile.delete() || !tempFile.renameTo(originalFile)) {
             JOptionPane.showMessageDialog(this, "Error finalizing update.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -181,13 +169,12 @@ public class PaymentPortal_Panel extends JPanel {
         }
     }
 
-    // Renderer for button cells
+
     class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
             setOpaque(true);
             setFont(new Font("Arial", Font.BOLD, 12));
             setForeground(Color.BLACK);
-            setBackground(new Color(255, 165, 0)); // orange
         }
 
         @Override
@@ -206,7 +193,6 @@ public class PaymentPortal_Panel extends JPanel {
         }
     }
 
-    // Editor for button cells (handles click event)
     class ButtonEditor extends DefaultCellEditor {
         private JButton button;
         private String appId;
@@ -219,7 +205,6 @@ public class PaymentPortal_Panel extends JPanel {
             button.setFont(new Font("Arial", Font.BOLD, 12));
             button.setForeground(Color.BLACK);
             button.setBackground(new Color(255, 165, 0));
-
             button.addActionListener(e -> fireEditingStopped());
         }
 
@@ -237,6 +222,7 @@ public class PaymentPortal_Panel extends JPanel {
                 button.setEnabled(true);
                 button.setBackground(new Color(255, 165, 0));
             }
+
             isPushed = true;
             return button;
         }
@@ -244,7 +230,6 @@ public class PaymentPortal_Panel extends JPanel {
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
-                // On button click, mark as paid
                 markAsPaid(appId);
             }
             isPushed = false;

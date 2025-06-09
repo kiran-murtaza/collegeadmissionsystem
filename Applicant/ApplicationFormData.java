@@ -1,11 +1,6 @@
 package Applicant;
 
-import AdminSetup.College.College;
-import AdminSetup.Program.Program;
-import Authentication.Users;
-
-import java.io.FileWriter;
-import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class ApplicationFormData {
     private String applicationId;
@@ -25,6 +20,7 @@ public class ApplicationFormData {
     private String testSchedule;
     private String testScore;
     private Status status;
+    private FeeStatus feeStatus;
     private Boolean submitted;
     private Boolean scholarshipSubmitted;
 
@@ -45,12 +41,16 @@ public class ApplicationFormData {
         this.stream12 = stream12;
         this.selectedProgram = selectedProgram;
         this.selectedCollege = selectedCollege;
+        this.testSchedule=null;
+        this.testScore="N/A";
         this.email = email;         // can be set later via setter
-        this.testSchedule = "N/A";  // default initial value
-        this.testScore = "N/A";     // default initial value
         this.status = Status.SUBMITTED; // default initial status//
+        this.feeStatus=FeeStatus.UNPAID;
     }
 
+    public String getApplicantId(){
+        return applicant.getUserID();
+    }
 
 
     public String getApplicationId() {
@@ -170,7 +170,7 @@ public class ApplicationFormData {
     }
 
     public void setTestSchedule(String testSchedule) {
-        this.testSchedule = testSchedule;
+        this.testSchedule = String.valueOf(testSchedule);
     }
 
     public String getTestScore() {
@@ -192,6 +192,13 @@ public class ApplicationFormData {
     public boolean isSubmitted() { return submitted; }
     public void setSubmitted(boolean submitted) {
         this.submitted = submitted;
+    }
+
+    public void setFeeStatus(FeeStatus feeStatus) {
+        this.feeStatus = feeStatus;
+    }
+    public FeeStatus getFeeStatus() {
+        return feeStatus;
     }
 
     public boolean isScholarshipSubmitted() { return scholarshipSubmitted; }

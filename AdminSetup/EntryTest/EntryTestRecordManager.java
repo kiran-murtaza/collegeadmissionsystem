@@ -1,9 +1,6 @@
 package AdminSetup.EntryTest;
 
-import AdminSetup.PaymentManager;
-
 import java.io.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +59,8 @@ public class EntryTestRecordManager {
      * Saves or updates the given entry test record.
      */
     public void saveRecord(EntryTestRecord record) {
-        List<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();  // Use internal method to include all
+        List<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
+
         boolean updated = false;
 
         for (int i = 0; i < records.size(); i++) {
@@ -86,29 +84,34 @@ public class EntryTestRecordManager {
         }
     }
 
+    /**
+     * Get record for given applicant ID (no fee check here).
+     */
     public EntryTestRecord getRecordById(String applicantId) {
-        if (!PaymentManager.isFeePaid(applicantId)) {
-            return null;
-        }
-
-        return loadAllRecords().stream()
+        return loadAllRecordsIncludingUnpaid().stream()
                 .filter(r -> r.getApplicantId().equals(applicantId))
                 .findFirst()
                 .orElse(null);
     }
 
+    /**
+     * Loads only fee-paid applicants' test records.
+     */
     public List<EntryTestRecord> loadAllRecords() {
         List<EntryTestRecord> all = loadAllRecordsIncludingUnpaid();
         List<EntryTestRecord> paidOnly = new ArrayList<>();
 
         for (EntryTestRecord r : all) {
-            if (PaymentManager.isFeePaid(r.getApplicantId())) {
+            if (AdminSetup.PaymentManager.isFeePaid(r.getApplicantId())) {
                 paidOnly.add(r);
             }
         }
         return paidOnly;
     }
 
+    /**
+     * Loads all test records (regardless of fee).
+     */
     private List<EntryTestRecord> loadAllRecordsIncludingUnpaid() {
         List<EntryTestRecord> list = new ArrayList<>();
         File file = new File(FILE_PATH);
@@ -122,7 +125,16 @@ public class EntryTestRecordManager {
                     if (parts.length < 4) continue;
 
                     String applicantId = parts[0].trim();
-                    LocalDateTime dateTime = LocalDateTime.parse(parts[1].trim());
+                    String dateTimeStr = parts[1].trim();
+                    LocalDateTime dateTime = null;
+
+                    // Handle "N/A" or "Not Set" or empty string date values safely
+                    if (!dateTimeStr.equalsIgnoreCase("N/A") &&
+                            !dateTimeStr.equalsIgnoreCase("Not Set") &&
+                            !dateTimeStr.isEmpty()) {
+                        dateTime = LocalDateTime.parse(dateTimeStr);
+                    }
+
                     boolean attempted = Boolean.parseBoolean(parts[2].trim());
                     int score = Integer.parseInt(parts[3].trim());
 
@@ -138,10 +150,5 @@ public class EntryTestRecordManager {
 
         return list;
     }
+
 }
-
-
-
-
-
-

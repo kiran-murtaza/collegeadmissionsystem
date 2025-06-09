@@ -1,11 +1,9 @@
 package Applicant;
 
-import AdminSetup.College.College;
-import AdminSetup.College.CollegeManager;
-import AdminSetup.Program.Program;
-import AdminSetup.Program.ProgramManager;
+
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -32,8 +30,10 @@ public class ApplicantManager {
                     nullSafe(app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A"),
                     nullSafe(app.getUsers().getEmail()),
                     nullSafe(app.getStatus() != null ? app.getStatus().name() : "UNKNOWN"),
-                    nullSafe(app.getTestSchedule()),
-                    nullSafe(app.getTestScore())
+                    nullSafe(app.getTestSchedule().toString()),
+                    nullSafe(app.getTestScore()),
+                    nullSafe(app.getFeeStatus() != null ? app.getFeeStatus().name() : "PENDING") // <-- enum name
+
             );
             writer.write(line + System.lineSeparator());
         } catch (IOException e) {
@@ -75,13 +75,13 @@ public class ApplicantManager {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
 
+                // Expecting at least 18 parts, since you added feeStatus as 18th field
                 if (parts.length < 17) {
-                    // Skip invalid lines
-                    continue;
+                    continue; // skip incomplete lines
                 }
 
                 String applicationID = parts[0];
-                String fullName = parts[1];  // You may lookup user by name/email if needed
+                String fullName = parts[1];
                 String address = parts[2];
                 String board10 = parts[3];
                 String year10 = parts[4];
@@ -91,14 +91,15 @@ public class ApplicantManager {
                 String year12 = parts[8];
                 String percent12 = parts[9];
                 String stream12 = parts[10];
-                String selectedProgramName = parts[11];  // keep as String
-                String selectedCollegeName = parts[12];  // keep as String
+                String selectedProgramName = parts[11];
+                String selectedCollegeName = parts[12];
                 String email = parts[13];
                 String statusStr = parts[14];
                 String testSchedule = parts[15];
                 String testScore = parts[16];
+                String feeStatusStr = parts[17];
 
-                Applicant user = null;  // You may implement user lookup if needed
+                Applicant user = null; // Implement user lookup if needed
 
                 ApplicationFormData app = new ApplicationFormData(
                         applicationID,
@@ -114,10 +115,18 @@ public class ApplicantManager {
                 app.setTestSchedule(testSchedule);
                 app.setTestScore(testScore);
 
+                // Load Status enum safely
                 try {
                     app.setStatus(Status.valueOf(statusStr.toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    app.setStatus(Status.SUBMITTED);  // default fallback
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    app.setStatus(Status.SUBMITTED); // default if invalid
+                }
+
+                // Load FeeStatus enum safely
+                try {
+                    app.setFeeStatus(FeeStatus.valueOf(feeStatusStr.toUpperCase()));
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    app.setFeeStatus(FeeStatus.UNPAID); // default if invalid
                 }
 
                 applications.add(app);
@@ -128,6 +137,7 @@ public class ApplicantManager {
 
         return applications;
     }
+
 
     public static ArrayList<ApplicationFormData> getApplicationsByUserEmail(String email) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
@@ -141,6 +151,15 @@ public class ApplicantManager {
 
         return userApps;
     }
+    public static ApplicationFormData getApplicationById(String applicantId) {
+        for (ApplicationFormData form : loadAllApplications()) {
+            if (form.getApplicationId().equals(applicantId)) {
+                return form;
+            }
+        }
+        return null;
+    }
+
 
     public static void updateApplicationStatus(String applicationId, Status newStatus) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
@@ -172,8 +191,9 @@ public class ApplicantManager {
                 String college = app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A";
                 String email = app.getEmail() != null ? app.getEmail() : "n/a";
                 String status = app.getStatus() != null ? app.getStatus().name() : "UNKNOWN";
-                String testSchedule = app.getTestSchedule() != null ? app.getTestSchedule() : "null";
+                String testSchedule = app.getTestSchedule() != null ? app.getTestSchedule() : "N/A";
                 String testScore = app.getTestScore() != null ? app.getTestScore() : "null";
+                String feeStatusStr = app.getFeeStatus() != null ? app.getFeeStatus().name() : "PENDING";
 
                 String line = String.join(",",
                         applicationId1,
@@ -191,8 +211,10 @@ public class ApplicantManager {
                         college,
                         email,
                         status,
-                        testSchedule,
-                        testScore
+                        testSchedule.toString(),
+                        testScore,
+                        feeStatusStr
+
                 );
                 writer.write(line + System.lineSeparator());
             }
@@ -225,27 +247,7 @@ public class ApplicantManager {
         }
         return Status.SUBMITTED; // Default fallback
     }
-//    public static List<String> getPaidApplicants() {
-//        List<String> paidApplicants = new ArrayList<>();
-//
-//        try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATION_FILE))) {
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] parts = line.split(",");
-//                if (parts.length >= 16) {
-//                    String appId = parts[0].trim();
-//                    String status = parts[14].trim().toUpperCase();
-//                    if ("PAYMENT_CLEARED".equals(status)) {
-//                        paidApplicants.add(appId);
-//                    }
-//                }
-//            }
-//        } catch (IOException e) {
-//            System.err.println("Error reading applications: " + e.getMessage());
-//        }
-//
-//        return paidApplicants;
-//    }
+
 
 
 }
