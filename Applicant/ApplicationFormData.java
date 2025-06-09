@@ -48,9 +48,7 @@ public class ApplicationFormData {
         this.feeStatus=FeeStatus.UNPAID;
     }
 
-    public String getApplicantId(){
-        return applicant.getUserID();
-    }
+
 
 
     public String getApplicationId() {

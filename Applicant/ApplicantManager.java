@@ -3,7 +3,6 @@ package Applicant;
 
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,37 +14,31 @@ public class ApplicantManager {
     public static void saveToFile(ApplicationFormData app) {
         try (FileWriter writer = new FileWriter(APPLICATION_FILE, true)) {
             String line = String.join(",",
-                    nullSafe(app.getApplicationId()),
-                    nullSafe(app.getUsers() != null ? app.getUsers().getFirstName() : "Unknown"),
-                    nullSafe(app.getAddress()),
-                    nullSafe(app.getBoard10()),
-                    nullSafe(app.getYear10()),
-                    nullSafe(app.getPercent10()),
-                    nullSafe(app.getStream10()),
-                    nullSafe(app.getBoard12()),
-                    nullSafe(app.getYear12()),
-                    nullSafe(app.getPercent12()),
-                    nullSafe(app.getStream12()),
-                    nullSafe(app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A"),
-                    nullSafe(app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A"),
-                    nullSafe(app.getUsers().getEmail()),
-                    nullSafe(app.getStatus() != null ? app.getStatus().name() : "UNKNOWN"),
-                    nullSafe(app.getTestSchedule().toString()),
-                    nullSafe(app.getTestScore()),
-                    nullSafe(app.getFeeStatus() != null ? app.getFeeStatus().name() : "PENDING") // <-- enum name
-
+                    app.getApplicationId() != null ? app.getApplicationId() : "",
+                    app.getUsers() != null && app.getUsers().getFirstName() != null ? app.getUsers().getFirstName() : "Unknown",
+                    app.getAddress() != null ? app.getAddress() : "",
+                    app.getBoard10() != null ? app.getBoard10() : "",
+                    app.getYear10() != null ? app.getYear10() : "",
+                    app.getPercent10() != null ? app.getPercent10() : "",
+                    app.getStream10() != null ? app.getStream10() : "",
+                    app.getBoard12() != null ? app.getBoard12() : "",
+                    app.getYear12() != null ? app.getYear12() : "",
+                    app.getPercent12() != null ? app.getPercent12() : "",
+                    app.getStream12() != null ? app.getStream12() : "",
+                    app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
+                    app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
+                    app.getUsers() != null && app.getUsers().getEmail() != null ? app.getUsers().getEmail() : "n/a",
+                    app.getStatus() != null ? app.getStatus().name() : "UNKNOWN",
+                    app.getTestSchedule() != null ? app.getTestSchedule() : "N/A",
+                    app.getTestScore() != null ? app.getTestScore() : "null",
+                    app.getFeeStatus() != null ? app.getFeeStatus().name() : "PENDING"
             );
+
             writer.write(line + System.lineSeparator());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    // Helper method to avoid null values causing issues
-    private static String nullSafe(String value) {
-        return value == null ? "" : value;
-    }
-
 
 
     public static boolean hasAppliedBefore(ArrayList<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
@@ -151,15 +144,17 @@ public class ApplicantManager {
 
         return userApps;
     }
-    public static ApplicationFormData getApplicationById(String applicantId) {
-        for (ApplicationFormData form : loadAllApplications()) {
-            if (form.getApplicationId().equals(applicantId)) {
-                return form;
+    public static ApplicationFormData getApplicationByAppId(String id) {
+        ArrayList<ApplicationFormData> allApps = loadAllApplications();
+
+        for (ApplicationFormData app : allApps) {
+            if (app.getApplicationId() != null && app.getApplicationId().equalsIgnoreCase(id)) {
+                return app;
             }
         }
-        return null;
-    }
 
+        return null; // Not found
+    }
 
     public static void updateApplicationStatus(String applicationId, Status newStatus) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
@@ -191,7 +186,7 @@ public class ApplicantManager {
                 String college = app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A";
                 String email = app.getEmail() != null ? app.getEmail() : "n/a";
                 String status = app.getStatus() != null ? app.getStatus().name() : "UNKNOWN";
-                String testSchedule = app.getTestSchedule() != null ? app.getTestSchedule() : "N/A";
+                String testSchedule = app.getTestSchedule() != null ? app.getTestSchedule() : "null";
                 String testScore = app.getTestScore() != null ? app.getTestScore() : "null";
                 String feeStatusStr = app.getFeeStatus() != null ? app.getFeeStatus().name() : "PENDING";
 
@@ -211,7 +206,7 @@ public class ApplicantManager {
                         college,
                         email,
                         status,
-                        testSchedule.toString(),
+                        testSchedule,
                         testScore,
                         feeStatusStr
 

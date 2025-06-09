@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -144,12 +145,14 @@ public class SetTestDatePanel extends JPanel {
                         record = new EntryTestRecordManager.EntryTestRecord(applicantId, dateTime, false, 0);
                     } else {
                         record.setTestDateTime(dateTime);
+                        ApplicationFormData applicationFormData = ApplicantManager.getApplicationByAppId(applicantId);
+                        applicationFormData.setTestSchedule(dateTime.toString());
+
+
                     }
                     recordManager.saveRecord(record);
 
-                    // 2. Update ApplicationFormData
 
-                    // 3. Update status
                     ApplicantManager.updateApplicationStatus(applicantId, Status.TEST_SCHEDULED);
 
                     JOptionPane.showMessageDialog(null, "Test date updated for applicant " + applicantId);

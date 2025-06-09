@@ -88,11 +88,16 @@ public class EntryTestRecordManager {
      * Get record for given applicant ID (no fee check here).
      */
     public EntryTestRecord getRecordById(String applicantId) {
-        return loadAllRecordsIncludingUnpaid().stream()
-                .filter(r -> r.getApplicantId().equals(applicantId))
-                .findFirst()
-                .orElse(null);
+        List<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
+
+        for (EntryTestRecord record : records) {
+            if (record.getApplicantId().equalsIgnoreCase(applicantId)) {
+                return record;
+            }
+        }
+        return null; // Not found
     }
+
 
     /**
      * Loads only fee-paid applicants' test records.

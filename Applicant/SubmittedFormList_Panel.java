@@ -1,5 +1,7 @@
 package Applicant;
 
+import AdminSetup.EntryTest.EntryTestRecordManager;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -98,37 +100,29 @@ public class SubmittedFormList_Panel extends JPanel {
     }
 
     private void addRow(ApplicationFormData app) {
-        // Debug print
-        System.out.println("App ID: " + app.getApplicationId()
-                + ", Status: " + app.getStatus()
-                + ", TestSchedule: " + app.getTestSchedule()
-                + ", FeeStatus: " + app.getFeeStatus());
+        EntryTestRecordManager entryTestRecordManager = new EntryTestRecordManager();
+        EntryTestRecordManager.EntryTestRecord recordById = entryTestRecordManager.getRecordById(app.getApplicationId());
 
         String schedule = "Not Scheduled";
+        String score = "N/A";
+        String actionText = "Unavailable";
 
-        if (app.getTestSchedule() != null && !app.getTestSchedule().equals("null")) {
-            try {
-                LocalDateTime dateTime = LocalDateTime.parse(app.getTestSchedule().toString());
-                schedule = dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a"));
-            } catch (Exception e) {
-                System.err.println("Error parsing date for app " + app.getApplicationId() + ": " + e.getMessage());
-                schedule = "Invalid Format";
+        if (recordById != null) {
+            LocalDateTime testDate = recordById.getTestDateTime();
+            if (testDate != null) {
+                schedule = testDate.format(DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a"));
+
+                if (LocalDate.now().equals(testDate.toLocalDate())) {
+                    actionText = "Give Test Now";
+                }
+            }
+
+            if (recordById.isAttempted()) {
+                score = String.valueOf(recordById.getScore());
+                actionText = "Completed";
             }
         }
 
-        String score = (app.getStatus() == Status.TEST_TAKEN && app.getTestScore() != null)
-                ? String.valueOf(app.getTestScore())
-                : "N/A";
-
-        String actionText = "Unavailable";
-
-        if (app.getFeeStatus() == FeeStatus.PAID && isToday(app.getTestSchedule().toString())) {
-            actionText = "Give Test Now";
-        } else if (app.getStatus() == Status.TEST_TAKEN) {
-            actionText = "Completed";
-        }
-
-        // Don't override status here – just display what's set
         String combinedStatus = formatCombinedStatus(app.getStatus(), app.getFeeStatus());
 
         model.addRow(new Object[]{
@@ -144,16 +138,19 @@ public class SubmittedFormList_Panel extends JPanel {
     }
 
 
+
+
     private boolean isToday(String dateTimeStr) {
-        if (dateTimeStr == null) return false;
+        if (dateTimeStr == null || dateTimeStr.equalsIgnoreCase("null") || dateTimeStr.equalsIgnoreCase("N/A")) return false;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDate date = LocalDateTime.parse(dateTimeStr, formatter).toLocalDate();
-            return LocalDate.now().equals(date);
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            return LocalDate.now().equals(dateTime.toLocalDate());
         } catch (Exception e) {
+            System.err.println("Date parsing error: " + e.getMessage());
             return false;
         }
     }
+
 
     private String formatCombinedStatus(Status status, FeeStatus feeStatus) {
         String statusText = switch (status) {
@@ -248,7 +245,8 @@ public class SubmittedFormList_Panel extends JPanel {
         @Override
         public Object getCellEditorValue() {
             if (isPushed && "Give Test Now".equals(label)) {
-                ApplicationFormData selectedApp = userApplications.get(selectedRow);
+                int modelRow = table.convertRowIndexToModel(selectedRow);
+                ApplicationFormData selectedApp = userApplications.get(modelRow);
 
                 JFrame testFrame = new JFrame("Online Test");
                 testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -263,5 +261,6 @@ public class SubmittedFormList_Panel extends JPanel {
             isPushed = false;
             return label;
         }
+
     }
 }
