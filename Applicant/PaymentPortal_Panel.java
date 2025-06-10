@@ -168,7 +168,7 @@ public class PaymentPortal_Panel extends JPanel {
             JOptionPane.showMessageDialog(this, "Application not found or already paid.", "Info", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
+//
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
