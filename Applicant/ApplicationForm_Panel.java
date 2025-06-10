@@ -266,7 +266,7 @@ public class ApplicationForm_Panel extends JPanel {
             );
 
             // Now set the remaining fields with setters:
-
+//
             applicationFormData.setTestSchedule(null);
             applicationFormData.setTestScore("N/A");
             applicationFormData.setStatus(Status.SUBMITTED);

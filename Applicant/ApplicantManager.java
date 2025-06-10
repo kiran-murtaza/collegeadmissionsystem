@@ -155,7 +155,7 @@ public class ApplicantManager {
 
         return null; // Not found
     }
-
+//
     public static void updateApplicationStatus(String applicationId, Status newStatus) {
         ArrayList<ApplicationFormData> allApps = loadAllApplications();
         System.out.println("Applications loaded: " + allApps.size());
