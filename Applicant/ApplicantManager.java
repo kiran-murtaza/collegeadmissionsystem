@@ -41,18 +41,19 @@ public class ApplicantManager {
     }
 
 
-    public static boolean hasAppliedBefore(ArrayList<ApplicationFormData> existingApplications, ApplicationFormData newApp) {
+    public boolean hasAppliedBefore(ApplicationFormData newApp) {
+        ArrayList<ApplicationFormData> existingApplications = loadAllApplications(); // get saved apps
+
         for (ApplicationFormData app : existingApplications) {
             boolean sameUser = app.getUsers().equals(newApp.getUsers());
-            boolean sameProgram = app.getSelectedProgram() != null && newApp.getSelectedProgram() != null &&
-                    app.getSelectedProgram().equalsIgnoreCase(newApp.getSelectedProgram());
-            boolean sameCollege = app.getSelectedCollege() != null && newApp.getSelectedCollege() != null &&
-                    app.getSelectedCollege().equalsIgnoreCase(newApp.getSelectedCollege());
+            boolean sameProgram = app.getSelectedProgram().equalsIgnoreCase(newApp.getSelectedProgram());
+            boolean sameCollege = app.getSelectedCollege().equalsIgnoreCase(newApp.getSelectedCollege());
 
             if (sameUser && (sameProgram || sameCollege)) {
                 return true;
             }
         }
+
         return false;
     }
 
