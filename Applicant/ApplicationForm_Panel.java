@@ -100,6 +100,7 @@ public class ApplicationForm_Panel extends JPanel {
                 collegeDropdown.removeAllItems();
                 collegeDropdown.addItem("Select a program first");
             }
+            validateDropdowns();
         });
         addLabelAndComponent(formPanel, "12th Stream:", stream12Dropdown, row++, gbc);
 
@@ -117,7 +118,10 @@ public class ApplicationForm_Panel extends JPanel {
             } else {
                 collegeDropdown.removeAllItems();
                 collegeDropdown.addItem("Select a program first");
+
             }
+
+            validateDropdowns();
         });
 
         submitButton = new JButton("Submit");
@@ -202,38 +206,18 @@ public class ApplicationForm_Panel extends JPanel {
             collegeDropdown.setSelectedIndex(0);
         }
 
-        // Enable submit only if a valid college is selected
-        collegeDropdown.addActionListener(e -> {
-            String selectedCollege = (String) collegeDropdown.getSelectedItem();
-
-            if (selectedCollege != null
-                    && !selectedCollege.equals("No colleges available")
-                    && !selectedCollege.equals("Select a program first")
-                    && !selectedCollege.trim().isEmpty()) {
-
-                submitButton.setEnabled(true);
-                System.out.println("Selected college: " + selectedCollege);
-            } else {
-                submitButton.setEnabled(false);
-            }
-        });
+        // Call validation method instead of adding new listener here
+        validateDropdowns();
+        collegeDropdown.addActionListener(e -> validateDropdowns());
     }
 
 
 
     private void validateForm() {
         // Check if any required field is empty
-        if (addressField.getText().isEmpty() || board10Field.getText().isEmpty() ||
-                year10Field.getText().isEmpty() || percent10Field.getText().isEmpty() ||
-                stream10Field.getText().isEmpty() || board12Field.getText().isEmpty() ||
-                year12Field.getText().isEmpty() || percent12Field.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(this,
-                    "Please fill in all required fields.",
-                    "Validation Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-            return;
+        // Validate all fields first
+        if (!validateAllFields()) {
+            return; // Exit if validation fails
         }
 
         try {
@@ -367,4 +351,165 @@ public class ApplicationForm_Panel extends JPanel {
         add(new JLabel(value));
     }
 
+    private boolean validateAllFields() {
+        // Validate address
+        if (addressField.getText().trim().isEmpty()) {
+            showError("Address cannot be empty");
+            addressField.requestFocus();
+            return false;
+        }
+
+        // Validate 10th details
+        if (!validateEducationField(board10Field, "10th Board Name") ||
+                !validateYearField(year10Field, "10th Year") ||
+                !validatePercentageField(percent10Field, "10th Percentage") ||
+                !validateEducationField(stream10Field, "10th Stream")) {
+            return false;
+        }
+
+        // Validate 12th details
+        // Validate 12th details
+        if (!validateEducationField(board12Field, "12th Board Name") ||
+                !validateYearField(year12Field, "12th Year") ||
+                !validatePercentageField(percent12Field, "12th Percentage")) {
+            return false;
+        }
+
+        // Validate that 12th year is after 10th year
+        try {
+            int year10 = Integer.parseInt(year10Field.getText().trim());
+            int year12 = Integer.parseInt(year12Field.getText().trim());
+
+            if (year12 <= year10) {
+                showError("12th Year must be after 10th Year");
+                year12Field.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            // This should never happen as we already validated these fields
+            showError("Invalid year values");
+            return false;
+        }
+
+        if (!validateDropdowns()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please make valid selections in all dropdown fields",
+                    "Validation Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+//        // Validate stream selection
+//        if (stream12Dropdown.getSelectedIndex() <= 0) {
+//            showError("Please select a 12th Stream");
+//            stream12Dropdown.requestFocus();
+//            return false;
+//        }
+//
+//        // Validate college selection
+//        if (collegeDropdown.getSelectedIndex() <= 0) {
+//            showError("Please select a college");
+//            collegeDropdown.requestFocus();
+//            return false;
+//        }
+//
+//        // Validate program selection
+//        if (programDropdown.getSelectedIndex() <= 0) {
+//            showError("Please select a program");
+//            programDropdown.requestFocus();
+//            return false;
+//        }
+
+        return true;
+    }
+
+    private boolean validateEducationField(JTextField field, String fieldName) {
+        String value = field.getText().trim();
+        if (value.isEmpty()) {
+            showError(fieldName + " cannot be empty");
+            field.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateYearField(JTextField field, String fieldName) {
+        String value = field.getText().trim();
+        if (value.isEmpty()) {
+            showError(fieldName + " cannot be empty");
+            field.requestFocus();
+            return false;
+        }
+
+        try {
+            int year = Integer.parseInt(value);
+            int currentYear = java.time.Year.now().getValue();
+            if (year < 1900 || year > currentYear) {
+                showError(fieldName + " must be between 1900 and " + currentYear);
+                field.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showError(fieldName + " must be a valid year");
+            field.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validatePercentageField(JTextField field, String fieldName) {
+        String value = field.getText().trim();
+        if (value.isEmpty()) {
+            showError(fieldName + " cannot be empty");
+            field.requestFocus();
+            return false;
+        }
+
+        try {
+            double percentage = Double.parseDouble(value);
+            if (percentage < 0 || percentage > 100) {
+                showError(fieldName + " must be between 0 and 100");
+                field.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showError(fieldName + " must be a valid number");
+            field.requestFocus();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    private boolean validateDropdowns() {
+        String selectedStream = (String) stream12Dropdown.getSelectedItem();
+        String selectedProgram = (String) programDropdown.getSelectedItem();
+        String selectedCollege = (String) collegeDropdown.getSelectedItem();
+
+        boolean isStreamValid = selectedStream != null
+                && !selectedStream.equals("Select your 12th Stream")
+                && !selectedStream.trim().isEmpty();
+
+        boolean isProgramValid = selectedProgram != null
+                && !selectedProgram.equals("No programs available")
+                && !selectedProgram.equals("Select a stream first")
+                && !selectedProgram.trim().isEmpty();
+
+        boolean isCollegeValid = selectedCollege != null
+                && !selectedCollege.equals("No colleges available")
+                && !selectedCollege.equals("Select a program first")
+                && !selectedCollege.trim().isEmpty();
+
+        boolean isValid = isStreamValid && isProgramValid && isCollegeValid;
+        submitButton.setEnabled(isValid);
+
+        return isValid;
+    }
 }
