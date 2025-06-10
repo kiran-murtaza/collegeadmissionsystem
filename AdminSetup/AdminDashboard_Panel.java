@@ -5,7 +5,7 @@ import AdminSetup.Applicants.ViewApplicantsPanel;
 import AdminSetup.College.CollegeManager;
 import AdminSetup.College.College_Panel;
 import AdminSetup.EntryTest.EntryTestRecordManager;
-import AdminSetup.EntryTest.EntryTest_Panel;
+import AdminSetup.EntryTest.SetTestDatePanel;
 import AdminSetup.Program.ProgramManager;
 import AdminSetup.Program.ProgramPanel;
 import Authentication.LoginFrame;
@@ -158,7 +158,7 @@ public class AdminDashboard_Panel extends JFrame {
 
     private void showSetTestDatePanel() {
         EntryTestRecordManager recordManager = new EntryTestRecordManager();
-        EntryTest_Panel panel = new EntryTest_Panel();
+        SetTestDatePanel panel = new SetTestDatePanel(recordManager);
         contentPanel.removeAll();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.add(panel, BorderLayout.CENTER);

@@ -171,7 +171,7 @@ public class ApplicantManager {
         try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite entire file
             for (ApplicationFormData app : allApps) {
                 String applicationId1 = app.getApplicationId() != null ? app.getApplicationId() : "";
-                String firstName = (app.getUsers().getFirstName() != null)
+                String firstName = (app.getUsers() != null && app.getUsers().getFirstName() != null)
                         ? app.getUsers().getFirstName() : "Unknown";
                 String address = app.getAddress() != null ? app.getAddress() : "";
                 String board10 = app.getBoard10() != null ? app.getBoard10() : "";
