@@ -13,6 +13,7 @@ public class EntryTestRecordManager {
         private LocalDateTime testDateTime;
         private boolean attempted;
         private int score;
+        private List<String> subjects;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {
             this.applicantId = applicantId;
@@ -53,6 +54,11 @@ public class EntryTestRecordManager {
         public String toString() {
             return applicantId + "," + testDateTime + "," + attempted + "," + score;
         }
+
+        // With appropriate getters and setters
+        public List<String> getSubjects() { return subjects; }
+        public void setSubjects(List<String> subjects) { this.subjects = subjects; }
+
     }
 
     /**
