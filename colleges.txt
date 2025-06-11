@@ -33,3 +33,10 @@ Program:BCS,23,80,12000.0
 Stream:Pre-Engineering
 Stream:Computer Science
 College:KSBL
+Program:M&E,80,33,40000.0
+Stream:Pre-Medical
+Stream:Pre-Engineering
+Stream:Computer Science
+Stream:Commerce
+Stream:Humanities/Arts
+Stream:General Science
