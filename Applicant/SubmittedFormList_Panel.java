@@ -254,16 +254,47 @@ public class SubmittedFormList_Panel extends JPanel {
                 int modelRow = table.convertRowIndexToModel(selectedRow);
                 ApplicationFormData selectedApp = userApplications.get(modelRow);
 
-                JFrame testFrame = new JFrame("Online Test");
-                testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                testFrame.setSize(600, 400);
-                testFrame.setLocationRelativeTo(null);
+                EntryTestRecordManager entryTestRecordManager = new EntryTestRecordManager();
+                EntryTestRecordManager.EntryTestRecord recordById = entryTestRecordManager.getRecordById(selectedApp.getApplicationId());
 
-                JPanel testPanel = new JPanel();
-                testPanel.add(new JLabel("Your test starts here..."));
-                testFrame.setContentPane(testPanel);
-                testFrame.setVisible(true);
+                JFrame frame = new JFrame("Start Your Test");
+                frame.setSize(500, 300);
+                frame.setLocationRelativeTo(null);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+                JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15)); // 2 rows, 2 cols, 15px gap
+                panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+                JButton englishBtn = new JButton("ENGLISH");
+                JButton bioBtn = new JButton("BIOLOGY");
+                JButton addMathBtn = new JButton("ADD MATHS");
+                JButton mathBtn = new JButton("MATH");
+
+                // Disable all initially
+                englishBtn.setEnabled(false);
+                bioBtn.setEnabled(false);
+                addMathBtn.setEnabled(false);
+                mathBtn.setEnabled(false);
+
+                // Enable only those present in the subject list
+                for (String subject : recordById.getSubjects()) {
+                    switch (subject.trim().toLowerCase()) {
+                        case "english" -> englishBtn.setEnabled(true);
+                        case "biology" -> bioBtn.setEnabled(true);
+                        case "add maths", "add math" -> addMathBtn.setEnabled(true);
+                        case "math", "maths" -> mathBtn.setEnabled(true);
+                    }
+                }
+
+                panel.add(englishBtn);
+                panel.add(bioBtn);
+                panel.add(addMathBtn);
+                panel.add(mathBtn);
+
+                frame.add(panel);
+                frame.setVisible(true);
             }
+
             isPushed = false;
             return label;
         }

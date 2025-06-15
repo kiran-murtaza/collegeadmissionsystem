@@ -7,83 +7,33 @@ import Applicant.ApplicantManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
-
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class SetTestDatePanel extends JPanel {
     private JTable table;
     private DefaultTableModel model;
     private EntryTestRecordManager recordManager;
-    private JButton batchSetButton, batchSetSubjectsButton;
-    private JCheckBox mathCheckBox, engCheckBox, advancedMathCheckBox, biologyCheckBox;
-    private List<String> allSubjects = List.of("Math", "English", "Advanced Math", "Biology");
 
     public SetTestDatePanel(EntryTestRecordManager recordManager) {
         this.recordManager = recordManager;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // Title Panel
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("Set Entry Test Date & Time");
+        JLabel title = new JLabel("Set Entry Test Date, Time & Subjects");
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        titlePanel.add(title, BorderLayout.NORTH);
+        add(title, BorderLayout.NORTH);
 
-        // Control Panel for batch operations
-        JPanel controlPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-        controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Batch Date/Time Selection
-        JPanel dateTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        batchSetButton = new JButton("Batch Set Date/Time");
-        batchSetButton.addActionListener(this::handleBatchDateSet);
-        dateTimePanel.add(batchSetButton);
-
-        // Batch Subject Selection
-        JPanel subjectBatchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        batchSetSubjectsButton = new JButton("Batch Set Subjects");
-        batchSetSubjectsButton.addActionListener(this::handleBatchSubjectSet);
-        subjectBatchPanel.add(batchSetSubjectsButton);
-
-        // Subject Selection
-        JPanel subjectPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        subjectPanel.setBorder(BorderFactory.createTitledBorder("Test Subjects"));
-        mathCheckBox = new JCheckBox("Math");
-        engCheckBox = new JCheckBox("English");
-        advancedMathCheckBox = new JCheckBox("Advanced Math");
-        biologyCheckBox = new JCheckBox("Biology");
-        subjectPanel.add(mathCheckBox);
-        subjectPanel.add(engCheckBox);
-        subjectPanel.add(advancedMathCheckBox);
-        subjectPanel.add(biologyCheckBox);
-
-        controlPanel.add(dateTimePanel);
-        controlPanel.add(subjectBatchPanel);
-        controlPanel.add(subjectPanel);
-
-        titlePanel.add(controlPanel, BorderLayout.SOUTH);
-        add(titlePanel, BorderLayout.NORTH);
-
-        // Table Setup
-        String[] columns = {"Select", "Applicant ID", "Test Date & Time", "Attempted", "Score", "Subjects", "Action"};
+        String[] columns = {"Applicant ID", "Test Date & Time", "Attempted", "Score", "Subjects", "Action"};
         model = new DefaultTableModel(columns, 0) {
             @Override
-            public Class<?> getColumnClass(int column) {
-                return column == 0 ? Boolean.class : super.getColumnClass(column);
-            }
-
-            @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 0 || column == 6;
+                return column == 5;
             }
         };
 
@@ -91,85 +41,11 @@ public class SetTestDatePanel extends JPanel {
         table.setRowHeight(35);
         loadTestData();
 
-        // Add checkbox renderer/editor for first column
-        table.getColumnModel().getColumn(0).setCellRenderer(table.getDefaultRenderer(Boolean.class));
-        table.getColumnModel().getColumn(0).setCellEditor(table.getDefaultEditor(Boolean.class));
-
         table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
         table.getColumn("Action").setCellEditor(new ActionCellEditor(new JCheckBox(), model));
 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-    }
-
-    private void handleBatchDateSet(ActionEvent e) {
-        String dateTimeStr = JOptionPane.showInputDialog(
-                this,
-                "Enter Test Date and Time (YYYY-MM-DD HH:MM):",
-                "Batch Set Test Date & Time",
-                JOptionPane.PLAIN_MESSAGE);
-
-        if (dateTimeStr == null || dateTimeStr.trim().isEmpty()) return;
-
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr.trim(), formatter);
-
-            for (int row = 0; row < model.getRowCount(); row++) {
-                if ((Boolean) model.getValueAt(row, 0)) {
-                    String applicantId = (String) model.getValueAt(row, 1);
-                    EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
-                    if (record == null) {
-                        record = new EntryTestRecordManager.EntryTestRecord(applicantId, dateTime, false, 0);
-                    } else {
-                        record.setTestDateTime(dateTime);
-                    }
-                    recordManager.saveRecord(record);
-                    ApplicantManager.updateApplicationStatus(applicantId, Status.TEST_SCHEDULED);
-                    model.setValueAt(dateTime.format(formatter), row, 2);
-                }
-            }
-            JOptionPane.showMessageDialog(this, "Batch date update completed!");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Invalid date format. Use YYYY-MM-DD HH:MM",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void handleBatchSubjectSet(ActionEvent e) {
-        List<String> selectedSubjects = getSelectedSubjects();
-        if (selectedSubjects.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Please select at least one subject",
-                    "Warning",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        for (int row = 0; row < model.getRowCount(); row++) {
-            if ((Boolean) model.getValueAt(row, 0)) {
-                String applicantId = (String) model.getValueAt(row, 1);
-                EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
-                if (record == null) {
-                    record = new EntryTestRecordManager.EntryTestRecord(applicantId, null, false, 0);
-                }
-                record.setSubjects(new ArrayList<>(selectedSubjects));
-                recordManager.saveRecord(record);
-                model.setValueAt(String.join(", ", selectedSubjects), row, 5);
-            }
-        }
-        JOptionPane.showMessageDialog(this, "Batch subject update completed!");
-    }
-
-    private List<String> getSelectedSubjects() {
-        List<String> subjects = new ArrayList<>();
-        if (mathCheckBox.isSelected()) subjects.add("Math");
-        if (engCheckBox.isSelected()) subjects.add("English");
-        if (advancedMathCheckBox.isSelected()) subjects.add("Advanced Math");
-        if (biologyCheckBox.isSelected()) subjects.add("Biology");
-        return subjects;
     }
 
     private void loadTestData() {
@@ -179,21 +55,29 @@ public class SetTestDatePanel extends JPanel {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         for (String id : applicantIds) {
-            if (!PaymentManager.isFeePaid(id)) continue;
+            if (!PaymentManager.isFeePaid(id)) {
+                continue;
+            }
 
-            EntryTestRecordManager.EntryTestRecord record = existingRecords.stream()
-                    .filter(r -> r.getApplicantId().equals(id))
-                    .findFirst()
-                    .orElse(new EntryTestRecordManager.EntryTestRecord(id, null, false, 0));
+            EntryTestRecordManager.EntryTestRecord record = null;
+            for (EntryTestRecordManager.EntryTestRecord r : existingRecords) {
+                if (r.getApplicantId().equals(id)) {
+                    record = r;
+                    break;
+                }
+            }
+
+            if (record == null) {
+                record = new EntryTestRecordManager.EntryTestRecord(id, null, false, 0);
+            }
 
             model.addRow(new Object[]{
-                    false,
                     record.getApplicantId(),
                     record.getTestDateTime() != null ? record.getTestDateTime().format(formatter) : "Not Set",
                     record.isAttempted() ? "Yes" : "No",
                     record.getScore(),
-                    record.getSubjects() != null ? String.join(", ", record.getSubjects()) : "",
-                    "Edit"
+                    record.getSubjects() != null ? String.join(", ", record.getSubjects()) : "Not Set",
+                    "Set Details"
             });
         }
 
@@ -203,12 +87,15 @@ public class SetTestDatePanel extends JPanel {
     }
 
     class ActionCellRenderer extends JPanel implements TableCellRenderer {
-        private final JButton button;
+        private final JButton dateButton;
+        private final JButton subjectButton;
 
         public ActionCellRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
-            button = new JButton("Edit");
-            add(button);
+            dateButton = new JButton("Set Date");
+            subjectButton = new JButton("Set Subjects");
+            add(dateButton);
+            add(subjectButton);
         }
 
         @Override
@@ -220,112 +107,99 @@ public class SetTestDatePanel extends JPanel {
     }
 
     class ActionCellEditor extends DefaultCellEditor {
-        private final JButton button;
         private final JPanel panel;
+        private final JButton dateButton;
+        private final JButton subjectButton;
         private int editingRow;
 
         public ActionCellEditor(JCheckBox checkBox, DefaultTableModel model) {
             super(checkBox);
             panel = new JPanel(new FlowLayout());
-            button = new JButton("Edit");
-            panel.add(button);
+            dateButton = new JButton("Set Date");
+            subjectButton = new JButton("Set Subjects");
+            panel.add(dateButton);
+            panel.add(subjectButton);
 
-            button.addActionListener(e -> {
+            dateButton.addActionListener(e -> {
                 editingRow = table.getSelectedRow();
                 if (editingRow == -1) return;
 
-                String applicantId = (String) model.getValueAt(editingRow, 1);
-                showEditDialog(applicantId, editingRow);
-                fireEditingStopped();
-            });
-        }
+                String applicantId = (String) model.getValueAt(editingRow, 0);
 
-        private void showEditDialog(String applicantId, int row) {
-            JDialog dialog = new JDialog();
-            dialog.setLayout(new BorderLayout());
-            dialog.setTitle("Edit Test Details for " + applicantId);
+                String input = JOptionPane.showInputDialog(null, "Enter Test Date and Time (YYYY-MM-DD HH:MM):");
 
-            JPanel contentPanel = new JPanel(new GridLayout(3, 1, 10, 10));
-            contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+                if (input == null || input.trim().isEmpty()) return;
 
-            // Date/Time Panel
-            JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            JLabel dateLabel = new JLabel("Test Date/Time:");
-            JTextField dateField = new JTextField(20);
-            datePanel.add(dateLabel);
-            datePanel.add(dateField);
-
-            // Subject Panel
-            JPanel subjectPanel = new JPanel(new GridLayout(0, 1));
-            subjectPanel.setBorder(BorderFactory.createTitledBorder("Test Subjects"));
-            JCheckBox math = new JCheckBox("Math");
-            JCheckBox eng = new JCheckBox("English");
-            JCheckBox advancedMath = new JCheckBox("Advanced Math");
-            JCheckBox biology = new JCheckBox("Biology");
-
-            // Preselect current subjects
-            String currentSubjects = (String) model.getValueAt(row, 5);
-            if (currentSubjects != null) {
-                math.setSelected(currentSubjects.contains("Math"));
-                eng.setSelected(currentSubjects.contains("English"));
-                advancedMath.setSelected(currentSubjects.contains("Advanced Math"));
-                biology.setSelected(currentSubjects.contains("Biology"));
-            }
-            subjectPanel.add(math);
-            subjectPanel.add(eng);
-            subjectPanel.add(advancedMath);
-            subjectPanel.add(biology);
-
-            // Button Panel
-            JPanel buttonPanel = new JPanel();
-            JButton saveButton = new JButton("Save");
-            saveButton.addActionListener(ev -> {
                 try {
-                    LocalDateTime dateTime = null;
-                    if (!dateField.getText().trim().isEmpty()) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                        dateTime = LocalDateTime.parse(dateField.getText().trim(), formatter);
-                    }
-
-                    List<String> subjects = new ArrayList<>();
-                    if (math.isSelected()) subjects.add("Math");
-                    if (eng.isSelected()) subjects.add("English");
-                    if (advancedMath.isSelected()) subjects.add("Advanced Math");
-                    if (biology.isSelected()) subjects.add("Biology");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    LocalDateTime dateTime = LocalDateTime.parse(input.trim(), formatter);
 
                     EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
                     if (record == null) {
                         record = new EntryTestRecordManager.EntryTestRecord(applicantId, dateTime, false, 0);
                     } else {
-                        if (dateTime != null) {
-                            record.setTestDateTime(dateTime);
-                        }
+                        record.setTestDateTime(dateTime);
                     }
-                    record.setSubjects(subjects);
-                    recordManager.saveRecord(record);
 
-                    if (dateTime != null) {
-                        model.setValueAt(dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), row, 2);
-                    }
-                    model.setValueAt(String.join(", ", subjects), row, 5);
-                    dialog.dispose();
+                    ApplicationFormData applicationFormData = ApplicantManager.getApplicationByAppId(applicantId);
+                    applicationFormData.setTestSchedule(dateTime.toString());
+
+                    recordManager.saveRecord(record);
+                    ApplicantManager.updateApplicationStatus(applicantId, Status.TEST_SCHEDULED);
+
+                    JOptionPane.showMessageDialog(null, "Test date/time set for " + applicantId);
+                    loadTestData();
+                    fireEditingStopped();
+
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(dialog,
-                            "Invalid date format. Use YYYY-MM-DD HH:MM or leave blank",
+                    JOptionPane.showMessageDialog(null,
+                            "Invalid date format. Use YYYY-MM-DD HH:MM",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
             });
-            buttonPanel.add(saveButton);
 
-            contentPanel.add(datePanel);
-            contentPanel.add(subjectPanel);
-            contentPanel.add(buttonPanel);
+            subjectButton.addActionListener(e -> {
+                editingRow = table.getSelectedRow();
+                if (editingRow == -1) return;
 
-            dialog.add(contentPanel, BorderLayout.CENTER);
-            dialog.pack();
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
+                String applicantId = (String) model.getValueAt(editingRow, 0);
+                JPanel inputPanel = new JPanel(new GridLayout(0, 1));
+
+                String[] subjectOptions = {"Math", "Add Maths", "English", "Biology"};
+                List<JCheckBox> checkBoxes = new ArrayList<>();
+
+                for (String subject : subjectOptions) {
+                    JCheckBox cb = new JCheckBox(subject);
+                    checkBoxes.add(cb);
+                    inputPanel.add(cb);
+                }
+
+                int result = JOptionPane.showConfirmDialog(null, inputPanel, "Select Subjects", JOptionPane.OK_CANCEL_OPTION);
+                if (result != JOptionPane.OK_OPTION) return;
+
+                ArrayList<String> selectedSubjects = new ArrayList<>();
+                for (JCheckBox cb : checkBoxes) {
+                    if (cb.isSelected()) selectedSubjects.add(cb.getText());
+                }
+
+                if (selectedSubjects.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please select at least one subject.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
+                if (record == null) {
+                    record = new EntryTestRecordManager.EntryTestRecord(applicantId, null, false, 0);
+                }
+                record.setSubjects(selectedSubjects);
+
+                recordManager.saveRecord(record);
+
+                JOptionPane.showMessageDialog(null, "Subjects set for " + applicantId);
+                loadTestData();
+                fireEditingStopped();
+            });
         }
 
         @Override

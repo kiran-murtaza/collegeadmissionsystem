@@ -13,7 +13,7 @@ public class EntryTestRecordManager {
         private LocalDateTime testDateTime;
         private boolean attempted;
         private int score;
-        private List<String> subjects;
+        private ArrayList<String> subjects;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {
             this.applicantId = applicantId;
@@ -52,12 +52,13 @@ public class EntryTestRecordManager {
 
         @Override
         public String toString() {
-            return applicantId + "," + testDateTime + "," + attempted + "," + score;
+            return applicantId + "," + testDateTime + "," + attempted + "," + score + "," +
+                    (subjects != null ? String.join(";", subjects) : "Not Set");
         }
 
         // With appropriate getters and setters
-        public List<String> getSubjects() { return subjects; }
-        public void setSubjects(List<String> subjects) { this.subjects = subjects; }
+        public ArrayList<String> getSubjects() { return subjects; }
+        public void setSubjects(ArrayList<String> subjects) { this.subjects = subjects; }
 
     }
 
@@ -123,8 +124,8 @@ public class EntryTestRecordManager {
     /**
      * Loads all test records (regardless of fee).
      */
-    private List<EntryTestRecord> loadAllRecordsIncludingUnpaid() {
-        List<EntryTestRecord> list = new ArrayList<>();
+    private ArrayList<EntryTestRecord> loadAllRecordsIncludingUnpaid() {
+        ArrayList<EntryTestRecord> list = new ArrayList<>();
         File file = new File(FILE_PATH);
         if (!file.exists()) return list;
 
@@ -132,14 +133,13 @@ public class EntryTestRecordManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    String[] parts = line.split(",", 4);
+                    String[] parts = line.split(",", 5); // changed from 4 to 5
                     if (parts.length < 4) continue;
 
                     String applicantId = parts[0].trim();
                     String dateTimeStr = parts[1].trim();
                     LocalDateTime dateTime = null;
 
-                    // Handle "N/A" or "Not Set" or empty string date values safely
                     if (!dateTimeStr.equalsIgnoreCase("N/A") &&
                             !dateTimeStr.equalsIgnoreCase("Not Set") &&
                             !dateTimeStr.isEmpty()) {
@@ -150,7 +150,20 @@ public class EntryTestRecordManager {
                     int score = Integer.parseInt(parts[3].trim());
 
                     EntryTestRecord record = new EntryTestRecord(applicantId, dateTime, attempted, score);
-                    list.add(record);
+
+                    if (parts.length == 5) {
+                        String subjectStr = parts[4].trim();
+                        if (!subjectStr.equalsIgnoreCase("Not Set") && !subjectStr.isEmpty()) {
+                            ArrayList<String> subjectList = new ArrayList<>();
+                            for (String sub : subjectStr.split(";")) {
+                                subjectList.add(sub.trim());
+                            }
+                            record.setSubjects(subjectList);
+                        }
+                    }
+
+                    list.add(record); // ✅ THIS WAS MISSING
+
                 } catch (Exception ex) {
                     System.err.println("Skipped invalid record: " + line);
                 }
