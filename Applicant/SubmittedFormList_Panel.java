@@ -1,6 +1,7 @@
 package Applicant;
 
 import AdminSetup.EntryTest.EntryTestRecordManager;
+import Applicant.Tests.AdvancedMathTest;
 import Applicant.Tests.BioTest;
 import Applicant.Tests.EnglishTest;
 import Applicant.Tests.MathTest;
@@ -134,7 +135,7 @@ public class SubmittedFormList_Panel extends JPanel {
                 app.getApplicationId(),
                 app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
                 app.getSelectedCollege() != null ? app.getSelectedCollege() : "N/A",
-                app.getUsers() != null ? app.getUsers().getEmail() : "N/A",
+                userInfo.getEmail(),
                 combinedStatus,
                 schedule,
                 score,
@@ -299,10 +300,11 @@ public class SubmittedFormList_Panel extends JPanel {
                                 bioBtn.setEnabled(false);
                             });
                         }
-                        case "add math", "advanced math" -> {
+                        case "add math", "advanced math", "add maths", "advanced maths" ->
+                        {
                             addMathBtn.setEnabled(!record.isAdvMathTaken());
                             addMathBtn.addActionListener(e -> {
-                                // new ExamLauncher("Advanced Math", 20);
+                                new AdvancedMathTest(record);
                                 record.setAdvMathTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 addMathBtn.setEnabled(false);
@@ -328,7 +330,7 @@ public class SubmittedFormList_Panel extends JPanel {
 //                // Create End Exam button
                 JButton endExamBtn = new JButton("End Exam");
                 endExamBtn.setBackground(new Color(220, 53, 69)); // Red
-                endExamBtn.setForeground(Color.WHITE);
+                endExamBtn.setForeground(Color.black);
                 endExamBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
                 endExamBtn.setFocusPainted(false);
                 endExamBtn.setPreferredSize(new Dimension(0, 40));
@@ -376,7 +378,7 @@ public class SubmittedFormList_Panel extends JPanel {
                 total += MathTest.getMathScore();
             }
             if (testRecord.isBiologyTaken()) {
-                total += BioTest.getBioScore();  // Make sure this method exists
+                total += BioTest.getBioMarks();  // Make sure this method exists
             }
             if (testRecord.isAdvMathTaken()) {
                 total += 20; // Or call: AdvancedMathTest.getScore() if available
@@ -394,7 +396,8 @@ public class SubmittedFormList_Panel extends JPanel {
                     case "english" -> allDone &= record.isEnglishTaken();
                     case "biology" -> allDone &= record.isBiologyTaken();
                     case "math", "maths" -> allDone &= record.isMathTaken();
-                    case "add math", "advanced math" -> allDone &= record.isAdvMathTaken();
+                    case "add math", "advanced math", "add maths", "advanced maths" ->
+                            allDone &= record.isAdvMathTaken();
                 }
             }
 
@@ -408,3 +411,4 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 }
+//ssss
