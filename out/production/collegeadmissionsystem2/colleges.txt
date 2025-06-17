@@ -40,3 +40,4 @@ Stream:Computer Science
 Stream:Commerce
 Stream:Humanities/Arts
 Stream:General Science
+College:NED

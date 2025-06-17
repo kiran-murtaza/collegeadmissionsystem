@@ -77,14 +77,13 @@ public class Program {
         this.collegeName = collegeName;
     }
 
-    // Add getter for collegeName if needed
     public String getCollegeName() {
         return collegeName;
     }
 
     @Override
     public String toString() {
-        return this.name;  // or getName()
+        return this.name;
     }
 }
 

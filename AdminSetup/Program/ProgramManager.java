@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProgramManager {
-    private List<Program> programList;
+    private ArrayList<Program> programList;
 
     public ProgramManager() {
         programList = new ArrayList<>();
@@ -22,7 +22,7 @@ public class ProgramManager {
         return true;
     }
 
-    public List<Program> getAllPrograms() {
+    public ArrayList<Program> getAllPrograms() {
         return programList;
     }
 

@@ -38,15 +38,7 @@ public class EntryTestRecordManager {
             return attemptedSubjects;
         }
 
-        public void setAttemptedSubjects(ArrayList<String> attemptedSubjects) {
-            this.attemptedSubjects = attemptedSubjects;
-        }
 
-        public void addAttemptedSubject(String subject) {
-            if (!attemptedSubjects.contains(subject)) {
-                attemptedSubjects.add(subject);
-            }
-        }
 
         public int getTotalScore() {
             return totalScore;
@@ -133,7 +125,6 @@ public class EntryTestRecordManager {
                     (subjects != null ? String.join(";", subjects) : "Not Set");
         }
 
-        // With appropriate getters and setters
         public ArrayList<String> getSubjects() { return subjects; }
         public void setSubjects(ArrayList<String> subjects) { this.subjects = subjects; }
 
@@ -145,11 +136,9 @@ public class EntryTestRecordManager {
         }
     }
 
-    /**
-     * Saves or updates the given entry test record.
-     */
+
     public void saveRecord(EntryTestRecord record) {
-        List<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
+        ArrayList<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
 
         boolean updated = false;
 
@@ -174,28 +163,22 @@ public class EntryTestRecordManager {
         }
     }
 
-    /**
-     * Get record for given applicant ID (no fee check here).
-     */
     public EntryTestRecord getRecordById(String applicantId) {
-        List<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
+        ArrayList<EntryTestRecord> records = loadAllRecordsIncludingUnpaid();
 
         for (EntryTestRecord record : records) {
             if (record.getApplicantId().equalsIgnoreCase(applicantId)) {
                 return record;
             }
         }
-        return null; // Not found
+        return null;
     }
-//
 
 
-    /**
-     * Loads only fee-paid applicants' test records.
-     */
-    public List<EntryTestRecord> loadAllRecords() {
-        List<EntryTestRecord> all = loadAllRecordsIncludingUnpaid();
-        List<EntryTestRecord> paidOnly = new ArrayList<>();
+
+    public ArrayList<EntryTestRecord> loadAllRecords() {
+        ArrayList<EntryTestRecord> all = loadAllRecordsIncludingUnpaid();
+        ArrayList<EntryTestRecord> paidOnly = new ArrayList<>();
 
         for (EntryTestRecord r : all) {
             if (AdminSetup.PaymentManager.isFeePaid(r.getApplicantId())) {
@@ -205,9 +188,7 @@ public class EntryTestRecordManager {
         return paidOnly;
     }
 
-    /**
-     * Loads all test records (regardless of fee).
-     */
+
     private ArrayList<EntryTestRecord> loadAllRecordsIncludingUnpaid() {
         ArrayList<EntryTestRecord> list = new ArrayList<>();
         File file = new File(FILE_PATH);
@@ -217,7 +198,7 @@ public class EntryTestRecordManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 try {
-                    String[] parts = line.split(",", 5); // changed from 4 to 5
+                    String[] parts = line.split(",", 5);
                     if (parts.length < 4) continue;
 
                     String applicantId = parts[0].trim();
@@ -246,7 +227,7 @@ public class EntryTestRecordManager {
                         }
                     }
 
-                    list.add(record); // ✅ THIS WAS MISSING
+                    list.add(record);
 
                 } catch (Exception ex) {
                     System.err.println("Skipped invalid record: " + line);

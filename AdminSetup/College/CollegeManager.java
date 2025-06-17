@@ -59,7 +59,7 @@ public class CollegeManager {
                         result.add(college);
                     }
 
-                    break; // No need to keep checking other programs in this college
+                    break;
                 }
             }
         }
@@ -91,18 +91,7 @@ public class CollegeManager {
         }
         return result;
     }
-        // Update programs of a college by its name
-    public boolean updateCollegeProgramsByName(String collegeName, ArrayList<Program> newPrograms) {
-        for (College c : colleges) {
-            if (c.getName().equalsIgnoreCase(collegeName)) {
-                c.setPrograms(newPrograms);
-                return true;
-            }
-        }
-        return false;
-    }
 
-    // Save all college and program data to a file
     public void saveToFile(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             for (College college : colleges) {
@@ -123,7 +112,6 @@ public class CollegeManager {
         }
     }
 
-    // Load all college and program data from a file
     public void loadFromFile(String filename) {
         colleges.clear();
 
@@ -137,7 +125,8 @@ public class CollegeManager {
                     String collegeName = line.substring(8).trim();
                     currentCollege = new College(collegeName);
                     colleges.add(currentCollege);
-                } else if (line.startsWith("Program:") && currentCollege != null) {
+                }
+                else if (line.startsWith("Program:") && currentCollege != null) {
                     String[] parts = line.substring(8).split(",");
                     String name = parts[0].trim();
                     int seats = Integer.parseInt(parts[1].trim());
@@ -145,12 +134,14 @@ public class CollegeManager {
                     double fee = Double.parseDouble(parts[3].trim());
                     currentProgram = new Program(name, seats, eligibility, fee);
                     currentCollege.addProgram(currentProgram);
-                } else if (line.startsWith("Stream:") && currentProgram != null) {
+                }
+                else if (line.startsWith("Stream:") && currentProgram != null) {
                     String stream = line.substring(7).trim();
                     currentProgram.addAllowedStream(stream);
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException("Error loading from file: " + filename, e);
         }
     }

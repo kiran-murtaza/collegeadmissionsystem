@@ -16,12 +16,12 @@ public class College_Panel extends JPanel {
     public College_Panel() {
         setLayout(new BorderLayout());
         setBackground(COLORAZ_WHITE);
-         initUI();
+         addElements();
          refreshCollegeList();
     }
 
 
-    private void initUI() {
+    private void addElements (){
         JLabel titleLabel = new JLabel("College Management", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(COLORAZ_BLACK);

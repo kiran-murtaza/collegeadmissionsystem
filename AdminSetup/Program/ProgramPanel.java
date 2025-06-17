@@ -58,37 +58,31 @@ public class ProgramPanel extends JPanel {
             streamChecks.add(new JCheckBox(stream));
         }
 
-        // Row 0
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(collegeLabel, gbc);
         gbc.gridx = 1;
         formPanel.add(collegeDropdown, gbc);
 
-        // Row 1
         gbc.gridx = 0; gbc.gridy++;
         formPanel.add(nameLabel, gbc);
         gbc.gridx = 1;
         formPanel.add(nameField, gbc);
 
-        // Row 2
         gbc.gridx = 0; gbc.gridy++;
         formPanel.add(seatsLabel, gbc);
         gbc.gridx = 1;
         formPanel.add(seatsField, gbc);
 
-        // Row 3
         gbc.gridx = 0; gbc.gridy++;
         formPanel.add(eligibilityLabel, gbc);
         gbc.gridx = 1;
         formPanel.add(eligibilityField, gbc);
 
-        // Row 4
         gbc.gridx = 0; gbc.gridy++;
         formPanel.add(feeLabel, gbc);
         gbc.gridx = 1;
         formPanel.add(feeField, gbc);
 
-        // Row 5 - Checkboxes
         gbc.gridx = 0; gbc.gridy++;
         formPanel.add(new JLabel("Allowed Streams:"), gbc);
         gbc.gridx = 1;
@@ -98,13 +92,11 @@ public class ProgramPanel extends JPanel {
         }
         formPanel.add(streamPanel, gbc);
 
-        // Program List Panel
         programListModel = new DefaultListModel<>();
         programList = new JList<>(programListModel);
         JScrollPane listScrollPane = new JScrollPane(programList);
         listScrollPane.setBorder(BorderFactory.createTitledBorder("Programs in College"));
 
-        // Buttons Panel
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("Add Program");
         JButton removeButton = new JButton("Remove Program");
@@ -216,12 +208,7 @@ public class ProgramPanel extends JPanel {
         }
     }
 
-    //    private void loadColleges() {
-//        collegeDropdown.removeAllItems();
-//        for (College c : collegeManager.getAllColleges()) {
-//            collegeDropdown.addItem(c.getName());
-//        }
-//    }
+
     private void loadColleges() {
         String selectedCollege = (String) collegeDropdown.getSelectedItem(); // Save current selection
         collegeDropdown.removeAllItems();
