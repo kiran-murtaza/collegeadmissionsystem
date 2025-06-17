@@ -1,9 +1,14 @@
 package Applicant.Tests;
+import AdminSetup.EntryTest.EntryTestRecordManager;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class EnglishTest extends JFrame {
+    public static int engScore;
+    private EntryTestRecordManager.EntryTestRecord record;
+
+
     private String[] questions = {
             "1. Choose the correct synonym of 'Happy':",
             "2. Which sentence is grammatically correct?",
@@ -38,9 +43,9 @@ public class EnglishTest extends JFrame {
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public EnglishTest() {
+    public EnglishTest(EntryTestRecordManager.EntryTestRecord entryTestRecordManager) {
         setTitle("English Entry Test");
-
+        this.record=entryTestRecordManager;
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -77,6 +82,7 @@ public class EnglishTest extends JFrame {
         contentPanel.add(submitBtn);
 
         submitBtn.addActionListener(e -> {
+
             int score = 0;
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -85,6 +91,10 @@ public class EnglishTest extends JFrame {
                     }
                 }
             }
+
+            engScore=score;
+            record.setEnglishTaken(true);
+
             JOptionPane.showMessageDialog(this, "Score: " + score + "/10");
         });
 
@@ -100,7 +110,9 @@ public class EnglishTest extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new EnglishTest();
+    public static int getEngScore(){
+        return engScore;
     }
+
+
 }

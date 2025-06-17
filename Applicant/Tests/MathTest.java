@@ -1,9 +1,14 @@
 package Applicant.Tests;
 
+import AdminSetup.EntryTest.EntryTestRecordManager;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MathTest extends JFrame {
+    private static int mathScore;
+    private EntryTestRecordManager.EntryTestRecord record;
+    EntryTestRecordManager.EntryTestRecord entryTestRecordManager;
     private String[] questions = {
             "1. What is the value of π (pi) approximately?",
             "2. What is the derivative of x²?",
@@ -38,9 +43,9 @@ public class MathTest extends JFrame {
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public MathTest() {
+    public MathTest(EntryTestRecordManager.EntryTestRecord entryTestRecordManager) {
         setTitle("Math Entry Test");
-
+        this.record=entryTestRecordManager;
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -84,6 +89,8 @@ public class MathTest extends JFrame {
                     }
                 }
             }
+            mathScore=score;
+            record.setMathTaken(true);
             JOptionPane.showMessageDialog(this, "Score: " + score + "/10");
         });
 
@@ -99,7 +106,9 @@ public class MathTest extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new MathTest();
+    public static int getMathScore(){
+        return mathScore;
     }
+
+
 }

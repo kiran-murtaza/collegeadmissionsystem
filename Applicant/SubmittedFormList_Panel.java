@@ -4,7 +4,7 @@ import AdminSetup.EntryTest.EntryTestRecordManager;
 import Applicant.Tests.BioTest;
 import Applicant.Tests.EnglishTest;
 import Applicant.Tests.MathTest;
-import Applicant.ExamLauncher;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class SubmittedFormList_Panel extends JPanel {
+    String appID;
     private Applicant userInfo;
     private JTable table;
     private DefaultTableModel model;
@@ -128,7 +129,7 @@ public class SubmittedFormList_Panel extends JPanel {
         }
 
         String combinedStatus = formatCombinedStatus(app.getStatus(), app.getFeeStatus());
-
+        appID=app.getApplicationId();
         model.addRow(new Object[]{
                 app.getApplicationId(),
                 app.getSelectedProgram() != null ? app.getSelectedProgram() : "N/A",
@@ -261,19 +262,18 @@ public class SubmittedFormList_Panel extends JPanel {
                 EntryTestRecordManager.EntryTestRecord record = entryTestRecordManager.getRecordById(selectedApp.getApplicationId());
 
                 JFrame frame = new JFrame("Start Your Test");
-                frame.setSize(500, 300);
+                frame.setSize(500, 350);
                 frame.setLocationRelativeTo(null);
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-                JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15));
-                panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                JPanel subjectPanel = new JPanel(new GridLayout(2, 2, 15, 15));
+                subjectPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
                 JButton englishBtn = new JButton("ENGLISH");
                 JButton bioBtn = new JButton("BIOLOGY");
                 JButton addMathBtn = new JButton("ADVANCED MATH");
                 JButton mathBtn = new JButton("MATH");
 
-                // Disable all initially
                 englishBtn.setEnabled(false);
                 bioBtn.setEnabled(false);
                 addMathBtn.setEnabled(false);
@@ -284,7 +284,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "english" -> {
                             englishBtn.setEnabled(!record.isEnglishTaken());
                             englishBtn.addActionListener(e -> {
-                                new ExamLauncher("English", 20);
+                                new EnglishTest(record);
                                 record.setEnglishTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 englishBtn.setEnabled(false);
@@ -293,7 +293,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "biology" -> {
                             bioBtn.setEnabled(!record.isBiologyTaken());
                             bioBtn.addActionListener(e -> {
-                                new ExamLauncher("Biology", 20);
+                                new BioTest();
                                 record.setBiologyTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 bioBtn.setEnabled(false);
@@ -302,7 +302,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "add math", "advanced math" -> {
                             addMathBtn.setEnabled(!record.isAdvMathTaken());
                             addMathBtn.addActionListener(e -> {
-                                new ExamLauncher("Advanced Math", 20);
+                                // new ExamLauncher("Advanced Math", 20);
                                 record.setAdvMathTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 addMathBtn.setEnabled(false);
@@ -311,7 +311,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "math", "maths" -> {
                             mathBtn.setEnabled(!record.isMathTaken());
                             mathBtn.addActionListener(e -> {
-                                new ExamLauncher("Math", 20);
+                                new MathTest(record);
                                 record.setMathTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 mathBtn.setEnabled(false);
@@ -320,18 +320,72 @@ public class SubmittedFormList_Panel extends JPanel {
                     }
                 }
 
-                panel.add(englishBtn);
-                panel.add(bioBtn);
-                panel.add(addMathBtn);
-                panel.add(mathBtn);
+                subjectPanel.add(englishBtn);
+                subjectPanel.add(bioBtn);
+                subjectPanel.add(addMathBtn);
+                subjectPanel.add(mathBtn);
 
-                frame.add(panel);
+//                // Create End Exam button
+                JButton endExamBtn = new JButton("End Exam");
+                endExamBtn.setBackground(new Color(220, 53, 69)); // Red
+                endExamBtn.setForeground(Color.WHITE);
+                endExamBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                endExamBtn.setFocusPainted(false);
+                endExamBtn.setPreferredSize(new Dimension(0, 40));
+
+                endExamBtn.addActionListener(e -> {
+
+                    int confirm = JOptionPane.showConfirmDialog(
+                            frame,
+                            "Are you sure you want to end the exam?",
+                            "Confirm End Exam",
+                            JOptionPane.YES_NO_OPTION
+                    );
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        record.setAttempted(true);
+                        record.setStatus(Status.TEST_TAKEN);
+                        int mark=calculateMarks(record);
+                        record.setScore(mark);
+                        new EntryTestRecordManager().saveRecord(record);
+
+                        JOptionPane.showMessageDialog(frame, "Exam ended successfully. Status updated to TEST_TAKEN.");
+                        frame.dispose();
+                    }
+                });
+
+                JPanel wrapper = new JPanel(new BorderLayout());
+                wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                wrapper.add(subjectPanel, BorderLayout.CENTER);
+                wrapper.add(endExamBtn, BorderLayout.SOUTH);
+
+                frame.add(wrapper);
                 frame.setVisible(true);
             }
 
             isPushed = false;
             return label;
         }
+
+        private int calculateMarks(EntryTestRecordManager.EntryTestRecord testRecord){
+            int total = 0;
+
+            if (testRecord.isEnglishTaken()) {
+                total += EnglishTest.getEngScore();
+            }
+            if (testRecord.isMathTaken()) {
+                total += MathTest.getMathScore();
+            }
+            if (testRecord.isBiologyTaken()) {
+                total += BioTest.getBioScore();  // Make sure this method exists
+            }
+            if (testRecord.isAdvMathTaken()) {
+                total += 20; // Or call: AdvancedMathTest.getScore() if available
+            }
+
+            return total;
+        }
+
+
 
         private void checkAllSubjectsCompleted(EntryTestRecordManager.EntryTestRecord record) {
             boolean allDone = true;
@@ -346,12 +400,9 @@ public class SubmittedFormList_Panel extends JPanel {
 
             if (allDone) {
                 record.setAttempted(true);
-                record.setScore(100); // or average
-
-                record.setStatus(Status.TEST_TAKEN);// ← update enum status here
-
+                record.setStatus(Status.TEST_TAKEN);//// ← update enum status here
+                ApplicantManager.updateApplicationStatus(appID,Status.TEST_TAKEN);
                 new EntryTestRecordManager().saveRecord(record); // Save changes
-
                 JOptionPane.showMessageDialog(null, "All tests completed. Status updated to TEST_TAKEN!");
             }
         }
