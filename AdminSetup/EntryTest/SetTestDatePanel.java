@@ -10,6 +10,7 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,21 +30,40 @@ public class SetTestDatePanel extends JPanel {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         add(title, BorderLayout.NORTH);
 
-        String[] columns = {"Applicant ID", "Program", "12th Stream", "Test Date & Time", "Attempted", "Score", "Subjects", "Action"};
+        String[] columns = {
+                "Applicant ID", "Program", "12th Stream", "Test Date & Time",
+                "Attempted", "Score", "Subjects", "Action", "Decision"
+        };
 
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 5;
+                // Only "Action" and "Decision" columns are editable
+                return column == 7 || column == 8;
             }
         };
 
         table = new JTable(model);
-        table.setRowHeight(35);
+        table.setRowHeight(40);
         loadTestData();
 
+        // Set custom renderers and editors
         table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
-        table.getColumn("Action").setCellEditor(new ActionCellEditor(new JCheckBox(), model));
+        table.getColumn("Action").setCellEditor(new ActionCellEditor(new JCheckBox(), model, table));
+        table.getColumn("Decision").setCellRenderer(new DecisionCellRenderer());
+        table.getColumn("Decision").setCellEditor(new DecisionCellEditor(new JCheckBox(), model, table));
+
+        // Set column widths
+        TableColumnModel columnModel = table.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(100); // ID
+        columnModel.getColumn(1).setPreferredWidth(100); // Program
+        columnModel.getColumn(2).setPreferredWidth(100); // Stream
+        columnModel.getColumn(3).setPreferredWidth(150); // Date & Time
+        columnModel.getColumn(4).setPreferredWidth(80);  // Attempted
+        columnModel.getColumn(5).setPreferredWidth(60);  // Score
+        columnModel.getColumn(6).setPreferredWidth(150); // Subjects
+        columnModel.getColumn(7).setPreferredWidth(180); // Action buttons
+        columnModel.getColumn(8).setPreferredWidth(180); // Decision buttons
 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -74,7 +94,7 @@ public class SetTestDatePanel extends JPanel {
 
             ApplicationFormData appData = ApplicantManager.getApplicationByAppId(id);
             String program = appData != null ? appData.getSelectedProgram() : "N/A";
-            String stream = appData != null ? appData.getStream12(): "N/A";
+            String stream = appData != null ? appData.getStream12() : "N/A";
 
             model.addRow(new Object[]{
                     record.getApplicantId(),
@@ -84,9 +104,9 @@ public class SetTestDatePanel extends JPanel {
                     record.isAttempted() ? "Yes" : "No",
                     record.getScore(),
                     record.getSubjects() != null ? String.join(", ", record.getSubjects()) : "Not Set",
-                    "Set Details"
+                    "Set Details",
+                    "Make Decision"
             });
-
         }
 
         if (model.getRowCount() == 0) {
@@ -95,15 +115,10 @@ public class SetTestDatePanel extends JPanel {
     }
 
     class ActionCellRenderer extends JPanel implements TableCellRenderer {
-        private final JButton dateButton;
-        private final JButton subjectButton;
-
         public ActionCellRenderer() {
             setLayout(new FlowLayout(FlowLayout.CENTER));
-            dateButton = new JButton("Set Date");
-            subjectButton = new JButton("Set Subjects");
-            add(dateButton);
-            add(subjectButton);
+            add(new JButton("Set Date"));
+            add(new JButton("Set Subjects"));
         }
 
         @Override
@@ -118,10 +133,12 @@ public class SetTestDatePanel extends JPanel {
         private final JPanel panel;
         private final JButton dateButton;
         private final JButton subjectButton;
+        private final JTable table;
         private int editingRow;
 
-        public ActionCellEditor(JCheckBox checkBox, DefaultTableModel model) {
+        public ActionCellEditor(JCheckBox checkBox, DefaultTableModel model, JTable table) {
             super(checkBox);
+            this.table = table;
             panel = new JPanel(new FlowLayout());
             dateButton = new JButton("Set Date");
             subjectButton = new JButton("Set Subjects");
@@ -131,11 +148,9 @@ public class SetTestDatePanel extends JPanel {
             dateButton.addActionListener(e -> {
                 editingRow = table.getSelectedRow();
                 if (editingRow == -1) return;
-
                 String applicantId = (String) model.getValueAt(editingRow, 0);
 
                 String input = JOptionPane.showInputDialog(null, "Enter Test Date and Time (YYYY-MM-DD HH:MM):");
-
                 if (input == null || input.trim().isEmpty()) return;
 
                 try {
@@ -170,10 +185,9 @@ public class SetTestDatePanel extends JPanel {
             subjectButton.addActionListener(e -> {
                 editingRow = table.getSelectedRow();
                 if (editingRow == -1) return;
-
                 String applicantId = (String) model.getValueAt(editingRow, 0);
-                JPanel inputPanel = new JPanel(new GridLayout(0, 1));
 
+                JPanel inputPanel = new JPanel(new GridLayout(0, 1));
                 String[] subjectOptions = {"Math", "Add Maths", "English", "Biology"};
                 List<JCheckBox> checkBoxes = new ArrayList<>();
 
@@ -203,9 +217,72 @@ public class SetTestDatePanel extends JPanel {
                 record.setSubjects(selectedSubjects);
 
                 recordManager.saveRecord(record);
-
                 JOptionPane.showMessageDialog(null, "Subjects set for " + applicantId);
                 loadTestData();
+                fireEditingStopped();
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected, int row, int column) {
+            editingRow = row;
+            return panel;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return null;
+        }
+    }
+
+    class DecisionCellRenderer extends JPanel implements TableCellRenderer {
+        public DecisionCellRenderer() {
+            setLayout(new FlowLayout(FlowLayout.CENTER));
+            add(new JButton("Send Offer"));
+            add(new JButton("Reject"));
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus,
+                                                       int row, int column) {
+            return this;
+        }
+    }
+
+    class DecisionCellEditor extends DefaultCellEditor {
+        private final JPanel panel;
+        private final JButton offerButton;
+        private final JButton rejectButton;
+        private final JTable table;
+        private int editingRow;
+
+        public DecisionCellEditor(JCheckBox checkBox, DefaultTableModel model, JTable table) {
+            super(checkBox);
+            this.table = table;
+            panel = new JPanel(new FlowLayout());
+            offerButton = new JButton("Send Offer");
+            rejectButton = new JButton("Reject");
+
+            panel.add(offerButton);
+            panel.add(rejectButton);
+
+            offerButton.addActionListener(e -> {
+                editingRow = table.getSelectedRow();
+                if (editingRow == -1) return;
+                String applicantId = (String) model.getValueAt(editingRow, 0);
+                ApplicantManager.updateApplicationStatus(applicantId, Status.ADMISSION_OFFERED);
+                JOptionPane.showMessageDialog(null, "Admission offered to " + applicantId);
+                fireEditingStopped();
+            });
+
+            rejectButton.addActionListener(e -> {
+                editingRow = table.getSelectedRow();
+                if (editingRow == -1) return;
+                String applicantId = (String) model.getValueAt(editingRow, 0);
+                ApplicantManager.updateApplicationStatus(applicantId, Status.REJECTED);
+                JOptionPane.showMessageDialog(null, "Application rejected for " + applicantId);
                 fireEditingStopped();
             });
         }
