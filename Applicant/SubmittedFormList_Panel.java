@@ -1,6 +1,9 @@
 package Applicant;
 
 import AdminSetup.EntryTest.EntryTestRecordManager;
+import Applicant.Tests.BioTest;
+import Applicant.Tests.EnglishTest;
+import Applicant.Tests.MathTest;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -285,6 +288,16 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "math", "maths" -> mathBtn.setEnabled(true);
                     }
                 }
+
+                englishBtn.addActionListener(e -> {
+                    new EnglishTest(); // Assuming EnglishTest is your new class name
+                });
+                mathBtn.addActionListener(e -> {
+                    new MathTest(); // Assuming EnglishTest is your new class name
+                });
+                bioBtn.addActionListener(e -> {
+                    new BioTest(); // Assuming EnglishTest is your new class name
+                });
 
                 panel.add(englishBtn);
                 panel.add(bioBtn);

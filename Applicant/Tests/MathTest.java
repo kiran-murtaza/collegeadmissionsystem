@@ -3,45 +3,43 @@ package Applicant.Tests;
 import javax.swing.*;
 import java.awt.*;
 
-public class EngineeringTest extends JFrame {
+public class MathTest extends JFrame {
     private String[] questions = {
-            "1. Unit of electrical resistance?",
-            "2. Newton's Second Law?",
-            "3. SI unit of force?",
-            "4. Material used for electrical wires?",
-            "5. Speed of light?",
-            "6. Thermodynamics studies?",
-            "7. Ohm's law relates?",
-            "8. Gear ratio is?",
-            "9. Stress is force per unit?",
-            "10. SI unit of power?"
+            "1. What is the value of π (pi) approximately?",
+            "2. What is the derivative of x²?",
+            "3. Simplify: 5 + 3 × 2?",
+            "4. What is the square root of 144?",
+            "5. If f(x) = 2x + 3, what is f(2)?",
+            "6. What is the area of a circle with radius 3?",
+            "7. Solve for x: 2x - 4 = 10",
+            "8. Which is a prime number?",
+            "9. What is the integral of 1/x?",
+            "10. What is the result of 3⁴?"
     };
 
     private String[][] options = {
-            {"Ohm", "Watt", "Volt", "Ampere"},
-            {"F=ma", "E=mc^2", "V=IR", "P=IV"},
-            {"Newton", "Joule", "Watt", "Pascal"},
-            {"Copper", "Iron", "Steel", "Aluminum"},
-            {"3 x 10^8 m/s", "3 x 10^6 m/s", "3 x 10^5 m/s", "3 x 10^7 m/s"},
-            {"Heat and work", "Motion of planets", "Electricity", "Magnetism"},
-            {"Voltage and current", "Force and mass", "Energy and power", "Work and energy"},
-            {"Output speed/input speed", "Input speed/output speed", "Torque ratio", "Power ratio"},
-            {"Length", "Area", "Volume", "Cross-sectional area"},
-            {"Watt", "Newton", "Joule", "Horsepower"}
+            {"3.14", "2.17", "1.62", "4.00"},
+            {"x", "2x", "x^3", "1"},
+            {"11", "16", "6", "14"},
+            {"10", "11", "12", "13"},
+            {"5", "6", "7", "8"},
+            {"9π", "6π", "3π", "π"},
+            {"6", "7", "8", "9"},
+            {"4", "6", "9", "11"},
+            {"ln|x| + C", "x + C", "1 + C", "e^x + C"},
+            {"81", "64", "27", "12"}
     };
 
     private String[] answers = {
-            "Ohm", "F=ma", "Newton", "Copper", "3 x 10^8 m/s",
-            "Heat and work", "Voltage and current", "Output speed/input speed",
-            "Cross-sectional area", "Watt"
+            "3.14", "2x", "11", "12", "7",
+            "9π", "7", "11", "ln|x| + C", "81"
     };
 
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public EngineeringTest() {
-        setTitle("Engineering Entry Test");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public MathTest() {
+        setTitle("Math Entry Test");
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -102,6 +100,6 @@ public class EngineeringTest extends JFrame {
     }
 
     public static void main(String[] args) {
-        new EngineeringTest();
+        new MathTest();
     }
 }

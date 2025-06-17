@@ -3,45 +3,44 @@ package Applicant.Tests;
 import javax.swing.*;
 import java.awt.*;
 
-public class CommerceTest extends JFrame {
+public class EnglishTest extends JFrame {
     private String[] questions = {
-            "1. What is 'Assets'?",
-            "2. What is GST?",
-            "3. Primary goal of accounting?",
-            "4. What is 'Liability'?",
-            "5. Define 'Capital'?",
-            "6. What is inflation?",
-            "7. Who issues currency notes?",
-            "8. What is 'Market Economy'?",
-            "9. What is balance sheet?",
-            "10. What is 'Revenue'?"
+            "1. Choose the correct synonym of 'Happy':",
+            "2. Which sentence is grammatically correct?",
+            "3. What is the past tense of 'Go'?",
+            "4. Choose the correctly spelled word:",
+            "5. What is an antonym of 'Generous'?",
+            "6. Identify the noun in the sentence: 'The cat sat on the mat.'",
+            "7. Choose the correct article: '___ apple a day keeps the doctor away.'",
+            "8. Select the correct form: 'She has ___ the letter.'",
+            "9. What is a conjunction in: 'He studied hard but failed.'?",
+            "10. What part of speech is 'quickly' in: 'She ran quickly'?"
     };
 
     private String[][] options = {
-            {"Resources owned", "Debts owed", "Profits earned", "Expenses incurred"},
-            {"Goods and Services Tax", "General Sales Tax", "Government Service Tax", "Global Sales Tax"},
-            {"Record transactions", "Calculate tax", "Manage payroll", "Audit accounts"},
-            {"What a company owes", "What a company owns", "Profits of company", "Capital invested"},
-            {"Owner's investment", "Company debt", "Current assets", "Expenses"},
-            {"Rise in prices", "Decrease in GDP", "Growth in sales", "Increase in exports"},
-            {"RBI", "Finance Ministry", "Income Tax Dept", "SEBI"},
-            {"Government controlled", "Consumer controlled", "Free enterprise system", "Barter system"},
-            {"Financial statement showing assets & liabilities", "Sales report", "Profit & loss statement", "Cash flow statement"},
-            {"Income earned", "Expenses paid", "Capital invested", "Tax paid"}
+            {"Joyful", "Angry", "Sad", "Lazy"},
+            {"He don't like pizza.", "She go to school daily.", "They is playing.", "He doesn't like pizza."},
+            {"Goed", "Went", "Go", "Going"},
+            {"Recieve", "Receive", "Recive", "Receeve"},
+            {"Kind", "Helpful", "Stingy", "Friendly"},
+            {"sat", "cat", "on", "the"},
+            {"An", "A", "The", "No article needed"},
+            {"wrote", "write", "written", "writing"},
+            {"He", "studied", "but", "failed"},
+            {"Adjective", "Verb", "Noun", "Adverb"}
     };
 
     private String[] answers = {
-            "Resources owned", "Goods and Services Tax", "Record transactions", "What a company owes",
-            "Owner's investment", "Rise in prices", "RBI", "Free enterprise system",
-            "Financial statement showing assets & liabilities", "Income earned"
+            "Joyful", "He doesn't like pizza.", "Went", "Receive", "Stingy",
+            "cat", "An", "written", "but", "Adverb"
     };
 
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public CommerceTest() {
-        setTitle("Commerce Entry Test");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public EnglishTest() {
+        setTitle("English Entry Test");
+
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -102,6 +101,6 @@ public class CommerceTest extends JFrame {
     }
 
     public static void main(String[] args) {
-        new CommerceTest();
+        new EnglishTest();
     }
 }
