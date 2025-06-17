@@ -347,7 +347,8 @@ public class SubmittedFormList_Panel extends JPanel {
             if (allDone) {
                 record.setAttempted(true);
                 record.setScore(100); // or average
-                record.setStatus(Status.TEST_TAKEN); // ← update enum status here
+
+                record.setStatus(Status.TEST_TAKEN);// ← update enum status here
 
                 new EntryTestRecordManager().saveRecord(record); // Save changes
 

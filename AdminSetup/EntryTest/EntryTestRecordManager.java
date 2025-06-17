@@ -20,6 +20,7 @@ public class EntryTestRecordManager {
         private boolean biologyTaken;
         private Status status;
 
+
         private boolean advMathTaken;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {

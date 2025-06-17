@@ -1,24 +1,20 @@
 package Applicant;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExamLauncher{
+public class ExamLauncher {
 
     private JFrame frame;
-    private JLabel questionLabel;
-    private JRadioButton[] options;
-    private ButtonGroup group;
-    private JButton nextButton;
     private List<Question> questions;
-    private int currentQuestionIndex = 0;
-    private int score = 0;
+    private List<JPanel> questionPanels;
+    private List<ButtonGroup> optionGroups;
+    private JButton submitButton;
 
     public ExamLauncher(String subjectName, int maxQuestions) {
         loadQuestions(subjectName, maxQuestions);
@@ -27,70 +23,69 @@ public class ExamLauncher{
             return;
         }
         initUI(subjectName);
-        displayQuestion();
     }
 
     private void initUI(String subjectName) {
         frame = new JFrame(subjectName + " Test");
-        frame.setSize(600, 300);
+        frame.setSize(800, 700);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        questionLabel = new JLabel("Question will appear here");
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        questionLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel questionsPanel = new JPanel();
+        questionsPanel.setLayout(new BoxLayout(questionsPanel, BoxLayout.Y_AXIS));
+        questionPanels = new ArrayList<>();
+        optionGroups = new ArrayList<>();
 
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 1));
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            JPanel qPanel = new JPanel(new BorderLayout());
+            qPanel.setBorder(BorderFactory.createTitledBorder("Q" + (i + 1) + ": " + q.question));
 
-        options = new JRadioButton[4];
-        group = new ButtonGroup();
+            JPanel optionsPanel = new JPanel(new GridLayout(2, 2));
+            ButtonGroup group = new ButtonGroup();
+            for (int j = 0; j < 4; j++) {
+                JRadioButton option = new JRadioButton(q.options[j]);
+                group.add(option);
+                optionsPanel.add(option);
+            }
 
-        for (int i = 0; i < 4; i++) {
-            options[i] = new JRadioButton();
-            group.add(options[i]);
-            centerPanel.add(options[i]);
+            qPanel.add(optionsPanel, BorderLayout.CENTER);
+            questionsPanel.add(qPanel);
+
+            questionPanels.add(qPanel);
+            optionGroups.add(group);
         }
 
-        nextButton = new JButton("Next");
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                checkAnswer();
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.size()) {
-                    displayQuestion();
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Test Completed!\nScore: " + score + "/" + questions.size());
-                    frame.dispose();
-                }
-            }
-        });
+        JScrollPane scrollPane = new JScrollPane(questionsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        frame.add(questionLabel, BorderLayout.NORTH);
-        frame.add(centerPanel, BorderLayout.CENTER);
-        frame.add(nextButton, BorderLayout.SOUTH);
+        submitButton = new JButton("Submit Test");
+        submitButton.setFont(new Font("Arial", Font.BOLD, 16));
+        submitButton.setBackground(Color.GREEN);
+        submitButton.setForeground(Color.WHITE);
+        submitButton.addActionListener(e -> submitTest());
+
+        frame.add(scrollPane, BorderLayout.CENTER);
+        frame.add(submitButton, BorderLayout.SOUTH);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private void displayQuestion() {
-        group.clearSelection();
-        Question q = questions.get(currentQuestionIndex);
-        questionLabel.setText("Q" + (currentQuestionIndex + 1) + ": " + q.question);
-        for (int i = 0; i < 4; i++) {
-            options[i].setText(q.options[i]);
-        }
-    }
-
-    private void checkAnswer() {
-        Question q = questions.get(currentQuestionIndex);
-        for (int i = 0; i < 4; i++) {
-            if (options[i].isSelected() && options[i].getText().startsWith(q.correctAnswer + ")")) {
-                score++;
+    private void submitTest() {
+        int score = 0;
+        for (int i = 0; i < questions.size(); i++) {
+            Question q = questions.get(i);
+            ButtonGroup group = optionGroups.get(i);
+            for (AbstractButton btn : java.util.Collections.list(group.getElements())) {
+                if (btn.isSelected() && btn.getText().startsWith(q.correctAnswer + ")")) {
+                    score++;
+                    break;
+                }
             }
         }
+        JOptionPane.showMessageDialog(frame, "Test Completed!\nScore: " + score + "/" + questions.size());
+        frame.dispose();
     }
 
     private void loadQuestions(String subjectName, int maxQuestions) {
@@ -141,6 +136,4 @@ public class ExamLauncher{
             this.correctAnswer = correctAnswer;
         }
     }
-
-
 }
