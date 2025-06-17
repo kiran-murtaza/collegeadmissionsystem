@@ -66,37 +66,3 @@ public class ScholarshipApplicationData {
 }
 
 
-//public class ScholarshipApplicationData {
-//    public String applicantId, name, email, gender, dob;
-//    public String school, percentage, achievements, income, otherAid, explanation;
-//    public String clubs, volunteer, sports, leadership;
-//    public String proofIncome, portfolio, signature, status, date;
-//
-//    public ScholarshipApplicationData(String[] parts) {
-//        if (parts.length != 20) {
-//            throw new IllegalArgumentException("Expected 20 fields, got " + parts.length);
-//        }
-//        applicantId = parts[0];
-//        name = parts[1];
-//        email = parts[2];
-//        gender = parts[3];
-//        dob = parts[4];
-//        school = parts[5];
-//        percentage = parts[6];
-//        achievements = parts[7];
-//        income = parts[8];
-//        otherAid = parts[9];
-//        explanation = parts[10];
-//        clubs = parts[11];
-//        volunteer = parts[12];
-//        sports = parts[13];
-//        leadership = parts[14];
-//        proofIncome = parts[15];
-//        portfolio = parts[16];
-//        signature = parts[17];
-//        status = parts[18];
-//        date = parts[19];
-//    }
-//}
-
-

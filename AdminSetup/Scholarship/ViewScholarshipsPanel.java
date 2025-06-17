@@ -68,38 +68,6 @@ public class ViewScholarshipsPanel extends JPanel {
 }
 
 
-//public class ViewScholarshipsPanel extends JPanel {
-//    private JTable table;
-//    private DefaultTableModel model;
-//
-//    public ViewScholarshipsPanel() {
-//        setLayout(new BorderLayout());
-//        String[] columns = {
-//                "Applicant ID", "Name", "Email", "Gender", "DOB", "School", "Percentage",
-//                "Achievements", "Income", "Other Aid", "Explanation", "Clubs", "Volunteer",
-//                "Sports", "Leadership", "Proof Income", "Portfolio", "Signature",
-//                "Status", "Date"
-//        };
-//        model = new DefaultTableModel(columns, 0);
-//        table = new JTable(model);
-//        add(new JScrollPane(table), BorderLayout.CENTER);
-//
-//        loadScholarshipData();
-//    }
-//
-//    private void loadScholarshipData() {
-//        List<ScholarshipApplicationData> scholarships = ScholarshipManager.loadAllScholarships();
-//        for (ScholarshipApplicationData data : scholarships) {
-//            model.addRow(new Object[]{
-//                    data.applicantId, data.name, data.email, data.gender, data.dob,
-//                    data.school, data.percentage, data.achievements, data.income,
-//                    data.otherAid, data.explanation, data.clubs, data.volunteer,
-//                    data.sports, data.leadership, data.proofIncome, data.portfolio,
-//                    data.signature, data.status, data.date
-//            });
-//        }
-//    }
-//}
 
 
 
