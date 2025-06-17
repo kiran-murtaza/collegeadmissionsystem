@@ -346,9 +346,12 @@ public class SubmittedFormList_Panel extends JPanel {
 
             if (allDone) {
                 record.setAttempted(true);
-                record.setScore(100); // or calculate from each exam
-                new EntryTestRecordManager().saveRecord(record); // Save back to file
-                JOptionPane.showMessageDialog(null, "All tests completed and status updated!");
+                record.setScore(100); // or average
+                record.setStatus(Status.TEST_TAKEN); // ← update enum status here
+
+                new EntryTestRecordManager().saveRecord(record); // Save changes
+
+                JOptionPane.showMessageDialog(null, "All tests completed. Status updated to TEST_TAKEN!");
             }
         }
     }

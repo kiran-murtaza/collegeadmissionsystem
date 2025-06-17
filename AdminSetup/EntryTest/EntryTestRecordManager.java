@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import Applicant.Status;
 
 public class EntryTestRecordManager {
     private final String FILE_PATH = "EntryTestRecords.txt";
@@ -17,6 +18,8 @@ public class EntryTestRecordManager {
         private boolean mathTaken;
         private boolean englishTaken;
         private boolean biologyTaken;
+        private Status status;
+
         private boolean advMathTaken;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {
@@ -24,6 +27,13 @@ public class EntryTestRecordManager {
             this.testDateTime = testDateTime;
             this.attempted = attempted;
             this.score = score;
+        }
+        public Status getStatus() {
+            return status;
+        }
+
+        public void setStatus(Status status) {
+            this.status = status;
         }
         public boolean isMathTaken() { return mathTaken; }
         public void setMathTaken(boolean mathTaken) { this.mathTaken = mathTaken; }
