@@ -14,6 +14,10 @@ public class EntryTestRecordManager {
         private boolean attempted;
         private int score;
         private ArrayList<String> subjects;
+        private boolean mathTaken;
+        private boolean englishTaken;
+        private boolean biologyTaken;
+        private boolean advMathTaken;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {
             this.applicantId = applicantId;
@@ -21,6 +25,17 @@ public class EntryTestRecordManager {
             this.attempted = attempted;
             this.score = score;
         }
+        public boolean isMathTaken() { return mathTaken; }
+        public void setMathTaken(boolean mathTaken) { this.mathTaken = mathTaken; }
+
+        public boolean isEnglishTaken() { return englishTaken; }
+        public void setEnglishTaken(boolean englishTaken) { this.englishTaken = englishTaken; }
+
+        public boolean isBiologyTaken() { return biologyTaken; }
+        public void setBiologyTaken(boolean biologyTaken) { this.biologyTaken = biologyTaken; }
+
+        public boolean isAdvMathTaken() { return advMathTaken; }
+        public void setAdvMathTaken(boolean advMathTaken) { this.advMathTaken = advMathTaken; }
 
         public String getApplicantId() {
             return applicantId;

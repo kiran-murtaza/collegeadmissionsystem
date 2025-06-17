@@ -4,6 +4,7 @@ import AdminSetup.EntryTest.EntryTestRecordManager;
 import Applicant.Tests.BioTest;
 import Applicant.Tests.EnglishTest;
 import Applicant.Tests.MathTest;
+import Applicant.ExamLauncher;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -141,10 +142,9 @@ public class SubmittedFormList_Panel extends JPanel {
     }
 
 
-
-
     private boolean isToday(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.equalsIgnoreCase("null") || dateTimeStr.equalsIgnoreCase("N/A")) return false;
+        if (dateTimeStr == null || dateTimeStr.equalsIgnoreCase("null") || dateTimeStr.equalsIgnoreCase("N/A"))
+            return false;
         try {
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             return LocalDate.now().equals(dateTime.toLocalDate());
@@ -250,7 +250,7 @@ public class SubmittedFormList_Panel extends JPanel {
             selectedRow = row;
             return button;
         }
-//
+
         @Override
         public Object getCellEditorValue() {
             if (isPushed && "Give Test Now".equals(label)) {
@@ -258,19 +258,19 @@ public class SubmittedFormList_Panel extends JPanel {
                 ApplicationFormData selectedApp = userApplications.get(modelRow);
 
                 EntryTestRecordManager entryTestRecordManager = new EntryTestRecordManager();
-                EntryTestRecordManager.EntryTestRecord recordById = entryTestRecordManager.getRecordById(selectedApp.getApplicationId());
+                EntryTestRecordManager.EntryTestRecord record = entryTestRecordManager.getRecordById(selectedApp.getApplicationId());
 
                 JFrame frame = new JFrame("Start Your Test");
                 frame.setSize(500, 300);
                 frame.setLocationRelativeTo(null);
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-                JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15)); // 2 rows, 2 cols, 15px gap
+                JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15));
                 panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
                 JButton englishBtn = new JButton("ENGLISH");
                 JButton bioBtn = new JButton("BIOLOGY");
-                JButton addMathBtn = new JButton("ADD MATHS");
+                JButton addMathBtn = new JButton("ADVANCED MATH");
                 JButton mathBtn = new JButton("MATH");
 
                 // Disable all initially
@@ -279,25 +279,46 @@ public class SubmittedFormList_Panel extends JPanel {
                 addMathBtn.setEnabled(false);
                 mathBtn.setEnabled(false);
 
-                // Enable only those present in the subject list
-                for (String subject : recordById.getSubjects()) {
+                for (String subject : record.getSubjects()) {
                     switch (subject.trim().toLowerCase()) {
-                        case "english" -> englishBtn.setEnabled(true);
-                        case "biology" -> bioBtn.setEnabled(true);
-                        case "add maths", "add math" -> addMathBtn.setEnabled(true);
-                        case "math", "maths" -> mathBtn.setEnabled(true);
+                        case "english" -> {
+                            englishBtn.setEnabled(!record.isEnglishTaken());
+                            englishBtn.addActionListener(e -> {
+                                new ExamLauncher("English", 5);
+                                record.setEnglishTaken(true);
+                                checkAllSubjectsCompleted(record);
+                                englishBtn.setEnabled(false);
+                            });
+                        }
+                        case "biology" -> {
+                            bioBtn.setEnabled(!record.isBiologyTaken());
+                            bioBtn.addActionListener(e -> {
+                                new ExamLauncher("Biology", 5);
+                                record.setBiologyTaken(true);
+                                checkAllSubjectsCompleted(record);
+                                bioBtn.setEnabled(false);
+                            });
+                        }
+                        case "add math", "advanced math" -> {
+                            addMathBtn.setEnabled(!record.isAdvMathTaken());
+                            addMathBtn.addActionListener(e -> {
+                                new ExamLauncher("Advanced Math", 5);
+                                record.setAdvMathTaken(true);
+                                checkAllSubjectsCompleted(record);
+                                addMathBtn.setEnabled(false);
+                            });
+                        }
+                        case "math", "maths" -> {
+                            mathBtn.setEnabled(!record.isMathTaken());
+                            mathBtn.addActionListener(e -> {
+                                new ExamLauncher("Math", 5);
+                                record.setMathTaken(true);
+                                checkAllSubjectsCompleted(record);
+                                mathBtn.setEnabled(false);
+                            });
+                        }
                     }
                 }
-
-                englishBtn.addActionListener(e -> {
-                    new EnglishTest(); // Assuming EnglishTest is your new class name
-                });
-                mathBtn.addActionListener(e -> {
-                    new MathTest(); // Assuming EnglishTest is your new class name
-                });
-                bioBtn.addActionListener(e -> {
-                    new BioTest(); // Assuming EnglishTest is your new class name
-                });
 
                 panel.add(englishBtn);
                 panel.add(bioBtn);
@@ -312,5 +333,23 @@ public class SubmittedFormList_Panel extends JPanel {
             return label;
         }
 
+        private void checkAllSubjectsCompleted(EntryTestRecordManager.EntryTestRecord record) {
+            boolean allDone = true;
+            for (String subject : record.getSubjects()) {
+                switch (subject.trim().toLowerCase()) {
+                    case "english" -> allDone &= record.isEnglishTaken();
+                    case "biology" -> allDone &= record.isBiologyTaken();
+                    case "math", "maths" -> allDone &= record.isMathTaken();
+                    case "add math", "advanced math" -> allDone &= record.isAdvMathTaken();
+                }
+            }
+
+            if (allDone) {
+                record.setAttempted(true);
+                record.setScore(100); // or calculate from each exam
+                new EntryTestRecordManager().saveRecord(record); // Save back to file
+                JOptionPane.showMessageDialog(null, "All tests completed and status updated!");
+            }
+        }
     }
 }
