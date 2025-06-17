@@ -8,6 +8,7 @@ import AdminSetup.EntryTest.EntryTestRecordManager;
 import AdminSetup.EntryTest.SetTestDatePanel;
 import AdminSetup.Program.ProgramManager;
 import AdminSetup.Program.ProgramPanel;
+import AdminSetup.Scholarship.ViewScholarshipsPanel;
 import Authentication.LoginFrame;
 import javax.swing.*;
 import java.awt.*;
@@ -108,7 +109,7 @@ public class AdminDashboard_Panel extends JFrame {
             case "View Program" -> showPrograms();
             case "Set Test" -> showSetTestDatePanel();
             case "Add Admin" -> showAddAdmin();
-            case "Scholarship Applications" -> contentPanel.add(new JLabel("Scholarship Applications here", SwingConstants.CENTER), BorderLayout.CENTER);
+            case "Scholarship Applications" -> showScholarshipApplications();
             case "Logout" -> {
                 dispose();
                 new LoginFrame().setVisible(true);
@@ -165,6 +166,18 @@ public class AdminDashboard_Panel extends JFrame {
         contentPanel.revalidate();
         contentPanel.repaint();
     }
+
+    private void showScholarshipApplications() {
+        System.out.println("Scholarship Applications panel opened.");
+        ViewScholarshipsPanel panel = new ViewScholarshipsPanel();
+        contentPanel.removeAll();
+        contentPanel.setLayout(new BorderLayout());
+        contentPanel.add(panel, BorderLayout.CENTER);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+
 
 
 
