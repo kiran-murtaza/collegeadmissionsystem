@@ -79,14 +79,14 @@ public class ExamLauncher{
         group.clearSelection();
         Question q = questions.get(currentQuestionIndex);
         questionLabel.setText("Q" + (currentQuestionIndex + 1) + ": " + q.question);
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 4; i++) {
             options[i].setText(q.options[i]);
         }
     }
 
     private void checkAnswer() {
         Question q = questions.get(currentQuestionIndex);
-        for (int i = 0; i < 21; i++) {
+        for (int i = 0; i < 4; i++) {
             if (options[i].isSelected() && options[i].getText().startsWith(q.correctAnswer + ")")) {
                 score++;
             }
