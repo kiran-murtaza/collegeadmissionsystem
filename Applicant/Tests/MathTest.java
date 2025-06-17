@@ -1,48 +1,51 @@
 package Applicant.Tests;
 
+import AdminSetup.EntryTest.EntryTestRecordManager;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class CommerceTest extends JFrame {
+public class MathTest extends JFrame {
+    private static int mathScore;
+    private EntryTestRecordManager.EntryTestRecord record;
+    EntryTestRecordManager.EntryTestRecord entryTestRecordManager;
     private String[] questions = {
-            "1. What is 'Assets'?",
-            "2. What is GST?",
-            "3. Primary goal of accounting?",
-            "4. What is 'Liability'?",
-            "5. Define 'Capital'?",
-            "6. What is inflation?",
-            "7. Who issues currency notes?",
-            "8. What is 'Market Economy'?",
-            "9. What is balance sheet?",
-            "10. What is 'Revenue'?"
+            "1. What is the value of π (pi) approximately?",
+            "2. What is the derivative of x²?",
+            "3. Simplify: 5 + 3 × 2?",
+            "4. What is the square root of 144?",
+            "5. If f(x) = 2x + 3, what is f(2)?",
+            "6. What is the area of a circle with radius 3?",
+            "7. Solve for x: 2x - 4 = 10",
+            "8. Which is a prime number?",
+            "9. What is the integral of 1/x?",
+            "10. What is the result of 3⁴?"
     };
 
     private String[][] options = {
-            {"Resources owned", "Debts owed", "Profits earned", "Expenses incurred"},
-            {"Goods and Services Tax", "General Sales Tax", "Government Service Tax", "Global Sales Tax"},
-            {"Record transactions", "Calculate tax", "Manage payroll", "Audit accounts"},
-            {"What a company owes", "What a company owns", "Profits of company", "Capital invested"},
-            {"Owner's investment", "Company debt", "Current assets", "Expenses"},
-            {"Rise in prices", "Decrease in GDP", "Growth in sales", "Increase in exports"},
-            {"RBI", "Finance Ministry", "Income Tax Dept", "SEBI"},
-            {"Government controlled", "Consumer controlled", "Free enterprise system", "Barter system"},
-            {"Financial statement showing assets & liabilities", "Sales report", "Profit & loss statement", "Cash flow statement"},
-            {"Income earned", "Expenses paid", "Capital invested", "Tax paid"}
+            {"3.14", "2.17", "1.62", "4.00"},
+            {"x", "2x", "x^3", "1"},
+            {"11", "16", "6", "14"},
+            {"10", "11", "12", "13"},
+            {"5", "6", "7", "8"},
+            {"9π", "6π", "3π", "π"},
+            {"6", "7", "8", "9"},
+            {"4", "6", "9", "11"},
+            {"ln|x| + C", "x + C", "1 + C", "e^x + C"},
+            {"81", "64", "27", "12"}
     };
 
     private String[] answers = {
-            "Resources owned", "Goods and Services Tax", "Record transactions", "What a company owes",
-            "Owner's investment", "Rise in prices", "RBI", "Free enterprise system",
-            "Financial statement showing assets & liabilities", "Income earned"
+            "3.14", "2x", "11", "12", "7",
+            "9π", "7", "11", "ln|x| + C", "81"
     };
 
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public CommerceTest() {
-        setTitle("Commerce Entry Test");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public MathTest(EntryTestRecordManager.EntryTestRecord entryTestRecordManager) {
+        setTitle("Math Entry Test");
+        this.record=entryTestRecordManager;
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -86,6 +89,8 @@ public class CommerceTest extends JFrame {
                     }
                 }
             }
+            mathScore=score;
+            record.setMathTaken(true);
             JOptionPane.showMessageDialog(this, "Score: " + score + "/10");
         });
 
@@ -101,7 +106,9 @@ public class CommerceTest extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new CommerceTest();
+    public static int getMathScore(){
+        return mathScore;
     }
+
+
 }

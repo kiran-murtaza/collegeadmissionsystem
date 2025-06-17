@@ -126,7 +126,12 @@ public class ApplicationForm_Panel extends JPanel {
 
         submitButton = new JButton("Submit");
         submitButton.setBackground(COLORAZ_SAGE);
-        submitButton.addActionListener(e -> validateForm());
+        submitButton.addActionListener(e -> {
+
+            validateForm();
+
+
+        });
 
         gbc.gridx = 1;
         gbc.gridy = row;

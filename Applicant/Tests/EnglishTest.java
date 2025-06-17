@@ -1,47 +1,51 @@
 package Applicant.Tests;
+import AdminSetup.EntryTest.EntryTestRecordManager;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class EngineeringTest extends JFrame {
+public class EnglishTest extends JFrame {
+    public static int engScore;
+    private EntryTestRecordManager.EntryTestRecord record;
+
+
     private String[] questions = {
-            "1. Unit of electrical resistance?",
-            "2. Newton's Second Law?",
-            "3. SI unit of force?",
-            "4. Material used for electrical wires?",
-            "5. Speed of light?",
-            "6. Thermodynamics studies?",
-            "7. Ohm's law relates?",
-            "8. Gear ratio is?",
-            "9. Stress is force per unit?",
-            "10. SI unit of power?"
+            "1. Choose the correct synonym of 'Happy':",
+            "2. Which sentence is grammatically correct?",
+            "3. What is the past tense of 'Go'?",
+            "4. Choose the correctly spelled word:",
+            "5. What is an antonym of 'Generous'?",
+            "6. Identify the noun in the sentence: 'The cat sat on the mat.'",
+            "7. Choose the correct article: '___ apple a day keeps the doctor away.'",
+            "8. Select the correct form: 'She has ___ the letter.'",
+            "9. What is a conjunction in: 'He studied hard but failed.'?",
+            "10. What part of speech is 'quickly' in: 'She ran quickly'?"
     };
 
     private String[][] options = {
-            {"Ohm", "Watt", "Volt", "Ampere"},
-            {"F=ma", "E=mc^2", "V=IR", "P=IV"},
-            {"Newton", "Joule", "Watt", "Pascal"},
-            {"Copper", "Iron", "Steel", "Aluminum"},
-            {"3 x 10^8 m/s", "3 x 10^6 m/s", "3 x 10^5 m/s", "3 x 10^7 m/s"},
-            {"Heat and work", "Motion of planets", "Electricity", "Magnetism"},
-            {"Voltage and current", "Force and mass", "Energy and power", "Work and energy"},
-            {"Output speed/input speed", "Input speed/output speed", "Torque ratio", "Power ratio"},
-            {"Length", "Area", "Volume", "Cross-sectional area"},
-            {"Watt", "Newton", "Joule", "Horsepower"}
+            {"Joyful", "Angry", "Sad", "Lazy"},
+            {"He don't like pizza.", "She go to school daily.", "They is playing.", "He doesn't like pizza."},
+            {"Goed", "Went", "Go", "Going"},
+            {"Recieve", "Receive", "Recive", "Receeve"},
+            {"Kind", "Helpful", "Stingy", "Friendly"},
+            {"sat", "cat", "on", "the"},
+            {"An", "A", "The", "No article needed"},
+            {"wrote", "write", "written", "writing"},
+            {"He", "studied", "but", "failed"},
+            {"Adjective", "Verb", "Noun", "Adverb"}
     };
 
     private String[] answers = {
-            "Ohm", "F=ma", "Newton", "Copper", "3 x 10^8 m/s",
-            "Heat and work", "Voltage and current", "Output speed/input speed",
-            "Cross-sectional area", "Watt"
+            "Joyful", "He doesn't like pizza.", "Went", "Receive", "Stingy",
+            "cat", "An", "written", "but", "Adverb"
     };
 
     private JRadioButton[][] radios = new JRadioButton[10][4];
     private ButtonGroup[] groups = new ButtonGroup[10];
 
-    public EngineeringTest() {
-        setTitle("Engineering Entry Test");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public EnglishTest(EntryTestRecordManager.EntryTestRecord entryTestRecordManager) {
+        setTitle("English Entry Test");
+        this.record=entryTestRecordManager;
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -78,6 +82,7 @@ public class EngineeringTest extends JFrame {
         contentPanel.add(submitBtn);
 
         submitBtn.addActionListener(e -> {
+
             int score = 0;
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 4; j++) {
@@ -86,6 +91,10 @@ public class EngineeringTest extends JFrame {
                     }
                 }
             }
+
+            engScore=score;
+            record.setEnglishTaken(true);
+
             JOptionPane.showMessageDialog(this, "Score: " + score + "/10");
         });
 
@@ -101,7 +110,9 @@ public class EngineeringTest extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new EngineeringTest();
+    public static int getEngScore(){
+        return engScore;
     }
+
+
 }

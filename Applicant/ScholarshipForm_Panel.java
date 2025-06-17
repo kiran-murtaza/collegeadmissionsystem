@@ -37,11 +37,10 @@ public class ScholarshipForm_Panel extends JPanel {
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         // Show loaded applicant info
-        formPanel.add(new JLabel("Applicant ID: " + applicantId));
-        formPanel.add(new JLabel("Name: " + name));
+        formPanel.add(new JLabel("Applicant ID: " + userInfo.getUserID()));
+        formPanel.add(new JLabel("Name: " + userInfo.getFirstName()+" " + userInfo.getLastName()));
         formPanel.add(new JLabel("Email: " + email));
-        formPanel.add(new JLabel("Gender: " + (gender == null ? "N/A" : gender)));
-        formPanel.add(new JLabel("Date of Birth: " + (dob == null ? "N/A" : dob)));
+
 
         // Academic Info
         formPanel.add(new JLabel("Current School/College:"));
@@ -124,12 +123,10 @@ public class ScholarshipForm_Panel extends JPanel {
                 if (parts.length >= 14) {
                     String existingEmail = parts[13].trim();
                     if (existingEmail.equalsIgnoreCase(emailToFind.trim())) {
-                        applicantId = parts[0].trim();
                         name = parts[1].trim();
                         // Your example data does not have gender and dob fields,
                         // so set these as "N/A" or read if you add those fields.
-                        gender = "N/A";
-                        dob = "N/A";
+
                         email = existingEmail;
                         return true;
                     }

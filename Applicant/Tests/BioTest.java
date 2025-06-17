@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BioTest extends JFrame {
+    private static int bioMarks;
     private String[] questions = {
             "1. Powerhouse of cell?",
             "2. Vitamin made in skin?",
@@ -41,7 +42,7 @@ public class BioTest extends JFrame {
     public BioTest() {
         setTitle("Bio Entry Test");
         setSize(800, 700); // initial size, can keep or remove
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
@@ -86,6 +87,7 @@ public class BioTest extends JFrame {
                     }
                 }
             }
+            bioMarks=score;
             JOptionPane.showMessageDialog(this, "Score: " + score + "/10");
         });
 
@@ -101,6 +103,9 @@ public class BioTest extends JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+    public static int getBioMarks(){
+        return bioMarks;
     }
 
     public static void main(String[] args) {
