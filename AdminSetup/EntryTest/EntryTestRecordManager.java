@@ -15,13 +15,16 @@ public class EntryTestRecordManager {
         private boolean attempted;
         private int score;
         private ArrayList<String> subjects;
-        private boolean mathTaken;
-        private boolean englishTaken;
-        private boolean biologyTaken;
+
         private Status status;
+        private ArrayList<String> attemptedSubjects = new ArrayList<>();
+        private int totalScore = 0;
+        private boolean englishTaken = false;
+        private boolean mathTaken = false;
+        private boolean biologyTaken = false;
+        private boolean advMathTaken = false;
 
 
-        private boolean advMathTaken;
 
         public EntryTestRecord(String applicantId, LocalDateTime testDateTime, boolean attempted, int score) {
             this.applicantId = applicantId;
@@ -29,6 +32,34 @@ public class EntryTestRecordManager {
             this.attempted = attempted;
             this.score = score;
         }
+
+
+        public ArrayList<String> getAttemptedSubjects() {
+            return attemptedSubjects;
+        }
+
+        public void setAttemptedSubjects(ArrayList<String> attemptedSubjects) {
+            this.attemptedSubjects = attemptedSubjects;
+        }
+
+        public void addAttemptedSubject(String subject) {
+            if (!attemptedSubjects.contains(subject)) {
+                attemptedSubjects.add(subject);
+            }
+        }
+
+        public int getTotalScore() {
+            return totalScore;
+        }
+
+        public void setTotalScore(int totalScore) {
+            this.totalScore = totalScore;
+        }
+
+        public void addToScore(int subjectScore) {
+            this.totalScore += subjectScore;
+        }
+
         public Status getStatus() {
             return status;
         }
@@ -36,17 +67,37 @@ public class EntryTestRecordManager {
         public void setStatus(Status status) {
             this.status = status;
         }
-        public boolean isMathTaken() { return mathTaken; }
-        public void setMathTaken(boolean mathTaken) { this.mathTaken = mathTaken; }
+        public boolean isEnglishTaken() {
+            return englishTaken;
+        }
 
-        public boolean isEnglishTaken() { return englishTaken; }
-        public void setEnglishTaken(boolean englishTaken) { this.englishTaken = englishTaken; }
+        public void setEnglishTaken(boolean englishTaken) {
+            this.englishTaken = englishTaken;
+        }
 
-        public boolean isBiologyTaken() { return biologyTaken; }
-        public void setBiologyTaken(boolean biologyTaken) { this.biologyTaken = biologyTaken; }
+        public boolean isMathTaken() {
+            return mathTaken;
+        }
 
-        public boolean isAdvMathTaken() { return advMathTaken; }
-        public void setAdvMathTaken(boolean advMathTaken) { this.advMathTaken = advMathTaken; }
+        public void setMathTaken(boolean mathTaken) {
+            this.mathTaken = mathTaken;
+        }
+
+        public boolean isBiologyTaken() {
+            return biologyTaken;
+        }
+
+        public void setBiologyTaken(boolean biologyTaken) {
+            this.biologyTaken = biologyTaken;
+        }
+
+        public boolean isAdvMathTaken() {
+            return advMathTaken;
+        }
+
+        public void setAdvMathTaken(boolean advMathTaken) {
+            this.advMathTaken = advMathTaken;
+        }
 
         public String getApplicantId() {
             return applicantId;
@@ -86,6 +137,12 @@ public class EntryTestRecordManager {
         public ArrayList<String> getSubjects() { return subjects; }
         public void setSubjects(ArrayList<String> subjects) { this.subjects = subjects; }
 
+        public boolean isAllSubjectsCompleted() {
+            return (isEnglishTaken() || !subjects.contains("English")) &&
+                    (isMathTaken() || !subjects.contains("Math")) &&
+                    (isBiologyTaken() || !subjects.contains("Biology")) &&
+                    (isAdvMathTaken() || !subjects.contains("Add Math") && !subjects.contains("Advanced Math"));
+        }
     }
 
     /**
@@ -131,6 +188,7 @@ public class EntryTestRecordManager {
         return null; // Not found
     }
 //
+
 
     /**
      * Loads only fee-paid applicants' test records.

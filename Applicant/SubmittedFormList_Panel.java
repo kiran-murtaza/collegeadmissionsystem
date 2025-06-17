@@ -192,7 +192,7 @@ public class SubmittedFormList_Panel extends JPanel {
             if (!isSelected) {  // only set background if not selected
                 String status = table.getValueAt(row, 4).toString();  // combined status column
 
-                if (status.contains("Approved") || status.contains("Admission Offered")) {
+                if (status.contains("Approved")) {
                     c.setBackground(new Color(198, 239, 206)); // Light green (success)
                 } else if (status.contains("Rejected") || status.contains("Admission Withdrawn")) {
                     c.setBackground(new Color(255, 199, 206)); // Light red (error)
@@ -202,7 +202,7 @@ public class SubmittedFormList_Panel extends JPanel {
                     c.setBackground(new Color(209, 222, 255)); // Light blue (completed action)
                 } else if (status.contains("Wait Listed")) {
                     c.setBackground(new Color(255, 207, 159)); // Light orange (waiting)
-                } else if (status.contains("Admission Secured")) {
+                } else if (status.contains("Admission Secured")|| status.contains("Admission Offered")) {
                     c.setBackground(new Color(183, 225, 205)); // Medium green (confirmed)
                 } else {
                     c.setBackground(Color.WHITE); // Default
@@ -411,4 +411,4 @@ public class SubmittedFormList_Panel extends JPanel {
         }
     }
 }
-//ssss
+//sssss
