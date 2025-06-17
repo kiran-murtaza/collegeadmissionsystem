@@ -284,7 +284,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "english" -> {
                             englishBtn.setEnabled(!record.isEnglishTaken());
                             englishBtn.addActionListener(e -> {
-                                new ExamLauncher("English", 5);
+                                new ExamLauncher("English", 20);
                                 record.setEnglishTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 englishBtn.setEnabled(false);
@@ -293,7 +293,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "biology" -> {
                             bioBtn.setEnabled(!record.isBiologyTaken());
                             bioBtn.addActionListener(e -> {
-                                new ExamLauncher("Biology", 5);
+                                new ExamLauncher("Biology", 20);
                                 record.setBiologyTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 bioBtn.setEnabled(false);
@@ -302,7 +302,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "add math", "advanced math" -> {
                             addMathBtn.setEnabled(!record.isAdvMathTaken());
                             addMathBtn.addActionListener(e -> {
-                                new ExamLauncher("Advanced Math", 5);
+                                new ExamLauncher("Advanced Math", 20);
                                 record.setAdvMathTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 addMathBtn.setEnabled(false);
@@ -311,7 +311,7 @@ public class SubmittedFormList_Panel extends JPanel {
                         case "math", "maths" -> {
                             mathBtn.setEnabled(!record.isMathTaken());
                             mathBtn.addActionListener(e -> {
-                                new ExamLauncher("Math", 5);
+                                new ExamLauncher("Math", 20);
                                 record.setMathTaken(true);
                                 checkAllSubjectsCompleted(record);
                                 mathBtn.setEnabled(false);
