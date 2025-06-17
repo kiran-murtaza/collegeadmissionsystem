@@ -29,7 +29,8 @@ public class SetTestDatePanel extends JPanel {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         add(title, BorderLayout.NORTH);
 
-        String[] columns = {"Applicant ID", "Test Date & Time", "Attempted", "Score", "Subjects", "Action"};
+        String[] columns = {"Applicant ID", "Program", "12th Stream", "Test Date & Time", "Attempted", "Score", "Subjects", "Action"};
+
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -71,14 +72,21 @@ public class SetTestDatePanel extends JPanel {
                 record = new EntryTestRecordManager.EntryTestRecord(id, null, false, 0);
             }
 
+            ApplicationFormData appData = ApplicantManager.getApplicationByAppId(id);
+            String program = appData != null ? appData.getSelectedProgram() : "N/A";
+            String stream = appData != null ? appData.getStream12(): "N/A";
+
             model.addRow(new Object[]{
                     record.getApplicantId(),
+                    program,
+                    stream,
                     record.getTestDateTime() != null ? record.getTestDateTime().format(formatter) : "Not Set",
                     record.isAttempted() ? "Yes" : "No",
                     record.getScore(),
                     record.getSubjects() != null ? String.join(", ", record.getSubjects()) : "Not Set",
                     "Set Details"
             });
+
         }
 
         if (model.getRowCount() == 0) {
