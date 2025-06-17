@@ -168,6 +168,7 @@ public class AdminDashboard_Panel extends JFrame {
     }
 
     private void showScholarshipApplications() {
+
         System.out.println("Scholarship Applications panel opened.");
         ViewScholarshipsPanel panel = new ViewScholarshipsPanel();
         contentPanel.removeAll();
