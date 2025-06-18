@@ -172,7 +172,6 @@ public class ApplicationForm_Panel extends JPanel {
         gbc.gridx = 1;
         panel.add(component, gbc);
     }
-    // Load programs based on selected stream
     private void loadProgramsByStream(String stream) {
         programDropdown.removeAllItems();
         ArrayList<Program> filteredPrograms = collegeManager.getProgramsByStream(stream);
@@ -188,13 +187,11 @@ public class ApplicationForm_Panel extends JPanel {
                 programDropdown.addItem(p.getName());
             }
 
-            // Select the first valid program automatically:
             programDropdown.setSelectedIndex(0);
         }
     }
 
 
-    // Update college dropdown based on selected program
     private void updateCollegeDropdown(String programName) {
         collegeDropdown.removeAllItems();
         ArrayList<College> filteredColleges = collegeManager.getCollegesByProgramName(programName);
@@ -211,7 +208,6 @@ public class ApplicationForm_Panel extends JPanel {
             collegeDropdown.setSelectedIndex(0);
         }
 
-        // Call validation method instead of adding new listener here
         validateDropdowns();
         collegeDropdown.addActionListener(e -> validateDropdowns());
     }
@@ -219,24 +215,17 @@ public class ApplicationForm_Panel extends JPanel {
 
 
     private void validateForm() {
-        // Check if any required field is empty
-        // Validate all fields first
         if (!validateAllFields()) {
-            return; // Exit if validation fails
+            return;
         }
 
         try {
-            // Generate a unique application ID
             applicationId = generateApplicationId();
 
-            // Get selected program and college from dropdowns
             String selectedProgramName = (String) programDropdown.getSelectedItem();
             String selectedCollegeName = (String) collegeDropdown.getSelectedItem();
 
-//            String selectedProgram = programManager.getProgramByName(selectedProgramName);
-//            String selectedCollege = collegeManager.getCollegeByName(selectedCollegeName);
 
-            // Create ApplicationFormData object with collected inputs
             ApplicationFormData applicationFormData = new ApplicationFormData(
                     applicationId,
                     userInfo,                 // User object, not email
@@ -254,19 +243,13 @@ public class ApplicationForm_Panel extends JPanel {
                     userInfo.getEmail()
             );
 
-            // Now set the remaining fields with setters:
 //
             applicationFormData.setTestSchedule(null);
             applicationFormData.setTestScore("N/A");
             applicationFormData.setStatus(Status.SUBMITTED);
             applicationFormData.setSubmitted(true);
 
-            // applicationFormData.setTestSchedule(testSchedule);
-            // applicationFormData.setTestScore(testScore);
-//            applicationFormData.setStatus(Status.SUBMITTED);
 
-
-            //Save application details to the file "all_applications.txt"
             ApplicantManager.saveToFile(applicationFormData);
 
             JOptionPane.showMessageDialog(this,
@@ -275,7 +258,6 @@ public class ApplicationForm_Panel extends JPanel {
                     JOptionPane.INFORMATION_MESSAGE
             );
 
-            // Ask user if they want to fill another form
             int response = JOptionPane.showConfirmDialog(this,
                     "Do you want to submit another application?",
                     "New Application",
@@ -289,9 +271,6 @@ public class ApplicationForm_Panel extends JPanel {
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
                 if (topFrame != null) {
-
-
-                    // Open the main dashboard
                     ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(userInfo, programManager, collegeManager);
                     dashboard.setVisible(true);
                     topFrame.dispose();
@@ -324,7 +303,6 @@ public class ApplicationForm_Panel extends JPanel {
         collegeDropdown.setSelectedIndex(0);
     }
 
-    // Reads application counter from file or returns 0 if file not found or invalid
     private int readCounter() {
         try (Scanner scanner = new Scanner(new File(COUNTER_FILE))) {
             return scanner.nextInt();
@@ -334,37 +312,22 @@ public class ApplicationForm_Panel extends JPanel {
         }
     }
 
-    // Writes updated counter to file
     private void writeCounter(int count) {
         try (FileWriter writer = new FileWriter(COUNTER_FILE)) {
             writer.write(Integer.toString(count));
         } catch (IOException e) {
-            // Handle write failure silently or log error
+
         }
     }
-    // Add label and text field to panel
-    private JTextField addTextField(String labelText) {
-        add(new JLabel(labelText));
-        JTextField textField = new JTextField();
-        add(textField);
-        return textField;
-    }
 
-    // Add a static label
-    private void addField(String label, String value) {
-        add(new JLabel(label));
-        add(new JLabel(value));
-    }
 
     private boolean validateAllFields() {
-        // Validate address
         if (addressField.getText().trim().isEmpty()) {
             showError("Address cannot be empty");
             addressField.requestFocus();
             return false;
         }
 
-        // Validate 10th details
         if (!validateEducationField(board10Field, "10th Board Name") ||
                 !validateYearField(year10Field, "10th Year") ||
                 !validatePercentageField(percent10Field, "10th Percentage") ||
@@ -372,8 +335,7 @@ public class ApplicationForm_Panel extends JPanel {
             return false;
         }
 
-        // Validate 12th details
-        // Validate 12th details
+
         if (!validateEducationField(board12Field, "12th Board Name") ||
                 !validateYearField(year12Field, "12th Year") ||
                 !validatePercentageField(percent12Field, "12th Percentage")) {
@@ -403,26 +365,7 @@ public class ApplicationForm_Panel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
-//        // Validate stream selection
-//        if (stream12Dropdown.getSelectedIndex() <= 0) {
-//            showError("Please select a 12th Stream");
-//            stream12Dropdown.requestFocus();
-//            return false;
-//        }
-//
-//        // Validate college selection
-//        if (collegeDropdown.getSelectedIndex() <= 0) {
-//            showError("Please select a college");
-//            collegeDropdown.requestFocus();
-//            return false;
-//        }
-//
-//        // Validate program selection
-//        if (programDropdown.getSelectedIndex() <= 0) {
-//            showError("Please select a program");
-//            programDropdown.requestFocus();
-//            return false;
-//        }
+
 
         return true;
     }

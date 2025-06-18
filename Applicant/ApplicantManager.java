@@ -42,7 +42,7 @@ public class ApplicantManager {
 
 
     public boolean hasAppliedBefore(ApplicationFormData newApp) {
-        ArrayList<ApplicationFormData> existingApplications = loadAllApplications(); // get saved apps
+        ArrayList<ApplicationFormData> existingApplications = loadAllApplications();
 
         for (ApplicationFormData app : existingApplications) {
             boolean sameUser = app.getUsers().equals(newApp.getUsers());
@@ -69,9 +69,8 @@ public class ApplicantManager {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
 
-                // Expecting at least 18 parts, since you added feeStatus as 18th field
                 if (parts.length < 17) {
-                    continue; // skip incomplete lines
+                    continue;
                 }
 
                 String applicationID = parts[0];
@@ -93,7 +92,7 @@ public class ApplicantManager {
                 String testScore = parts[16];
                 String feeStatusStr = parts[17];
 
-                Applicant user = null; // Implement user lookup if needed
+                Applicant user = null;
 
                 ApplicationFormData app = new ApplicationFormData(
                         applicationID,
@@ -109,18 +108,16 @@ public class ApplicantManager {
                 app.setTestSchedule(testSchedule);
                 app.setTestScore(testScore);
 
-                // Load Status enum safely
                 try {
                     app.setStatus(Status.valueOf(statusStr.toUpperCase()));
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    app.setStatus(Status.SUBMITTED); // default if invalid
+                    app.setStatus(Status.SUBMITTED);
                 }
 
-                // Load FeeStatus enum safely
                 try {
                     app.setFeeStatus(FeeStatus.valueOf(feeStatusStr.toUpperCase()));
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    app.setFeeStatus(FeeStatus.UNPAID); // default if invalid
+                    app.setFeeStatus(FeeStatus.UNPAID);
                 }
 
                 applications.add(app);
@@ -168,7 +165,6 @@ public class ApplicantManager {
             }
         }
 
-        // Now overwrite the file with updated list
         try (FileWriter writer = new FileWriter(APPLICATION_FILE, false)) { // overwrite entire file
             for (ApplicationFormData app : allApps) {
                 String applicationId1 = app.getApplicationId() != null ? app.getApplicationId() : "";
