@@ -234,11 +234,22 @@ public class ApplicantManager {
         ArrayList<ApplicationFormData> all = loadAllApplications();
         for (ApplicationFormData app : all) {
             if (app.getApplicationId().equals(applicationId)) {
-                return app.getStatus(); // Ensure this method exists in ApplicationFormData
+                return app.getStatus();
             }
         }
         return Status.SUBMITTED; // Default fallback
     }
+    public static Status getApplicationStatusByEmail(String email) {
+        // Example: Look up from saved applications
+        ArrayList<ApplicationFormData> all = loadAllApplications();
+        for (ApplicationFormData app : all) {
+            if (app.getEmail().equalsIgnoreCase(email)) {
+                return app.getStatus(); //
+            }
+        }
+        return Status.SUBMITTED;
+    }
+
 
 
 
