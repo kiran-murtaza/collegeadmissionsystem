@@ -147,20 +147,17 @@ public class ScholarshipForm_Panel extends JPanel {
         String explanation = explanationArea.getText().trim();
         String signature = signatureField.getText().trim();
 
-        // Check required fields not empty
         if (school.isEmpty() || percentageText.isEmpty() || incomeText.isEmpty() ||
                 achievements.isEmpty() || explanation.isEmpty() || signature.isEmpty()) {
             statusLabel.setText("Please complete all required fields.");
             return;
         }
 
-        // Explanation word count >= 100
         if (explanation.split("\\s+").length < 100) {
             statusLabel.setText("Explanation must be at least 100 words.");
             return;
         }
 
-        // Validate GPA: numeric and between 0 and 4.0 (adjust if your scale differs)
         double percentage;
         try {
             percentage = Double.parseDouble(percentageText);
@@ -186,7 +183,6 @@ public class ScholarshipForm_Panel extends JPanel {
             return;
         }
 
-        // Optional: Limit max length for certain fields (example: achievements and signature)
         if (achievements.length() > 500) {
             statusLabel.setText("Achievements text is too long (max 500 characters).");
             return;
@@ -209,7 +205,6 @@ public class ScholarshipForm_Panel extends JPanel {
             return;
         }
 
-        // Checkbox validation example: require proof of income checked if income > 0
         if (income > 0 && !proofIncomeCheck.isSelected()) {
             statusLabel.setText("Proof of Income must be attached if annual income is declared.");
             return;
@@ -241,7 +236,8 @@ public class ScholarshipForm_Panel extends JPanel {
             writer.newLine();
             statusLabel.setText("Scholarship form submitted successfully!");
             submitButton.setEnabled(false);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             statusLabel.setText("Error saving scholarship form.");
         }
     }

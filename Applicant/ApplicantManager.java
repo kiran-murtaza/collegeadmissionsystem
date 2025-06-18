@@ -210,7 +210,8 @@ public class ApplicantManager {
                 );
                 writer.write(line + System.lineSeparator());
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             System.out.println("Error updating application status: " + e.getMessage());
         }
 
@@ -223,7 +224,8 @@ public class ApplicantManager {
             for (ApplicationFormData app : apps) {
                 ids.add(app.getApplicationId());
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return ids;

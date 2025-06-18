@@ -44,7 +44,6 @@ public class ViewApplicantsPanel extends JPanel {
 
         loadApplicants();
 
-        // Set column widths manually for better spacing
         int[] columnWidths = {100, 90, 80, 70, 90, 90, 80, 80, 140, 110, 120, 125, 220};
         for (int i = 0; i < columnWidths.length; i++) {
             if (i < table.getColumnModel().getColumnCount()) {
@@ -53,12 +52,10 @@ public class ViewApplicantsPanel extends JPanel {
             }
         }
 
-        // Renderer and Editor for Action column
         table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
         table.getColumn("Action").setCellEditor(new ActionCellEditor(table, model));
 
-        JScrollPane scrollPane = new JScrollPane(table,
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
     }
@@ -84,7 +81,8 @@ public class ViewApplicantsPanel extends JPanel {
                         "Action"
                 });
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error reading file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -105,9 +103,11 @@ public class ViewApplicantsPanel extends JPanel {
         protected void paintComponent(Graphics g) {
             if (getModel().isPressed()) {
                 g.setColor(bgColor.darker());
-            } else if (getModel().isRollover()) {
+            }
+            else if (getModel().isRollover()) {
                 g.setColor(bgColor.brighter());
-            } else {
+            }
+            else {
                 g.setColor(bgColor);
             }
             g.fillRect(0, 0, getWidth(), getHeight());
@@ -169,10 +169,12 @@ public class ViewApplicantsPanel extends JPanel {
                         ApplicantManager.updateApplicationStatus(appId, Status.APPROVED);
                         model.setValueAt(Status.APPROVED.toString(), row, 11);
                         JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been APPROVED.");
-                    } else {
+                    }
+                    else {
                         JOptionPane.showMessageDialog(null, "Application already processed.");
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error while approving application.");
                 }
@@ -191,10 +193,12 @@ public class ViewApplicantsPanel extends JPanel {
                         ApplicantManager.updateApplicationStatus(appId, Status.REJECTED);
                         model.setValueAt(Status.REJECTED.toString(), row, 11);
                         JOptionPane.showMessageDialog(null, "Application ID " + appId + " has been REJECTED.");
-                    } else {
+                    }
+                    else {
                         JOptionPane.showMessageDialog(null, "Application already processed.");
                     }
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error while rejecting application.");
                 }

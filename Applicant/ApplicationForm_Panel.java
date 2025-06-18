@@ -201,7 +201,8 @@ public class ApplicationForm_Panel extends JPanel {
 
         if (filteredColleges.isEmpty()) {
             collegeDropdown.addItem("No colleges available");
-        } else {
+        }
+        else {
             for (College c : filteredColleges) {
                 collegeDropdown.addItem(c.getName());
             }
@@ -267,14 +268,17 @@ public class ApplicationForm_Panel extends JPanel {
 
             if (response == JOptionPane.YES_OPTION) {
                 clearForm();
-            } else {
+            }
+
+            else {
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 
                 if (topFrame != null) {
                     ApplicantDashboard_Panel dashboard = new ApplicantDashboard_Panel(userInfo, programManager, collegeManager);
                     dashboard.setVisible(true);
                     topFrame.dispose();
-                } else {
+                }
+                else {
                     JOptionPane.showMessageDialog(this, "Unable to locate main window. Exiting application.");
                     System.exit(0);
                 }
@@ -342,7 +346,6 @@ public class ApplicationForm_Panel extends JPanel {
             return false;
         }
 
-        // Validate that 12th year is after 10th year
         try {
             int year10 = Integer.parseInt(year10Field.getText().trim());
             int year12 = Integer.parseInt(year12Field.getText().trim());
@@ -352,8 +355,8 @@ public class ApplicationForm_Panel extends JPanel {
                 year12Field.requestFocus();
                 return false;
             }
-        } catch (NumberFormatException e) {
-            // This should never happen as we already validated these fields
+        }
+        catch (NumberFormatException e) {
             showError("Invalid year values");
             return false;
         }
@@ -396,7 +399,9 @@ public class ApplicationForm_Panel extends JPanel {
                 field.requestFocus();
                 return false;
             }
-        } catch (NumberFormatException e) {
+        }
+
+        catch (NumberFormatException e) {
             showError(fieldName + " must be a valid year");
             field.requestFocus();
             return false;
@@ -420,7 +425,8 @@ public class ApplicationForm_Panel extends JPanel {
                 field.requestFocus();
                 return false;
             }
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             showError(fieldName + " must be a valid number");
             field.requestFocus();
             return false;

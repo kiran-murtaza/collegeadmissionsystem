@@ -158,7 +158,9 @@ public class EntryTestRecordManager {
             for (EntryTestRecord r : records) {
                 writer.println(r.toString());
             }
-        } catch (IOException e) {
+        }
+
+        catch (IOException e) {
             System.err.println("Failed to save test records: " + e.getMessage());
         }
     }
@@ -229,12 +231,15 @@ public class EntryTestRecordManager {
 
                     list.add(record);
 
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     System.err.println("Skipped invalid record: " + line);
                 }
             }
-        } catch (IOException e) {
-            System.err.println("Error reading test records: " + e.getMessage());
+        }
+
+        catch (IOException e) {
+//            System.err.println("Error reading test records: " + e.getMessage());
         }
 
         return list;

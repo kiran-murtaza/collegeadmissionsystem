@@ -38,7 +38,6 @@ public class SetTestDatePanel extends JPanel {
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Only "Action" and "Decision" columns are editable
                 return column == 7 || column == 8;
             }
         };
@@ -47,13 +46,11 @@ public class SetTestDatePanel extends JPanel {
         table.setRowHeight(40);
         loadTestData();
 
-        // Set custom renderers and editors
         table.getColumn("Action").setCellRenderer(new ActionCellRenderer());
         table.getColumn("Action").setCellEditor(new ActionCellEditor(new JCheckBox(), model, table));
         table.getColumn("Decision").setCellRenderer(new DecisionCellRenderer());
         table.getColumn("Decision").setCellEditor(new DecisionCellEditor(new JCheckBox(), model, table));
 
-        // Set column widths
         TableColumnModel columnModel = table.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(100); // ID
         columnModel.getColumn(1).setPreferredWidth(100); // Program
@@ -160,7 +157,9 @@ public class SetTestDatePanel extends JPanel {
                     EntryTestRecordManager.EntryTestRecord record = recordManager.getRecordById(applicantId);
                     if (record == null) {
                         record = new EntryTestRecordManager.EntryTestRecord(applicantId, dateTime, false, 0);
-                    } else {
+                    }
+
+                    else {
                         record.setTestDateTime(dateTime);
                     }
 
@@ -174,7 +173,8 @@ public class SetTestDatePanel extends JPanel {
                     loadTestData();
                     fireEditingStopped();
 
-                } catch (Exception ex) {
+                }
+                catch (Exception ex) {
                     JOptionPane.showMessageDialog(null,
                             "Invalid date format. Use YYYY-MM-DD HH:MM",
                             "Error",

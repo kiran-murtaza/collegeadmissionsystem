@@ -36,7 +36,6 @@ public class AddAdmin extends AdminLogin {
 
         Admins admins = new Admins(
                 email, password
-                // new admin is not super admin by default
 
         );
 

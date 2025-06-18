@@ -15,7 +15,6 @@ public class ApplicantDashboard_Panel extends JFrame{
     private CollegeManager collegeManager;
     private ApplicationFormData applicationFormData;
 
-    // Color theme
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = new Color(255, 255, 255);
@@ -38,7 +37,6 @@ public class ApplicantDashboard_Panel extends JFrame{
     }
 
     private void initUI() {
-        // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COLORAZ_SAGE);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -49,7 +47,6 @@ public class ApplicantDashboard_Panel extends JFrame{
         headerPanel.add(welcomeLabel, BorderLayout.WEST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Menu Bar
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.X_AXIS));
         menuPanel.setBackground(COLORAZ_BLACK);
@@ -70,23 +67,21 @@ public class ApplicantDashboard_Panel extends JFrame{
         for (String item : menuItems) {
             JButton menuButton = new JButton(item);
 
-            // Styling the button
-            menuButton.setForeground(COLORAZ_WHITE);                 // Text color
-            menuButton.setBackground(COLORAZ_BLACK);                 // Button background
-            menuButton.setBorderPainted(false);                      // No border
-            menuButton.setFocusPainted(false);                       // No focus border
-            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Font styling
+            menuButton.setForeground(COLORAZ_WHITE);
+            menuButton.setBackground(COLORAZ_BLACK);
+            menuButton.setBorderPainted(false);
+            menuButton.setFocusPainted(false);
+            menuButton.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-            // Add action listener for handling clicks
             menuButton.addActionListener(e -> {
                 try {
                     handleMenuClick(item);
-                } catch (IOException ex) {
+                }
+                catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
             });
 
-            // Add button to the menu panel
             menuPanel.add(menuButton);
 
             // Add spacing between buttons

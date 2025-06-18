@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 public class Applicant extends Users {
 
-    private ScholarshipForm_Panel scholarshipForm;
     private ArrayList<ApplicationFormData> submittedApplications;
-//    private ArrayList<Document> documents = new ArrayList<>();
     private FeeStatus feeStatus = FeeStatus.UNPAID;
 
 
@@ -43,14 +41,4 @@ public class Applicant extends Users {
 
 
 
-//
-//        // Add a submitted application
-//        public void addApplication(ApplicationForm_Panel application) {
-//            submittedApplications.add(application);
-//        }
-//
-//        // Get all submitted applications
-//        public ArrayList<ApplicationForm_Panel> getSubmittedApplications() {
-//            return submittedApplications;
-//        }
 

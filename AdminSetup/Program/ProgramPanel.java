@@ -31,7 +31,6 @@ public class ProgramPanel extends JPanel {
 
         setLayout(new BorderLayout(10, 10));
 
-        // Input Form Panel
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBorder(BorderFactory.createTitledBorder("Add New Program"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -106,18 +105,16 @@ public class ProgramPanel extends JPanel {
         buttonPanel.add(removeButton);
         buttonPanel.add(refreshButton);
 
-        // Add panels to main layout
         add(formPanel, BorderLayout.NORTH);
         add(listScrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Event Listeners
         addButton.addActionListener(e -> addProgram());
         removeButton.addActionListener(e -> removeProgram());
         refreshButton.addActionListener(e -> clearFields());
 
         collegeDropdown.addActionListener(e -> refreshProgramList());
-        refreshProgramList(); // on load
+        refreshProgramList();
     }
 
 

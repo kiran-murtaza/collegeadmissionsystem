@@ -10,7 +10,6 @@ public class AddAdmin_Panel extends JPanel {
     private static final Color COLORAZ_BLACK = Color.BLACK;
     private static final Color COLORAZ_SAGE = new Color(180, 195, 180);
     private static final Color COLORAZ_WHITE = Color.WHITE;
-    AdminLogin login = new AdminLogin();
     private JTextField emailField;
     private JPasswordField passwordField;
     AddAdmin addAdmin;

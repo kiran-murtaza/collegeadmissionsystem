@@ -14,22 +14,18 @@ public class CollegeManager {
         loadFromFile(fileName);
     }
 
-    // Add a new college
     public void addCollege(String name) {
         colleges.add(new College(name));
     }
 
-    // Remove a college by name
     public boolean removeCollegeByName(String name) {
         return colleges.removeIf(c -> c.getName().equalsIgnoreCase(name));
     }
 
-    // Get all colleges
     public ArrayList<College> getAllColleges() {
         return colleges;
     }
 
-    // Get a specific college by name
     public College getCollegeByName(String collegeName) {
         for (College c : colleges) {
             if (c.getName().equalsIgnoreCase(collegeName)) {
@@ -39,7 +35,6 @@ public class CollegeManager {
         return null;
     }
 
-    // Get all colleges that offer a given program
     public ArrayList<College> getCollegesByProgramName(String programName) {
         ArrayList<College> result = new ArrayList<>();
 

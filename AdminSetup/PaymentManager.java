@@ -13,19 +13,21 @@ public class PaymentManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
-                if (parts.length < 18) continue; // 18 fields = last index is 17
+                if (parts.length < 18) continue;
 
                 String id = parts[0].trim();
-                String feeStatus = parts[17].trim(); // Fixed index
+                String feeStatus = parts[17].trim();
 
                 if (id.equalsIgnoreCase(applicantId)) {
                     return feeStatus.equalsIgnoreCase("PAID");
                 }
             }
-        } catch (IOException e) {
+        }
+
+        catch (IOException e) {
             e.printStackTrace();
         }
-        return false; // Default: unpaid if not found
+        return false;
     }
 
 
